@@ -10,7 +10,7 @@
     >
       {{ title }}
     </AppH1>
-    <p class="header__more">更多</p>
+    <p class="header__more">{{ subTitle }}</p>
   </header>
 </template>
 
@@ -36,6 +36,10 @@ export default {
       validator(value) {
         return ['normal', 'bold'].includes(value)
       }
+    },
+    subTitle: {
+      type: String,
+      default: '更多'
     },
     alignItems: {
       type: String,

@@ -1,5 +1,5 @@
 <template>
-  <ul class="list">
+  <ul :class="[ 'list', `list--${listItemLayout}` ]">
     <ShowcaseListItem class="list__list-item"/>
     <ShowcaseListItem class="list__list-item"/>
     <ShowcaseListItem class="list__list-item"/>
@@ -27,6 +27,15 @@
 import ShowcaseListItem from './ShowcaseListItem.vue'
 
 export default {
+  props: {
+    listItemLayout: {
+      type: String,
+      default: 'vertical',
+      validator(value) {
+        return ['vertical', 'horizontal'].includes(value)
+      }
+    }
+  },
   components: {
     ShowcaseListItem
   }
@@ -40,11 +49,11 @@ export default {
   padding 0
   display flex
   flex-wrap wrap
+  position relative
+  &--vertical
+    top -18px
+    left -18px
+    width calc(100% + 18px)
   &__list-item
-    & + &
-      margin 0 0 0 18px
-    &:nth-child(n+6)
-      margin 18px 0 0 18px
-    &:nth-child(5n + 1):not(:nth-child(1))
-      margin 18px 0 0 0
+    margin 18px 0 0 18px
 </style>

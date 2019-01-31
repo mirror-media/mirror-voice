@@ -11,17 +11,12 @@
 
 <style lang="stylus" scoped>
 .wrapper
-  max-width 999px
-  // width 999px
-  // height 1000px
-  // border 1px solid red
+  max-width 1000px
   margin 0 auto
   display flex
   &__main
     width 723px
-    // border 1px solid blue
   &__aside
     width 256px
     margin 0 0 0 20px
-    // border 1px solid blue
 </style>

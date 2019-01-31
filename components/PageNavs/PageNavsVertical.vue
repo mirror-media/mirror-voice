@@ -1,8 +1,8 @@
 <template>
-  <div class="navs">
+  <nav class="navs">
     <PageNavsVerticalList class="navs__list"/>
     <PageNavsVerticalList class="navs__list"/>
-  </div>
+  </nav>
 </template>
 
 <script>

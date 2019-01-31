@@ -47,6 +47,7 @@ import TrackList from '~/components/Track/TrackList.vue'
 import Info from '~/components/Info/Info.vue'
 
 export default {
+  layout: 'showBreadcrumb',
   components: {
     AppMainAsideWrapper,
     AppDiv,

@@ -9,8 +9,8 @@
     </AppH1>
     <AppDate class="info__date"/>
     <div class="info__basic">
-      <p>主播： 網路水手</p>
-      <p>原著： 邁克・貝克特爾</p>
+      <span>主播： 網路水手、網路水手、網路水手</span>
+      <span>原著： 邁克・貝克特爾、邁克・貝克特爾、邁克・貝克特爾</span>
     </div>
     <div class="info__tags tags">
       <AppTag class="tags__tag"/>
@@ -55,10 +55,12 @@ export default {
   &__basic
     margin 16px 0 0 0
     display flex
-    p
+    flex-wrap wrap
+    line-height 1.71
+    span
       font-size 14px
       color #7d7d7d
-    p + p
+    span + span
       margin 0 0 0 40px
   &__tags
     display flex
