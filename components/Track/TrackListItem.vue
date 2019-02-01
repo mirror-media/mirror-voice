@@ -1,18 +1,31 @@
 <template>
   <li
-    :class="[ 'list-item', { 'list-item--hover': isMouseover } ]"
-    @mouseover="showMarker"
-    @mouseout="hideMarker"
+    :class="[
+      'list-item',
+      { 'list-item--hover': isMouseover },
+      { 'list-item--more-padding': showListOrder }
+    ]"
+    @mouseover="onMouseover"
+    @mouseout="onMouseout"
   >
     <div class="list-item__left left">
       <TrackMarker
-        v-show="isMouseover"
+        v-show="showListOrder || isMouseover"
         class="left__marker"
+        :status="status"
       />
-      <p :class="[ 'left__title', { 'left__title--hover': isMouseover } ]">{{ '高難度對話：如何與挑剔的人高難度對話：如何與挑剔的人高難度對話：如何與挑剔的人' }}</p>
+      <nuxt-link to="/single/fakeslug1">
+        <p
+          :class="[
+            'left__title',
+            { 'left__title--hover': !showListOrder && isMouseover } ]"
+        >
+          {{ '高難度對話：如何與挑剔的人高難度對話：如何與挑剔的人高難度對話：如何與挑剔的人' }}
+        </p>
+      </nuxt-link>
     </div>
     <div
-      v-show="!isMouseover"
+      v-show="showListOrder || !isMouseover"
       class="list-item__right right"
     >
       <p class="right__date">{{ '12 小時前' }}</p>
@@ -24,6 +37,12 @@
 import TrackMarker from './TrackMarker.vue'
 
 export default {
+  props: {
+    showListOrder: {
+      type: Boolean,
+      defalut: false
+    }
+  },
   components: {
     TrackMarker
   },
@@ -32,11 +51,20 @@ export default {
       isMouseover: false
     }
   },
+  computed: {
+    status() {
+      if (this.isMouseover) {
+        return 'play'
+      }
+
+      return this.showListOrder ? 'order' : 'play'
+    }
+  },
   methods: {
-    showMarker() {
+    onMouseover() {
       this.isMouseover = true
     },
-    hideMarker() {
+    onMouseout() {
       this.isMouseover = false
     }
   }
@@ -53,6 +81,8 @@ export default {
   cursor pointer
   &--hover
     background-color #eeeeee
+  &--more-padding
+    padding 12px 21px
 
 .left
   overflow hidden
@@ -67,6 +97,7 @@ export default {
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
+    color black
     &--hover
       color #dc5a4c
 

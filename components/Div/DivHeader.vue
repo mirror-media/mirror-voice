@@ -10,7 +10,9 @@
     >
       {{ title }}
     </AppH1>
-    <p class="header__more">{{ subTitle }}</p>
+    <slot>
+      <p class="header__more">{{ subTitle }}</p>
+    </slot>
   </header>
 </template>
 

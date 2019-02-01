@@ -2,20 +2,36 @@
   <AppMainAsideWrapper>
     <div slot="main" class="main">
       <AppDiv class="main__wrapper info-wrapper">
-        <Info/>
+        <Info :layout="'album'"/>
       </AppDiv>
       <AppDiv class="main__wrapper body-wrapper">
-        <AppH1 class="body-wrapper__title">文稿</AppH1>
+        <AppH1 class="body-wrapper__title">簡介</AppH1>
         <div class="body-wrapper__body" v-html="body"></div>
+      </AppDiv>
+      <AppDiv class="main__wrapper tracks-wrapper">
+        <DivHeader
+          class="tracks-wrapper__header"
+          :title="'專輯音檔（18）'"
+        >
+          <div class="sorts">
+            <button class="sorts__sort">最新</button>
+            <button class="sorts__sort">最舊</button>
+          </div>
+        </DivHeader>
+        <TrackList
+          class="tracks-wrapper__tracks"
+          :showListOrder="true"
+        />
       </AppDiv>
     </div>
     <div slot="aside" class="aside">
       <AsideIntro
-        class="aside__wrapper album"
-        :title="'收錄於'"
+        class="aside__wrapper anchor"
+        :title="'主播'"
+        :imgStyle="'round'"
       />
-      <AsideTrackList
-        class="aside__wrapper"
+      <AsideAlbumList
+        class="aside__wrapper anchor-relateds"
       />
     </div>
   </AppMainAsideWrapper>
@@ -26,8 +42,10 @@ import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
 import Info from '~/components/Info/Info.vue'
+import DivHeader from '~/components/Div/DivHeader.vue'
 import AsideIntro from '~/components/Aside/AsideIntro.vue'
-import AsideTrackList from '~/components/Aside/AsideTrackList.vue'
+import AsideAlbumList from '~/components/Aside/AsideAlbumList.vue'
+import TrackList from '~/components/Track/TrackList.vue'
 
 export default {
   layout: 'showBreadcrumb',
@@ -36,8 +54,10 @@ export default {
     AppDiv,
     AppH1,
     Info,
+    DivHeader,
     AsideIntro,
-    AsideTrackList
+    AsideAlbumList,
+    TrackList
   },
   data() {
     return {
@@ -73,9 +93,25 @@ export default {
     & >>> *
       margin 20px 0 0 0
 
-.album-relateds-wrapper
-  &__header
-    margin 0 17px
-  &__track-list
-    margin 20px 0 0 0
+.sorts
+  &__sort
+    border none
+    background-color transparent
+    padding 0 14px
+    line-height 1
+    font-size 14px
+    color #7d7d7d
+    cursor pointer
+    &:focus
+      outline none
+    &:first-child
+      padding 0 14px 0 0
+    &:last-child
+      padding 0 0 0 14px
+    & + &
+      border-left 2px solid #7d7d7d
+
+.tracks-wrapper
+  &__tracks
+    margin 18px 0 0 0
 </style>

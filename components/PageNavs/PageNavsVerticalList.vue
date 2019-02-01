@@ -46,8 +46,9 @@
       width 100%
       height 100%
       font-size 16px
-      text-decoration none
       color black
+      &:hover
+        color #d84939
     & + &
       margin 2px 0 0 0
 </style>

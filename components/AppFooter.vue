@@ -29,7 +29,6 @@
   &__nav
     font-size 18px
     color black
-    text-decoration none
     cursor pointer
     & + &
       margin 0 0 0 53px

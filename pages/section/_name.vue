@@ -8,7 +8,10 @@
         :title="'全部類別一'"
         :subTitle="'共 180 筆'"
       />
-      <ShowcaseList class="bottom-wrapper__showcase"/>
+      <ShowcaseList
+        class="bottom-wrapper__showcase"
+        :listItemLayout="'horizontal'"
+      />
     </AppDiv>
   </section>
 </template>

@@ -9,7 +9,14 @@
           :size="'large'"
           :weight="'bold'"
           :alignItems="'flex-end'"
-        />
+        >
+          <nuxt-link
+            class="more"
+            to="/section/section1"
+          >
+            更多
+          </nuxt-link>
+        </DivHeader>
         <ShowcaseList class="showcase__showcase"/>
       </AppDiv>
       <AppDiv class="main__wrapper showcase">
@@ -19,7 +26,14 @@
           :size="'large'"
           :weight="'bold'"
           :alignItems="'flex-end'"
-        />
+        >
+          <nuxt-link
+            class="more"
+            to="/section/section2"
+          >
+            更多
+          </nuxt-link>
+        </DivHeader>
         <ShowcaseList class="showcase__showcase"/>
       </AppDiv>
     </div>
@@ -57,4 +71,9 @@ export default {
 .showcase
   &__showcase
     margin 24px 0 0 0
+
+.more
+  font-size 14px
+  color #7d7d7d
+  cursor pointer
 </style>

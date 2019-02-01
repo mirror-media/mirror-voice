@@ -1,9 +1,21 @@
 <template>
   <ol class="list">
-    <TrackListItem class="list__list-item"/>
-    <TrackListItem class="list__list-item"/>
-    <TrackListItem class="list__list-item"/>
-    <TrackListItem class="list__list-item"/>
+    <TrackListItem
+      class="list__list-item"
+      :showListOrder="showListOrder"
+    />
+    <TrackListItem
+      class="list__list-item"
+      :showListOrder="showListOrder"
+    />
+    <TrackListItem
+      class="list__list-item"
+      :showListOrder="showListOrder"
+    />
+    <TrackListItem
+      class="list__list-item"
+      :showListOrder="showListOrder"
+    />
   </ol>
 </template>
 

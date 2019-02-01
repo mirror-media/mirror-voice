@@ -1,25 +1,65 @@
 <template>
   <ul :class="[ 'list', `list--${listItemLayout}` ]">
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
-    <ShowcaseListItem class="list__list-item"/>
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
+    <ShowcaseListItem
+      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
+      :layout="listItemLayout"
+    />
   </ul>
 </template>
 
@@ -54,6 +94,13 @@ export default {
     top -18px
     left -18px
     width calc(100% + 18px)
+  &--horizontal
+    top -14px
+    left -16px
+    width calc(100% + 16px)
   &__list-item
-    margin 18px 0 0 18px
+    &--vertical
+      margin 18px 0 0 18px
+    &--horizontal
+      margin 14px 0 0 12px
 </style>

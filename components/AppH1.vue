@@ -28,6 +28,7 @@ export default {
 <style lang="stylus" scoped>
 .h1
   margin 0
+  line-height 1
   &--large
     font-size 21px
   &--small
