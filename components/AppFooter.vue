@@ -13,12 +13,13 @@
 
 <style lang="stylus" scoped>
 .footer
-  height 150px
+  height calc(150px + 60px)
   background-color white
   display flex
   flex-direction column
   justify-content center
   align-items center
+  padding 0 0 60px 0
   &__rights
     margin 28px 0 0 0
     font-size 14px

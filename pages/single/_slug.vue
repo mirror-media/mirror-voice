@@ -1,8 +1,12 @@
 <template>
   <AppMainAsideWrapper>
     <div slot="main" class="main">
-      <AppDiv class="main__wrapper info-wrapper">
-        <Info/>
+      <AppDiv
+        class="main__wrapper info-wrapper"
+        :padding="'0'"
+      >
+        <Info class="info-wrapper__info"/>
+        <Player/>
       </AppDiv>
       <AppDiv class="main__wrapper body-wrapper">
         <AppH1 class="body-wrapper__title">文稿</AppH1>
@@ -28,6 +32,7 @@ import AppH1 from '~/components/AppH1.vue'
 import Info from '~/components/Info/Info.vue'
 import AsideIntro from '~/components/Aside/AsideIntro.vue'
 import AsideTrackList from '~/components/Aside/AsideTrackList.vue'
+import Player from '~/components/Player/Player.vue'
 
 export default {
   layout: 'showBreadcrumb',
@@ -37,7 +42,8 @@ export default {
     AppH1,
     Info,
     AsideIntro,
-    AsideTrackList
+    AsideTrackList,
+    Player
   },
   data() {
     return {
@@ -62,6 +68,10 @@ export default {
   &__wrapper
     & + &
       margin 20px 0 0 0
+
+.info-wrapper
+  &__info
+    padding 25px
 
 .body-wrapper
   &__body

@@ -45,7 +45,12 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
     ['nuxt-i18n', {
-      locales: ['zh-tw'],
+      locales: [
+        {
+          code: 'zh-tw',
+          iso: 'zh-tw'
+        }
+      ],
       defaultLocale: 'zh-tw',
       vueI18n: {
         fallbackLocale: 'zh-tw',
