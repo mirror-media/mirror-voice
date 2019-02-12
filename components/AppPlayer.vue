@@ -3,6 +3,12 @@
     <Player
       class="player-wrapper__player"
       :type="'long'"
+      :sound="{
+        title: '前前前世',
+        artist: 'RADWIMPS',
+        src: 'https://cn-east-17-aplayer-35525609.oss.dogecdn.com/yourname.mp3',
+        cover: 'https://cn-east-17-aplayer-35525609.oss.dogecdn.com/yourname.jpg'
+      }"
     />
   </div>
 </template>

@@ -19,7 +19,9 @@
     "express": "^4.16.4",
     "lodash": "^4.17.11",
     "nuxt": "^2.3.4",
-    "nuxt-i18n": "^5.8.0"
+    "nuxt-i18n": "^5.8.0",
+    "vue-no-ssr": "^1.1.1",
+    "vue-slider-component": "^2.8.7"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",
