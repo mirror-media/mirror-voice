@@ -17,6 +17,10 @@ export default function(player) {
     onAudioVolumeChange.bind(player)
   )
   // player.audio.addEventListener('ended', player.onAudioEnded)
+  player.audio.addEventListener(
+    'loadedmetadata',
+    onAudioLoadedMetadata.bind(player)
+  )
 }
 
 function onAudioPlay() {
@@ -53,8 +57,24 @@ function onAudioSeeked() {
 }
 function onAudioTimeUpdate() {
   this.playStatPlayedTime = this.audio.currentTime
+  if (this.audio.buffered.length) {
+    this.playStatLoadedTime = this.audio.buffered.end(
+      this.audio.buffered.length - 1
+    )
+  } else {
+    this.playStatLoadedTime = 0
+  }
 }
 function onAudioVolumeChange() {
   this.audioVolume = this.audio.volume
   this.isAudioMuted = this.audio.muted
+}
+function onAudioLoadedMetadata() {
+  if (this.audio.buffered.length) {
+    this.playStatLoadedTime = this.audio.buffered.end(
+      this.audio.buffered.length - 1
+    )
+  } else {
+    this.playStatLoadedTime = 0
+  }
 }

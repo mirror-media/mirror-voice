@@ -1,11 +1,8 @@
 <template>
   <div :class="[ 'player', `player--${type}` ]">
     <audio ref="audio"></audio>
-    <div
-      v-if="type === 'long'"
-      class="player__cover cover"
-    >
-      <img class="cover__img" src="" alt="">
+    <div v-if="type === 'long'" class="player__cover cover">
+      <img class="cover__img" src alt>
     </div>
     <PlayerNavs
       class="player__navs"
@@ -26,15 +23,12 @@
       />
       <PlayerProgress
         class="middle__progress"
-        :bufferedAmount="(playStatLoadedTime / playStatDuration) * 100"
-        :playedAmount="(playStatPlayedTime / playStatDuration) * 100"
+        :bufferedAmount="((playStatLoadedTime / playStatDuration) * 100) || 0"
+        :playedAmount="((playStatPlayedTime / playStatDuration) * 100) || 0"
+        @seek="seek"
       />
     </div>
-    <PlayerRate
-      class="player__rate"
-      :type="type"
-      :rateCurrent.sync="audioPlaybackRate"
-    />
+    <PlayerRate class="player__rate" :type="type" :rateCurrent.sync="audioPlaybackRate"/>
     <PlayerVolume
       v-if="type === 'long'"
       class="player__volume"
@@ -78,9 +72,11 @@ export default {
         return []
       }
     },
+
+    // native audio's properties as props
     volume: {
       type: Number,
-      default: 0.8,
+      default: 1,
       validator(value) {
         return value >= 0 && value <= 1
       }
@@ -105,16 +101,44 @@ export default {
     PlayerVolume
   },
   watch: {
+    // observe mutable properties
+    audioVolume() {
+      this.audio.volume = this.audioVolume
+    },
+    isAudioMuted() {
+      this.audio.muted = this.isAudioMuted
+    },
     audioPlaybackRate() {
       this.audio.playbackRate = this.audioPlaybackRate
+    },
+
+    // sync muted, volume if parent component mutate the props
+    volume() {
+      this.internalVolume = this.volume
+    },
+    muted() {
+      this.internalMuted = this.muted
+    },
+    playbackRate() {
+      this.internalPlaybackRate = this.playbackRate
+    },
+
+    // coordinate volume and muted
+    internalVolume() {
+      this.internalMuted = this.internalVolume <= 0
+    },
+    internalMuted() {
+      this.internalVolume = this.internalMuted ? 0 : this.volume
     }
   },
   data() {
     return {
-      InternalSound: this.sound,
-      InternalVolume: this.volume,
-      InternalMuted: this.muted,
-      InternalPlaybackRate: this.playbackRate,
+      internalSound: this.sound,
+      internalVolume: this.volume,
+      internalMuted: this.muted,
+      internalPlaybackRate: this.playbackRate,
+      internalBufferedAmount: 0,
+      internalPlayedAmount: 0,
       isPlaying: false,
       isLoading: false,
       playStatDuration: 0,
@@ -123,51 +147,62 @@ export default {
     }
   },
   computed: {
+    // alias of audio element
     audio() {
       return this.$refs.audio
     },
+
+    // observers
+    // inform parent component in setters
     soundCurrent: {
       get() {
-        return this.InternalSound
+        return this.internalSound
       },
       set(val) {
-        // canUseSync && this.$emit('update:music', val)
-        this.InternalSound = val
+        this.$emit('update:sound', val)
+        this.internalSound = val
       }
     },
     audioVolume: {
       get() {
-        return this.InternalVolume
+        return this.internalVolume
       },
       set(val) {
-        // canUseSync && this.$emit('update:volume', val)
-        this.InternalVolume = val
+        this.$emit('update:volume', val)
+        this.internalVolume = val
       }
     },
     isAudioMuted: {
       get() {
-        return this.InternalMuted
+        return this.internalMuted
       },
       set(val) {
-        // canUseSync && this.$emit('update:muted', val)
-        this.InternalMuted = val
+        this.$emit('update:muted', val)
+        this.internalMuted = val
       }
     },
     audioPlaybackRate: {
       get() {
-        return this.InternalPlaybackRate
+        return this.internalPlaybackRate
       },
       set(val) {
-        // canUseSync && this.$emit('update:muted', val)
-        this.InternalPlaybackRate = val
+        this.$emit('update:playbackRate', val)
+        this.internalPlaybackRate = val
       }
     }
   },
   methods: {
     initAudio() {
+      // set exposed properties as their init value which is passing from props
+      this.audio.volume = this.volume
+      this.audio.muted = this.muted
+      this.audio.playbackRate = this.playbackRate
+
+      // init events
       initEventEmitters(this)
       initEventHandlers(this)
 
+      // set audio's src
       if (this.soundCurrent) {
         this.audio.src = this.soundCurrent.src
       }
@@ -177,6 +212,9 @@ export default {
     },
     pause() {
       this.audio.pause()
+    },
+    seek(value) {
+      this.audio.currentTime = this.audio.duration * value
     }
   },
   mounted() {

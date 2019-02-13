@@ -23,7 +23,6 @@ import DivHeader from '~/components/Div/DivHeader.vue'
 import ShowcaseList from '~/components/Showcase/ShowcaseList.vue'
 
 export default {
-  layout: 'showBreadcrumb',
   components: {
     AppDiv,
     PageNavsHorizontal,

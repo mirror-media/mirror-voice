@@ -1,59 +1,58 @@
 <template>
   <div class="progress">
-    <div
-      class="progress__buffer"
-      :style="{ width: `${bufferedAmount}%` }"
-    >
-    </div>
-    <div
-      class="progress__played"
-      :style="{ width: `${playedAmount}%` }"
-    >
-    </div>
+    <PlayerSlider
+      :direction="'horizontal'"
+      :buffered="internalBufferedAmount"
+      :value.sync="internalPlayedAmount"
+      @seek="onSeek"
+    />
   </div>
 </template>
 
 <script>
+import PlayerSlider from './PlayerSlider.vue'
+
 export default {
   props: {
     bufferedAmount: {
       type: Number,
-      default: 0
-      // validator(value) {
-      //   return value >= 0 && value <= 100
-      // }
+      default: 0,
+      validator(value) {
+        return value >= 0 && value <= 100
+      }
     },
     playedAmount: {
       type: Number,
-      default: 0
-      // validator(value) {
-      //   return value >= 0 && value <= 100
-      // }
+      default: 0,
+      validator(value) {
+        return value >= 0 && value <= 100
+      }
+    }
+  },
+  components: {
+    PlayerSlider
+  },
+  watch: {
+    bufferedAmount() {
+      this.internalBufferedAmount = this.bufferedAmount / 100
+    },
+    playedAmount() {
+      this.internalPlayedAmount = this.playedAmount / 100
+    }
+  },
+  data() {
+    return {
+      internalBufferedAmount: this.bufferedAmount / 100,
+      internalPlayedAmount: this.playedAmount / 100
+    }
+  },
+  methods: {
+    onSeek(value) {
+      this.$emit('seek', value)
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-.progress
-  height 4px
-  border-radius 2px
-  background-color black
-  position relative
-  &__buffer
-    position absolute
-    left 0
-    top 0
-    // width 10%
-    height 4px
-    border-radius 2px
-    background-color #7d7d7d
-  &__played
-    position absolute
-    left 0
-    top 0
-    // width 10%
-    height 4px
-    border-radius 2px
-    background-color #d84939
 </style>

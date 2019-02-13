@@ -15,16 +15,16 @@
       v-if="showSlider"
       :class="[ 'volume__slider', `volume__slider--${type}`, 'slider' ]"
     >
-      <PlaySlider
-        @valueChanged="valueChanged"
-        :value="volume * 100"
+      <PlayerSlider
+        :direction="'vertical'"
+        :value.sync="internalVolume"
       />
     </div>
   </div>
 </template>
 
 <script>
-import PlaySlider from './PlaySlider.vue'
+import PlayerSlider from './PlayerSlider.vue'
 
 export default {
   directives: {
@@ -54,17 +54,23 @@ export default {
     },
     volume: {
       type: Number,
-      default: 1,
+      required: true,
       validator(value) {
         return value >= 0 && value <= 1
       }
     }
   },
   components: {
-    PlaySlider
+    PlayerSlider
+  },
+  watch: {
+    internalVolume() {
+      this.$emit('update:volume', this.internalVolume)
+    }
   },
   data() {
     return {
+      internalVolume: this.volume,
       showSlider: false
     }
   },
@@ -74,10 +80,6 @@ export default {
     },
     hideSlider() {
       this.showSlider = false
-    },
-    valueChanged(value) {
-      value = value / 100
-      this.$emit('update:volume', value)
     }
     // pickRate(rate) {
     //   this.$emit('update:rateCurrent', rate)

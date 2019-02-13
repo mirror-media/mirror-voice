@@ -48,7 +48,6 @@ import AsideAlbumList from '~/components/Aside/AsideAlbumList.vue'
 import TrackList from '~/components/Track/TrackList.vue'
 
 export default {
-  layout: 'showBreadcrumb',
   components: {
     AppMainAsideWrapper,
     AppDiv,
