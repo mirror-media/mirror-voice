@@ -1,7 +1,11 @@
 <template>
   <header class="header">
-    <nuxt-link to="/">back to home</nuxt-link>
-    <div @click="tooglePlayerFixed">toggle fixed player</div>
+    <nuxt-link to="/">
+      back to home
+    </nuxt-link>
+    <div @click="tooglePlayerFixed">
+      toggle fixed player
+    </div>
   </header>
 </template>
 

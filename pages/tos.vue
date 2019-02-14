@@ -1,8 +1,10 @@
 <template>
   <section class="section">
     <AppDiv class="tos-content">
-      <AppH1 :size="'large'">服務條款</AppH1>
-      <div class="tos-content__body" v-html="$t('tos')"></div>
+      <AppH1 :size="'large'">
+        服務條款
+      </AppH1>
+      <div class="tos-content__body" v-html="$t('tos')" />
     </AppDiv>
   </section>
 </template>

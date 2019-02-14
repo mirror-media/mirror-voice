@@ -11,7 +11,9 @@
       {{ title }}
     </AppH1>
     <slot>
-      <p class="header__more">{{ subTitle }}</p>
+      <p class="header__more">
+        {{ subTitle }}
+      </p>
     </slot>
   </header>
 </template>
@@ -20,6 +22,9 @@
 import AppH1 from '~/components/AppH1.vue'
 
 export default {
+  components: {
+    AppH1
+  },
   props: {
     title: {
       type: String,
@@ -47,9 +52,6 @@ export default {
       type: String,
       default: 'center'
     }
-  },
-  components: {
-    AppH1
   }
 }
 </script>

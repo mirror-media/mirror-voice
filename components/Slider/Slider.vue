@@ -1,5 +1,5 @@
 <template>
-  <div class="slider"></div>
+  <div class="slider" />
 </template>
 
 <style lang="stylus" scoped>

@@ -1,14 +1,14 @@
 <template>
   <div class="app">
-    <AppHeader/>
+    <AppHeader />
     <AppBreadcrumb
       v-show="!hideBreadcrumb"
       class="app__breadcrumb"
     />
     <div class="app__view-wrapper">
-      <nuxt/>
+      <nuxt />
     </div>
-    <AppFooter/>
+    <AppFooter />
     <AppPlayer
       :class="[ 'app__player', { 'app__player--hide': !showPlayer } ]"
     />

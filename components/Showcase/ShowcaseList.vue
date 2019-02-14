@@ -67,6 +67,9 @@
 import ShowcaseListItem from './ShowcaseListItem.vue'
 
 export default {
+  components: {
+    ShowcaseListItem
+  },
   props: {
     listItemLayout: {
       type: String,
@@ -75,9 +78,6 @@ export default {
         return ['vertical', 'horizontal'].includes(value)
       }
     }
-  },
-  components: {
-    ShowcaseListItem
   }
 }
 </script>

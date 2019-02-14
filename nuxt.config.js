@@ -1,8 +1,6 @@
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const pkg = require('./package')
 const zhTW = require('./i18n/zh-tw')
-
-var LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
-var webpack = require('webpack')
 
 module.exports = {
   mode: 'universal',
@@ -28,9 +26,7 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [
-    '~/css/normalize.css'
-  ],
+  css: ['~/css/normalize.css'],
 
   /*
   ** Plugins to load before mounting the App
@@ -44,21 +40,24 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
-    ['nuxt-i18n', {
-      locales: [
-        {
-          code: 'zh-tw',
-          iso: 'zh-tw'
-        }
-      ],
-      defaultLocale: 'zh-tw',
-      vueI18n: {
-        fallbackLocale: 'zh-tw',
-        messages: {
-          'zh-tw': zhTW,
+    [
+      'nuxt-i18n',
+      {
+        locales: [
+          {
+            code: 'zh-tw',
+            iso: 'zh-tw'
+          }
+        ],
+        defaultLocale: 'zh-tw',
+        vueI18n: {
+          fallbackLocale: 'zh-tw',
+          messages: {
+            'zh-tw': zhTW
+          }
         }
       }
-    }]
+    ]
   ],
   /*
   ** Axios module configuration
@@ -86,14 +85,11 @@ module.exports = {
       }
 
       // lodash-webpack-plugin
-      config.plugins.push(new LodashModuleReplacementPlugin)
+      config.plugins.push(new LodashModuleReplacementPlugin())
     },
     babel: {
-      plugins: [
-        '@babel/plugin-syntax-dynamic-import',
-        'lodash'
-      ],
-      presets: [['@babel/env', { 'targets': { 'node': 6 } }]]
+      plugins: ['@babel/plugin-syntax-dynamic-import', 'lodash'],
+      presets: [['@babel/env', { targets: { node: 6 } }]]
     }
   }
 }

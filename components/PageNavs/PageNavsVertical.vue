@@ -1,7 +1,7 @@
 <template>
   <nav class="navs">
-    <PageNavsVerticalList class="navs__list"/>
-    <PageNavsVerticalList class="navs__list"/>
+    <PageNavsVerticalList class="navs__list" />
+    <PageNavsVerticalList class="navs__list" />
   </nav>
 </template>
 

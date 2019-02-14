@@ -1,7 +1,9 @@
 <template>
   <div class="date">
     <img class="date__icon" src="~/assets/img/icon_time.png" alt="">
-    <p class="date__text">2019/12/22</p>
+    <p class="date__text">
+      2019/12/22
+    </p>
   </div>
 </template>
 

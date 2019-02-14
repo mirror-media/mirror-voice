@@ -2,19 +2,19 @@
   <ol class="list">
     <TrackListItem
       class="list__list-item"
-      :showListOrder="showListOrder"
+      :show-list-order="showListOrder"
     />
     <TrackListItem
       class="list__list-item"
-      :showListOrder="showListOrder"
+      :show-list-order="showListOrder"
     />
     <TrackListItem
       class="list__list-item"
-      :showListOrder="showListOrder"
+      :show-list-order="showListOrder"
     />
     <TrackListItem
       :class="[ 'list__list-item', { 'list__list-item--border-bottom': showListOrder } ]"
-      :showListOrder="showListOrder"
+      :show-list-order="showListOrder"
     />
   </ol>
 </template>
@@ -23,14 +23,14 @@
 import TrackListItem from './TrackListItem.vue'
 
 export default {
+  components: {
+    TrackListItem
+  },
   props: {
     showListOrder: {
       type: Boolean,
       defalut: false
     }
-  },
-  components: {
-    TrackListItem
   }
 }
 </script>

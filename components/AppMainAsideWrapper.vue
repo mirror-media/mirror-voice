@@ -1,10 +1,10 @@
 <template>
   <section class="wrapper">
     <main class="wrapper__main">
-      <slot name="main"></slot>
+      <slot name="main" />
     </main>
     <aside class="wrapper__aside">
-      <slot name="aside"></slot>
+      <slot name="aside" />
     </aside>
   </section>
 </template>

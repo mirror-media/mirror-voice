@@ -1,7 +1,7 @@
 <template>
   <div
-    class="volume"
     v-click-outside="hideSlider"
+    class="volume"
   >
     <img
       class="volume__icon"
@@ -44,6 +44,9 @@ export default {
       }
     }
   },
+  components: {
+    PlayerSlider
+  },
   props: {
     type: {
       type: String,
@@ -60,18 +63,15 @@ export default {
       }
     }
   },
-  components: {
-    PlayerSlider
-  },
-  watch: {
-    internalVolume() {
-      this.$emit('update:volume', this.internalVolume)
-    }
-  },
   data() {
     return {
       internalVolume: this.volume,
       showSlider: false
+    }
+  },
+  watch: {
+    internalVolume() {
+      this.$emit('update:volume', this.internalVolume)
     }
   },
   methods: {

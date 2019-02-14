@@ -3,11 +3,11 @@
     <no-ssr>
       <vue-slider
         ref="slider"
+        v-model="internalValue"
         class="slider-wrapper__slider"
         :style="{ padding: '0' }"
         v-bind="options"
-        :bgStyle="{ background: bgStyleBackground }"
-        v-model="internalValue"
+        :bg-style="{ background: bgStyleBackground }"
         @callback="onSeek"
       />
     </no-ssr>
@@ -26,6 +26,7 @@ if (process.browser) {
 }
 
 export default {
+  components,
   props: {
     direction: {
       type: String,
@@ -36,6 +37,7 @@ export default {
     },
     buffered: {
       type: Number,
+      default: 0,
       require: true,
       validator(value) {
         return value >= 0 && value <= 1
@@ -43,23 +45,11 @@ export default {
     },
     value: {
       type: Number,
+      default: 0,
       require: true,
       validator(value) {
         return value >= 0 && value <= 1
       }
-    }
-  },
-  components,
-  watch: {
-    internalValue() {
-      this.$emit('update:value', this.internalValue / 100)
-    },
-
-    buffered() {
-      this.internalBuffered = this.buffered * 100
-    },
-    value() {
-      this.internalValue = this.value * 100
     }
   },
   data() {
@@ -92,6 +82,18 @@ export default {
       return `linear-gradient(90deg, #7d7d7d ${this.internalBuffered}%, black ${
         this.internalBuffered
       }%)`
+    }
+  },
+  watch: {
+    internalValue() {
+      this.$emit('update:value', this.internalValue / 100)
+    },
+
+    buffered() {
+      this.internalBuffered = this.buffered * 100
+    },
+    value() {
+      this.internalValue = this.value * 100
     }
   },
   methods: {

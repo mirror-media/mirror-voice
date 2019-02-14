@@ -1,12 +1,16 @@
 <template>
   <AppDiv class="anchor-relateds-wrapper">
-    <AppH1 class="anchor-relateds-wrapper__title">主播其他作品（3）</AppH1>
+    <AppH1 class="anchor-relateds-wrapper__title">
+      主播其他作品（3）
+    </AppH1>
     <ul class="anchor-relateds-wrapper__album-list album-list">
       <li class="album-list__list-item">
         <nuxt-link to="/album/fakeslug1">
           <figure class="album-list-figure">
             <img class="album-list-figure__img" src="" alt="">
-            <figcaption class="album-list-figure__figcaption">{{ truncate('知否？知否？应是綠肥红瘦知否？知否？应是綠肥红瘦') }}</figcaption>
+            <figcaption class="album-list-figure__figcaption">
+              {{ truncate('知否？知否？应是綠肥红瘦知否？知否？应是綠肥红瘦') }}
+            </figcaption>
           </figure>
         </nuxt-link>
       </li>
@@ -14,7 +18,9 @@
         <nuxt-link to="/album/fakeslug2">
           <figure class="album-list-figure">
             <img class="album-list-figure__img" src="" alt="">
-            <figcaption class="album-list-figure__figcaption">{{ truncate('知否？知否？应是綠肥红瘦') }}</figcaption>
+            <figcaption class="album-list-figure__figcaption">
+              {{ truncate('知否？知否？应是綠肥红瘦') }}
+            </figcaption>
           </figure>
         </nuxt-link>
       </li>
@@ -22,7 +28,9 @@
         <nuxt-link to="/album/fakeslug3">
           <figure class="album-list-figure">
             <img class="album-list-figure__img" src="" alt="">
-            <figcaption class="album-list-figure__figcaption">{{ truncate('知否？知否？应是綠肥红瘦') }}</figcaption>
+            <figcaption class="album-list-figure__figcaption">
+              {{ truncate('知否？知否？应是綠肥红瘦') }}
+            </figcaption>
           </figure>
         </nuxt-link>
       </li>

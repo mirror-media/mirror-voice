@@ -1,10 +1,14 @@
 <template>
   <AppDiv class="intro-wrapper">
-    <AppH1 class="intro-wrapper__title">{{ title }}</AppH1>
+    <AppH1 class="intro-wrapper__title">
+      {{ title }}
+    </AppH1>
     <div class="intro-wrapper__intro intro">
       <figure class="intro__info figure">
         <img :class="[ 'figure__img', `figure__img--${imgStyle}` ]" src="" alt="">
-        <figcaption class="figure__figcaption">高難度對話：如何與挑剔的人愉快相處</figcaption>
+        <figcaption class="figure__figcaption">
+          高難度對話：如何與挑剔的人愉快相處
+        </figcaption>
       </figure>
       <div class="intro__description">
         <p>你如果明白什麼事物能激起別人的反應，就能優化自己的行為、互動與人際關係。在沒有架構的情況下試圖和別人愉快相處，有點像是在沒有公式的情況下試圖解答複雜的數學題。這兩種做法不僅都相當困難，也會帶來許多不必要的痛苦。本書會給你學校從來沒教的人際技能。</p>
@@ -18,6 +22,10 @@ import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
 
 export default {
+  components: {
+    AppDiv,
+    AppH1
+  },
   props: {
     title: {
       type: String,
@@ -30,10 +38,6 @@ export default {
         return ['square', 'round'].includes(value)
       }
     }
-  },
-  components: {
-    AppDiv,
-    AppH1
   }
 }
 </script>

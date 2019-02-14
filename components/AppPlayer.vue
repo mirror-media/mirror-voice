@@ -11,7 +11,7 @@
       }"
       :volume.sync="playerVolume"
       :muted.sync="playerMuted"
-      :playbackRate.sync="playerplaybackRate"
+      :playback-rate.sync="playerplaybackRate"
     />
   </div>
 </template>

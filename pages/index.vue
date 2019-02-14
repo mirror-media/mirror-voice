@@ -1,14 +1,14 @@
 <template>
   <AppMainAsideWrapper>
     <div slot="main" class="main">
-      <Slider/>
+      <Slider />
       <AppDiv class="main__wrapper showcase">
         <DivHeader
           class="showcase__header"
           :title="'類別一'"
           :size="'large'"
           :weight="'bold'"
-          :alignItems="'flex-end'"
+          :align-items="'flex-end'"
         >
           <nuxt-link
             class="more"
@@ -17,7 +17,7 @@
             更多
           </nuxt-link>
         </DivHeader>
-        <ShowcaseList class="showcase__showcase"/>
+        <ShowcaseList class="showcase__showcase" />
       </AppDiv>
       <AppDiv class="main__wrapper showcase">
         <DivHeader
@@ -25,7 +25,7 @@
           :title="'類別二'"
           :size="'large'"
           :weight="'bold'"
-          :alignItems="'flex-end'"
+          :align-items="'flex-end'"
         >
           <nuxt-link
             class="more"
@@ -34,7 +34,7 @@
             更多
           </nuxt-link>
         </DivHeader>
-        <ShowcaseList class="showcase__showcase"/>
+        <ShowcaseList class="showcase__showcase" />
       </AppDiv>
     </div>
     <PageNavsVertical

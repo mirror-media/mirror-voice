@@ -28,7 +28,9 @@
       v-show="showListOrder || !isMouseover"
       class="list-item__right right"
     >
-      <p class="right__date">{{ '12 小時前' }}</p>
+      <p class="right__date">
+        {{ '12 小時前' }}
+      </p>
     </div>
   </li>
 </template>
@@ -37,14 +39,14 @@
 import TrackMarker from './TrackMarker.vue'
 
 export default {
+  components: {
+    TrackMarker
+  },
   props: {
     showListOrder: {
       type: Boolean,
       defalut: false
     }
-  },
-  components: {
-    TrackMarker
   },
   data() {
     return {

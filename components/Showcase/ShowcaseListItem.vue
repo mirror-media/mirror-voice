@@ -8,7 +8,7 @@
     @mouseover="onMouseover"
     @mouseout="onMouseout"
   >
-    <div class="list-item__cover"></div>
+    <div class="list-item__cover" />
     <div :class="[ 'list-item__info', `list-item__info--${layout}`, 'info' ]">
       <nuxt-link to="/album/fakeslug">
         <h1
@@ -17,7 +17,9 @@
           {{ title }}
         </h1>
       </nuxt-link>
-      <p class="info__author">{{ author }}</p>
+      <p class="info__author">
+        {{ author }}
+      </p>
       <AppDate
         v-if="layout === 'horizontal'"
         class="info__date"
@@ -31,6 +33,9 @@ import _ from 'lodash'
 import AppDate from '~/components/AppDate.vue'
 
 export default {
+  components: {
+    AppDate
+  },
   props: {
     layout: {
       type: String,
@@ -39,9 +44,6 @@ export default {
         return ['vertical', 'horizontal'].includes(value)
       }
     }
-  },
-  components: {
-    AppDate
   },
   data() {
     return {

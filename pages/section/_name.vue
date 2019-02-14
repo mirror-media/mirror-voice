@@ -1,16 +1,16 @@
 <template>
   <section class="section">
     <AppDiv class="section__wrapper top-wrapper">
-      <PageNavsHorizontal/>
+      <PageNavsHorizontal />
     </AppDiv>
     <AppDiv class="section__wrapper bottom-wrapper">
       <DivHeader
         :title="'全部類別一'"
-        :subTitle="'共 180 筆'"
+        :sub-title="'共 180 筆'"
       />
       <ShowcaseList
         class="bottom-wrapper__showcase"
-        :listItemLayout="'horizontal'"
+        :list-item-layout="'horizontal'"
       />
       <AppPagination
         class="bottom-wrapper__pagination"

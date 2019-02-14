@@ -1,6 +1,6 @@
 <template>
   <h1 :class="[ 'h1', `h1--${size}`, `h1--${weight}`]">
-    <slot></slot>
+    <slot />
   </h1>
 </template>
 

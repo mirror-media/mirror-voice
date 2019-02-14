@@ -1,4 +1,4 @@
-module.exports =  {
+module.exports = {
   welcome: '嗨嗨嗨',
   tos: `
     <h2>一、認知與接受條款</h2>

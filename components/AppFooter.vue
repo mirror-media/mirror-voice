@@ -1,9 +1,15 @@
 <template>
   <footer class="footer">
     <nav class="footer__navs navs">
-      <div class="navs__nav">聯絡我們</div>
-      <nuxt-link to="/tos" class="navs__nav">服務條款</nuxt-link>
-      <div class="navs__nav">隱私政策</div>
+      <div class="navs__nav">
+        聯絡我們
+      </div>
+      <nuxt-link to="/tos" class="navs__nav">
+        服務條款
+      </nuxt-link>
+      <div class="navs__nav">
+        隱私政策
+      </div>
     </nav>
     <div class="footer__rights">
       <p>Copyright © 2019 精鏡傳媒股份有限公司 All Rights Reserved.</p>

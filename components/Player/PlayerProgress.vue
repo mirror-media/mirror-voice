@@ -13,6 +13,9 @@
 import PlayerSlider from './PlayerSlider.vue'
 
 export default {
+  components: {
+    PlayerSlider
+  },
   props: {
     bufferedAmount: {
       type: Number,
@@ -29,8 +32,11 @@ export default {
       }
     }
   },
-  components: {
-    PlayerSlider
+  data() {
+    return {
+      internalBufferedAmount: this.bufferedAmount / 100,
+      internalPlayedAmount: this.playedAmount / 100
+    }
   },
   watch: {
     bufferedAmount() {
@@ -38,12 +44,6 @@ export default {
     },
     playedAmount() {
       this.internalPlayedAmount = this.playedAmount / 100
-    }
-  },
-  data() {
-    return {
-      internalBufferedAmount: this.bufferedAmount / 100,
-      internalPlayedAmount: this.playedAmount / 100
     }
   },
   methods: {

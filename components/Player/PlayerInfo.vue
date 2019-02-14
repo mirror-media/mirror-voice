@@ -1,12 +1,20 @@
 <template>
   <div class="info">
     <template v-if="showTitle">
-      <p class="info__first">{{ title }}</p>
-      <p class="info__second"><span>{{ secondsToHms(played) }}</span> / {{ secondsToHms(duration) }}</p>
+      <p class="info__first">
+        {{ title }}
+      </p>
+      <p class="info__second">
+        <span>{{ secondsToHms(played) }}</span> / {{ secondsToHms(duration) }}
+      </p>
     </template>
     <template v-else>
-      <p class="info__first">{{ secondsToHms(played) }}</p>
-      <p class="info__second">{{ secondsToHms(duration) }}</p>
+      <p class="info__first">
+        {{ secondsToHms(played) }}
+      </p>
+      <p class="info__second">
+        {{ secondsToHms(duration) }}
+      </p>
     </template>
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div
-    class="rate"
     v-click-outside="hidePicker"
+    class="rate"
   >
     <p
       class="rate__indicator"
@@ -14,13 +14,12 @@
       :class="[ 'rate__picker', `rate__picker--${type}`, 'picker' ]"
     >
       <li
-        :class="[ 'picker__list-item', { 'picker__list-item--highlight': rate === rateCurrent } ]"
         v-for="rate in rateAvailable"
         :key="rate"
-        v-text="formatRateDisplay(rate)"
+        :class="[ 'picker__list-item', { 'picker__list-item--highlight': rate === rateCurrent } ]"
         @click="pickRate(rate)"
-      >
-      </li>
+        v-text="formatRateDisplay(rate)"
+      />
     </ol>
   </div>
 </template>

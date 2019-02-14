@@ -3,7 +3,7 @@
     class="div"
     :style="{ padding: padding }"
   >
-    <slot></slot>
+    <slot />
   </div>
 </template>
 

@@ -6,7 +6,7 @@
         :page="page"
         :items-per-page="itemsPerPage"
       >
-        <template><div></div></template>
+        <template><div /></template>
         <template
           slot="buttons"
           slot-scope="props"

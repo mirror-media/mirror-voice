@@ -2,9 +2,9 @@
   <div class="info-wrapper">
     <div
       v-if="layout !== 'single'"
+      ref="cover"
       class="info-wrapper__cover"
       :style="{ minWidth: `${coverHeight}px`, maxWidth: `${coverHeight}px` }"
-      ref="cover"
     >
       <!-- <img src="" alt=""> -->
     </div>
@@ -16,7 +16,7 @@
       >
         有效的家庭關係
       </AppH1>
-      <AppDate class="info__date"/>
+      <AppDate class="info__date" />
       <div class="info__basic">
         <p>主播： 網路水手、網路水手、網路</p>
         <p>原著： 邁克・貝克特爾</p>
@@ -25,30 +25,32 @@
         v-if="layout === 'single'"
         class="info__tags tags"
       >
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
-        <AppTag class="tags__tag"/>
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
+        <AppTag class="tags__tag" />
       </div>
       <div
         v-else-if="layout === 'album'"
         class="info__play-all play-all"
       >
         <img class="play-all__icon" src="~/assets/img/btn_play.png" alt="">
-        <span class="play-all__text">全部播放</span>
+        <span class="play-all__text">
+          全部播放
+        </span>
       </div>
     </div>
   </div>
@@ -62,6 +64,11 @@ import AppDate from '~/components/AppDate.vue'
 import AppTag from '~/components/AppTag.vue'
 
 export default {
+  components: {
+    AppH1,
+    AppDate,
+    AppTag
+  },
   props: {
     layout: {
       type: String,
@@ -70,11 +77,6 @@ export default {
         return ['single', 'album'].includes(value)
       }
     }
-  },
-  components: {
-    AppH1,
-    AppDate,
-    AppTag
   },
   data() {
     return {

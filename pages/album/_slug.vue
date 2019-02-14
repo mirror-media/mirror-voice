@@ -2,11 +2,13 @@
   <AppMainAsideWrapper>
     <div slot="main" class="main">
       <AppDiv class="main__wrapper info-wrapper">
-        <Info :layout="'album'"/>
+        <Info :layout="'album'" />
       </AppDiv>
       <AppDiv class="main__wrapper body-wrapper">
-        <AppH1 class="body-wrapper__title">簡介</AppH1>
-        <div class="body-wrapper__body" v-html="body"></div>
+        <AppH1 class="body-wrapper__title">
+          簡介
+        </AppH1>
+        <div class="body-wrapper__body" v-html="body" />
       </AppDiv>
       <AppDiv class="main__wrapper tracks-wrapper">
         <DivHeader
@@ -14,13 +16,17 @@
           :title="'專輯音檔（18）'"
         >
           <div class="sorts">
-            <button class="sorts__sort">最新</button>
-            <button class="sorts__sort">最舊</button>
+            <button class="sorts__sort">
+              最新
+            </button>
+            <button class="sorts__sort">
+              最舊
+            </button>
           </div>
         </DivHeader>
         <TrackList
           class="tracks-wrapper__tracks"
-          :showListOrder="true"
+          :show-list-order="true"
         />
         <AppPagination
           class="tracks-wrapper__pagination"
@@ -31,7 +37,7 @@
       <AsideIntro
         class="aside__wrapper anchor"
         :title="'主播'"
-        :imgStyle="'round'"
+        :img-style="'round'"
       />
       <AsideAlbumList
         class="aside__wrapper anchor-relateds"

@@ -5,7 +5,7 @@
         class="main__wrapper info-wrapper"
         :padding="'0'"
       >
-        <Info class="info-wrapper__info"/>
+        <Info class="info-wrapper__info" />
         <Player
           :sound="{
             title: '前前前世',
@@ -15,12 +15,14 @@
           }"
           :volume.sync="playerVolume"
           :muted.sync="playerMuted"
-          :playbackRate.sync="playerplaybackRate"
+          :playback-rate.sync="playerplaybackRate"
         />
       </AppDiv>
       <AppDiv class="main__wrapper body-wrapper">
-        <AppH1 class="body-wrapper__title">文稿</AppH1>
-        <div class="body-wrapper__body" v-html="body"></div>
+        <AppH1 class="body-wrapper__title">
+          文稿
+        </AppH1>
+        <div class="body-wrapper__body" v-html="body" />
       </AppDiv>
     </div>
     <div slot="aside" class="aside">
