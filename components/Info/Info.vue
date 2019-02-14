@@ -3,6 +3,8 @@
     <div
       v-if="layout !== 'single'"
       class="info-wrapper__cover"
+      :style="{ minWidth: `${coverHeight}px`, maxWidth: `${coverHeight}px` }"
+      ref="cover"
     >
       <!-- <img src="" alt=""> -->
     </div>
@@ -16,8 +18,8 @@
       </AppH1>
       <AppDate class="info__date"/>
       <div class="info__basic">
-        <span>主播： 網路水手、網路水手、網路水手</span>
-        <span>原著： 邁克・貝克特爾</span>
+        <p>主播： 網路水手、網路水手、網路</p>
+        <p>原著： 邁克・貝克特爾</p>
       </div>
       <div
         v-if="layout === 'single'"
@@ -53,6 +55,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 import AppH1 from '~/components/AppH1.vue'
 import AppDate from '~/components/AppDate.vue'
 import AppTag from '~/components/AppTag.vue'
@@ -71,6 +75,19 @@ export default {
     AppH1,
     AppDate,
     AppTag
+  },
+  data() {
+    return {
+      coverHeight: 0
+    }
+  },
+  computed: {
+    cover() {
+      return this.$refs.cover
+    }
+  },
+  mounted() {
+    this.coverHeight = _.get(this.cover, ['offsetHeight'], 0)
   }
 }
 </script>
@@ -79,11 +96,9 @@ export default {
 .info-wrapper
   display flex
   &__cover
-    d = 140px
-    width d
-    min-width d
-    height d
-    min-height d
+    min-height 100%
+    max-height 100%
+    width 0
     background-color black
     margin 0 22px 0 0
 
@@ -94,13 +109,14 @@ export default {
   &__basic
     margin 16px 0 0 0
     display flex
-    flex-wrap wrap
-    line-height 1
-    span
+    flex-direction column
+    // flex-wrap wrap
+    line-height 1.71
+    p
       font-size 14px
       color #7d7d7d
-    span + span
-      margin 0 0 0 40px
+    p + p
+      margin 10px 0 0 0
   &__tags
     display flex
     margin 7px 0 0 0
