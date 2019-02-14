@@ -18,7 +18,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,vue,css}": ["yarn lintfix", "git add"]
+    "*.{js,vue,css}": ["yarn lint"]
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
