@@ -13,7 +13,7 @@
       :showListOrder="showListOrder"
     />
     <TrackListItem
-      class="list__list-item"
+      :class="[ 'list__list-item', { 'list__list-item--border-bottom': showListOrder } ]"
       :showListOrder="showListOrder"
     />
   </ol>
@@ -42,4 +42,6 @@ export default {
   padding 0
   &__list-item
     border-top 1px solid #eeeeee
+    &--border-bottom
+      border-bottom 1px solid #eeeeee
 </style>

@@ -22,6 +22,9 @@
           class="tracks-wrapper__tracks"
           :showListOrder="true"
         />
+        <AppPagination
+          class="tracks-wrapper__pagination"
+        />
       </AppDiv>
     </div>
     <div slot="aside" class="aside">
@@ -46,6 +49,7 @@ import DivHeader from '~/components/Div/DivHeader.vue'
 import AsideIntro from '~/components/Aside/AsideIntro.vue'
 import AsideAlbumList from '~/components/Aside/AsideAlbumList.vue'
 import TrackList from '~/components/Track/TrackList.vue'
+import AppPagination from '~/components/AppPagination.vue'
 
 export default {
   components: {
@@ -56,7 +60,8 @@ export default {
     DivHeader,
     AsideIntro,
     AsideAlbumList,
-    TrackList
+    TrackList,
+    AppPagination
   },
   data() {
     return {
@@ -113,4 +118,6 @@ export default {
 .tracks-wrapper
   &__tracks
     margin 18px 0 0 0
+  &__pagination
+    margin 20px 0 0 0
 </style>

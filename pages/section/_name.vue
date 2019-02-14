@@ -12,6 +12,9 @@
         class="bottom-wrapper__showcase"
         :listItemLayout="'horizontal'"
       />
+      <AppPagination
+        class="bottom-wrapper__pagination"
+      />
     </AppDiv>
   </section>
 </template>
@@ -21,13 +24,15 @@ import AppDiv from '~/components/AppDiv.vue'
 import PageNavsHorizontal from '~/components/PageNavs/PageNavsHorizontal.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import ShowcaseList from '~/components/Showcase/ShowcaseList.vue'
+import AppPagination from '~/components/AppPagination.vue'
 
 export default {
   components: {
     AppDiv,
     PageNavsHorizontal,
     DivHeader,
-    ShowcaseList
+    ShowcaseList,
+    AppPagination
   }
 }
 </script>
@@ -43,4 +48,6 @@ export default {
 .bottom-wrapper
   &__showcase
     margin 26px 0 0 0
+  &__pagination
+    margin 75px 0 0 0
 </style>
