@@ -132,6 +132,8 @@
       border-left 2px solid #7d7d7d
     a
       color #7d7d7d
+      &.nuxt-link-active
+        color black
 
 .category-list
   margin 24px 0 0 0
@@ -144,4 +146,6 @@
     cursor pointer
     a
       color #7d7d7d
+      &.nuxt-link-active
+        color #d84939
 </style>
