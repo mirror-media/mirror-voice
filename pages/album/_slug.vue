@@ -15,7 +15,13 @@
           class="tracks-wrapper__header"
           :title="'專輯音檔（18）'"
         >
-          <div class="sorts">
+          <template slot="left">
+            專輯音檔（18）
+          </template>
+          <div
+            slot="right"
+            class="sorts"
+          >
             <button class="sorts__sort">
               最新
             </button>

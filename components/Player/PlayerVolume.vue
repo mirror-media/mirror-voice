@@ -5,7 +5,7 @@
   >
     <img
       class="volume__icon"
-      src="~/assets/img/btn_volume_normal.png"
+      :src="require(`~/assets/img/btn_volume_${internalVolume <= 0 ? 'min' : 'normal'}.png`)"
       alt=""
       @click="toggleSlider"
     >

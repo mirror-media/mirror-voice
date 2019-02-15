@@ -3,11 +3,18 @@
     class="aside__wrapper album-relateds-wrapper"
     :padding="'25px 8px 7px 8px'"
   >
-    <DivHeader
-      class="album-relateds-wrapper__header"
-      :title="'同專輯的其他音檔'"
-    >
-      <nuxt-link class="album" to="/album/fakeslug">
+    <DivHeader class="album-relateds-wrapper__header">
+      <nuxt-link
+        slot="left"
+        to="/album/fakeslug"
+      >
+        同專輯的其他音檔
+      </nuxt-link>
+      <nuxt-link
+        slot="right"
+        class="album"
+        to="/album/fakeslug"
+      >
         更多
       </nuxt-link>
     </DivHeader>

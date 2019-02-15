@@ -4,10 +4,14 @@
       <PageNavsHorizontal />
     </AppDiv>
     <AppDiv class="section__wrapper bottom-wrapper">
-      <DivHeader
-        :title="'全部類別一'"
-        :sub-title="'共 180 筆'"
-      />
+      <DivHeader>
+        <template slot="left">
+          全部類別一
+        </template>
+        <template slot="right">
+          共 180 筆
+        </template>
+      </DivHeader>
       <ShowcaseList
         class="bottom-wrapper__showcase"
         :list-item-layout="'horizontal'"

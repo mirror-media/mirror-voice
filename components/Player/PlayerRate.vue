@@ -97,6 +97,7 @@ export default {
   align-items center
   position relative
   &__indicator
+    min-width 55px
     font-size 18px
     font-weight 600
     color #e5e5e5

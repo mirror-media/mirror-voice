@@ -4,14 +4,21 @@
       <Slider />
       <AppDiv class="main__wrapper showcase">
         <DivHeader
-          class="showcase__header"
-          :title="'類別一'"
+          class="showcase__header header"
           :size="'large'"
           :weight="'bold'"
           :align-items="'flex-end'"
         >
           <nuxt-link
-            class="more"
+            slot="left"
+            class="header__left"
+            to="/section/section1"
+          >
+            類別一
+          </nuxt-link>
+          <nuxt-link
+            slot="right"
+            class="header__right"
             to="/section/section1"
           >
             更多
@@ -21,14 +28,21 @@
       </AppDiv>
       <AppDiv class="main__wrapper showcase">
         <DivHeader
-          class="showcase__header"
-          :title="'類別二'"
+          class="showcase__header header"
           :size="'large'"
           :weight="'bold'"
           :align-items="'flex-end'"
         >
           <nuxt-link
-            class="more"
+            slot="left"
+            class="header__left"
+            to="/section/section2"
+          >
+            類別二
+          </nuxt-link>
+          <nuxt-link
+            slot="right"
+            class="header__right"
             to="/section/section2"
           >
             更多
@@ -72,8 +86,9 @@ export default {
   &__showcase
     margin 24px 0 0 0
 
-.more
-  font-size 14px
-  color #7d7d7d
-  cursor pointer
+.header
+  &__right
+    font-size 14px
+    color #7d7d7d
+    cursor pointer
 </style>

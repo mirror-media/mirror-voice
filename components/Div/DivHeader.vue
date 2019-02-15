@@ -8,13 +8,9 @@
       :size="size"
       :weight="weight"
     >
-      {{ title }}
+      <slot name="left" />
     </AppH1>
-    <slot>
-      <p class="header__more">
-        {{ subTitle }}
-      </p>
-    </slot>
+    <slot name="right" />
   </header>
 </template>
 
@@ -26,10 +22,6 @@ export default {
     AppH1
   },
   props: {
-    title: {
-      type: String,
-      required: true
-    },
     size: {
       type: String,
       default: 'small',
@@ -44,10 +36,6 @@ export default {
         return ['normal', 'bold'].includes(value)
       }
     },
-    subTitle: {
-      type: String,
-      default: '更多'
-    },
     alignItems: {
       type: String,
       default: 'center'
@@ -60,10 +48,4 @@ export default {
 .header
   display flex
   justify-content space-between
-  &__title
-    cursor pointer
-  &__more
-    font-size 14px
-    color #7d7d7d
-    cursor pointer
 </style>

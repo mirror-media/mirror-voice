@@ -29,6 +29,8 @@ export default {
 .h1
   margin 0
   line-height 1
+  & >>> a
+    color black !important
   &--large
     font-size 21px
   &--small

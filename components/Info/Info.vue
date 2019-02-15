@@ -44,12 +44,11 @@
         <AppTag class="tags__tag" />
       </div>
       <div
-        v-else-if="layout === 'album'"
         class="info__play-all play-all"
       >
         <img class="play-all__icon" src="~/assets/img/btn_play.png" alt="">
         <span class="play-all__text">
-          全部播放
+          {{ layout === 'album' ? '全部播放' : '播放' }}
         </span>
       </div>
     </div>
