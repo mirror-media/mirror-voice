@@ -2,13 +2,12 @@
   <div class="slider-wrapper">
     <no-ssr>
       <vue-slider
-        ref="slider"
         v-model="internalValue"
         class="slider-wrapper__slider"
         :style="{ padding: '0' }"
-        v-bind="options"
         :bg-style="{ background: bgStyleBackground }"
-        @callback="onSeek"
+        v-bind="options"
+        @callback="v => $emit('valueChange', v)"
       />
     </no-ssr>
   </div>
@@ -54,20 +53,16 @@ export default {
   },
   data() {
     return {
-      internalBuffered: this.buffered * 100,
-      internalValue: this.value * 100,
+      internalValue: this.value,
       options: {
+        interval: 0.1,
         direction: this.direction,
         width: this.direction === 'vertical' ? 4 : 'auto',
         height: this.direction === 'vertical' ? 126 : 4,
         min: 0,
-        max: 100,
+        max: 1,
         tooltip: false,
         dotSize: 12,
-        // bgStyle: {
-        //   // backgroundColor: 'black'
-        //   background: 'linear-gradient(90deg, #7d7d7d 50%, black 50%)'
-        // },
         sliderStyle: {
           backgroundColor: '#eeeeee'
         },
@@ -79,26 +74,14 @@ export default {
   },
   computed: {
     bgStyleBackground() {
-      return `linear-gradient(90deg, #7d7d7d ${this.internalBuffered}%, black ${
-        this.internalBuffered
+      return `linear-gradient(90deg, #7d7d7d ${this.buffered}%, black ${
+        this.buffered
       }%)`
     }
   },
   watch: {
-    internalValue() {
-      this.$emit('update:value', this.internalValue / 100)
-    },
-
-    buffered() {
-      this.internalBuffered = this.buffered * 100
-    },
     value() {
-      this.internalValue = this.value * 100
-    }
-  },
-  methods: {
-    onSeek(value) {
-      this.$emit('seek', value / 100)
+      this.internalValue = this.value
     }
   }
 }

@@ -5,7 +5,7 @@
   >
     <img
       class="volume__icon"
-      :src="require(`~/assets/img/btn_volume_${internalVolume <= 0 ? 'min' : 'normal'}.png`)"
+      :src="require(`~/assets/img/btn_volume_${volume <= 0 ? 'min' : 'normal'}.png`)"
       alt=""
       @click="toggleSlider"
     >
@@ -17,7 +17,8 @@
     >
       <PlayerSlider
         :direction="'vertical'"
-        :value.sync="internalVolume"
+        :value="volume"
+        @valueChange="v => $emit('volumeChange', v)"
       />
     </div>
   </div>
@@ -65,13 +66,7 @@ export default {
   },
   data() {
     return {
-      internalVolume: this.volume,
       showSlider: false
-    }
-  },
-  watch: {
-    internalVolume() {
-      this.$emit('update:volume', this.internalVolume)
     }
   },
   methods: {
@@ -81,10 +76,6 @@ export default {
     hideSlider() {
       this.showSlider = false
     }
-    // pickRate(rate) {
-    //   this.$emit('update:rateCurrent', rate)
-    //   this.hideSlider()
-    // }
   }
 }
 </script>

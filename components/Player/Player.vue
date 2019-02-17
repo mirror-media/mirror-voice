@@ -16,24 +16,31 @@
     <div :class="[ 'player__middle', 'middle', `middle--${type}` ]">
       <PlayerInfo
         class="middle__info"
-        :sound="soundCurrent"
+        :sound="currentSound"
         :show-title="type === 'long'"
         :duration="playStatDuration"
         :played="playStatPlayedTime"
       />
-      <PlayerProgress
+      <PlayerSlider
         class="middle__progress"
-        :buffered-amount="((playStatLoadedTime / playStatDuration) * 100) || 0"
-        :played-amount="((playStatPlayedTime / playStatDuration) * 100) || 0"
-        @seek="seek"
+        :direction="'horizontal'"
+        :buffered="(playStatLoadedTime / playStatDuration) || 0"
+        :value="(playStatPlayedTime / playStatDuration) || 0"
+        @valueChange="seek"
       />
     </div>
-    <PlayerRate class="player__rate" :type="type" :rate-current.sync="audioPlaybackRate" />
+    <PlayerRate
+      class="player__rate"
+      :type="type"
+      :rate="currentPlaybackRate"
+      @rateChange="v => currentPlaybackRate = v"
+    />
     <PlayerVolume
       v-if="type === 'long'"
       class="player__volume"
       :type="type"
-      :volume.sync="audioVolume"
+      :volume="currentVolume"
+      @volumeChange="v => currentVolume = v"
     />
   </div>
 </template>
@@ -41,22 +48,22 @@
 <script>
 import PlayerNavs from './PlayerNavs.vue'
 import PlayerInfo from './PlayerInfo.vue'
-import PlayerProgress from './PlayerProgress.vue'
 import PlayerRate from './PlayerRate.vue'
 import PlayerVolume from './PlayerVolume.vue'
+import PlayerSlider from './PlayerSlider.vue'
 
 import initEventEmitters from './util/eventEmitters'
 import initEventHandlers from './util/eventHandlers'
 
-import { rateAvailable } from './comm/rate'
+import { ratesAvailable } from './comm/rate'
 
 export default {
   components: {
     PlayerNavs,
     PlayerInfo,
-    PlayerProgress,
     PlayerRate,
-    PlayerVolume
+    PlayerVolume,
+    PlayerSlider
   },
   props: {
     type: {
@@ -96,7 +103,7 @@ export default {
       type: Number,
       default: 1.0,
       validator(value) {
-        return rateAvailable.includes(value)
+        return ratesAvailable.includes(value)
       }
     }
   },
@@ -123,7 +130,7 @@ export default {
 
     // observers
     // inform parent component in setters
-    soundCurrent: {
+    currentSound: {
       get() {
         return this.internalSound
       },
@@ -132,7 +139,7 @@ export default {
         this.internalSound = val
       }
     },
-    audioVolume: {
+    currentVolume: {
       get() {
         return this.internalVolume
       },
@@ -141,7 +148,7 @@ export default {
         this.internalVolume = val
       }
     },
-    isAudioMuted: {
+    currentMuted: {
       get() {
         return this.internalMuted
       },
@@ -150,7 +157,7 @@ export default {
         this.internalMuted = val
       }
     },
-    audioPlaybackRate: {
+    currentPlaybackRate: {
       get() {
         return this.internalPlaybackRate
       },
@@ -162,14 +169,14 @@ export default {
   },
   watch: {
     // observe mutable properties
-    audioVolume() {
-      this.audio.volume = this.audioVolume
+    currentVolume() {
+      this.audio.volume = this.currentVolume
     },
-    isAudioMuted() {
-      this.audio.muted = this.isAudioMuted
+    currentMuted() {
+      this.audio.muted = this.currentMuted
     },
-    audioPlaybackRate() {
-      this.audio.playbackRate = this.audioPlaybackRate
+    currentPlaybackRate() {
+      this.audio.playbackRate = this.currentPlaybackRate
     },
 
     // sync muted, volume if parent component mutate the props
@@ -206,8 +213,8 @@ export default {
       initEventHandlers(this)
 
       // set audio's src
-      if (this.soundCurrent) {
-        this.audio.src = this.soundCurrent.src
+      if (this.currentSound) {
+        this.audio.src = this.currentSound.src
       }
     },
     play() {
@@ -216,8 +223,8 @@ export default {
     pause() {
       this.audio.pause()
     },
-    seek(value) {
-      this.audio.currentTime = this.audio.duration * value
+    seek(percentage) {
+      this.audio.currentTime = this.audio.duration * percentage
     }
   }
 }

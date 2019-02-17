@@ -7,25 +7,25 @@
       class="rate__indicator"
       @click="togglePicker"
     >
-      X {{ formatRateDisplay(rateCurrent) }}
+      X {{ formatRateDisplay(rate) }}
     </p>
     <ol
       v-show="showPicker"
       :class="[ 'rate__picker', `rate__picker--${type}`, 'picker' ]"
     >
       <li
-        v-for="rate in rateAvailable"
-        :key="rate"
-        :class="[ 'picker__list-item', { 'picker__list-item--highlight': rate === rateCurrent } ]"
-        @click="pickRate(rate)"
-        v-text="formatRateDisplay(rate)"
+        v-for="rateAvailable in ratesAvailable"
+        :key="rateAvailable"
+        :class="[ 'picker__list-item', { 'picker__list-item--highlight': rateAvailable === rate } ]"
+        @click="pickRate(rateAvailable)"
+        v-text="formatRateDisplay(rateAvailable)"
       />
     </ol>
   </div>
 </template>
 
 <script>
-import { rateAvailable } from './comm/rate'
+import { ratesAvailable } from './comm/rate'
 
 export default {
   directives: {
@@ -53,17 +53,17 @@ export default {
         return ['short', 'long'].includes(value)
       }
     },
-    rateCurrent: {
+    rate: {
       type: Number,
       default: 1.0,
       validator(value) {
-        return rateAvailable.includes(value)
+        return ratesAvailable.includes(value)
       }
     }
   },
   data() {
     return {
-      rateAvailable: rateAvailable,
+      ratesAvailable,
       showPicker: false
     }
   },
@@ -75,7 +75,7 @@ export default {
       this.showPicker = false
     },
     pickRate(rate) {
-      this.$emit('update:rateCurrent', rate)
+      this.$emit('rateChange', rate)
       this.hidePicker()
     },
     formatRateDisplay(rate) {
