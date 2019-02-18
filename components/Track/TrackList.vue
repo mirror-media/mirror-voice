@@ -3,23 +3,29 @@
     <TrackListItem
       class="list__list-item"
       :show-list-order="showListOrder"
+      @click.native="TOGGLE_APP_PLAYER"
     />
     <TrackListItem
       class="list__list-item"
       :show-list-order="showListOrder"
+      @click.native="TOGGLE_APP_PLAYER"
     />
     <TrackListItem
       class="list__list-item"
       :show-list-order="showListOrder"
+      @click.native="TOGGLE_APP_PLAYER"
     />
     <TrackListItem
       :class="[ 'list__list-item', { 'list__list-item--border-bottom': showListOrder } ]"
       :show-list-order="showListOrder"
+      @click.native="TOGGLE_APP_PLAYER"
     />
   </ol>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 import TrackListItem from './TrackListItem.vue'
 
 export default {
@@ -31,6 +37,9 @@ export default {
       type: Boolean,
       defalut: false
     }
+  },
+  methods: {
+    ...mapMutations(['TOGGLE_APP_PLAYER'])
   }
 }
 </script>

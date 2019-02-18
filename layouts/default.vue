@@ -50,8 +50,10 @@ export default {
   &__view-wrapper
     margin 18px auto 60px auto
   &__player
-    transition transform .25s ease-out
+    opacity 1
     transform translate(0, 0)
+    transition transform .25s ease-out, opacity .25s ease-out
     &--hide
+      opacity 0
       transform translate(0, 60px)
 </style>

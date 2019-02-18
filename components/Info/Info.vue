@@ -44,10 +44,11 @@
         <AppTag class="tags__tag" />
       </div>
       <div
-        class="info__play-all play-all"
+        class="info__toggle-play toggle-play"
+        @click="TOGGLE_APP_PLAYER"
       >
-        <img class="play-all__icon" src="~/assets/img/btn_play.png" alt="">
-        <span class="play-all__text">
+        <img class="toggle-play__icon" src="~/assets/img/btn_play.png" alt="">
+        <span class="toggle-play__text">
           {{ layout === 'album' ? '全部播放' : '播放' }}
         </span>
       </div>
@@ -57,6 +58,7 @@
 
 <script>
 import _ from 'lodash'
+import { mapMutations } from 'vuex'
 
 import AppH1 from '~/components/AppH1.vue'
 import AppDate from '~/components/AppDate.vue'
@@ -89,6 +91,9 @@ export default {
   },
   mounted() {
     this.coverHeight = _.get(this.cover, ['offsetHeight'], 0)
+  },
+  methods: {
+    ...mapMutations(['TOGGLE_APP_PLAYER'])
   }
 }
 </script>
@@ -123,7 +128,7 @@ export default {
     margin 7px 0 0 0
     position relative
     left -12px
-  &__play-all
+  &__toggle-play
     margin 18px 0 0 0
 
 .tags
@@ -131,7 +136,7 @@ export default {
   &__tag
     margin 12px 0 0 12px
 
-.play-all
+.toggle-play
   display inline-flex
   align-items center
   height 36px

@@ -19,87 +19,87 @@
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category1">
           文學
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category2">
           懸疑
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category3">
           生活
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category4">
           都市
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category5">
           教材
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category6">
           幻想
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category7">
           經典
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category8">
           武俠
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category9">
           童書
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category10">
           歷史小說
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category11">
           勵志
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category12">
           外文原版
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category13">
           社科
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category14">
           商業
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category15">
           言情
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category16">
           官場商戰
         </nuxt-link>
       </li>
       <li class="category-list__list-item">
-        <nuxt-link to="/category/1">
+        <nuxt-link to="/category/category17">
           諸如此類
         </nuxt-link>
       </li>

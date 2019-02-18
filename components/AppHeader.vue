@@ -1,11 +1,11 @@
 <template>
   <header class="header">
     <nuxt-link to="/">
-      back to home
+      <img class="header__logo" src="~/assets/img/logo.svg" alt="">
     </nuxt-link>
-    <div @click="tooglePlayerFixed">
+    <!-- <div @click="tooglePlayerFixed">
       toggle fixed player
-    </div>
+    </div> -->
   </header>
 </template>
 
@@ -26,4 +26,9 @@ export default {
 .header
   height 70px
   background-color #d84939
+  padding 0 0 0 20px
+  display flex
+  align-items center
+  &__logo
+    width 100px
 </style>

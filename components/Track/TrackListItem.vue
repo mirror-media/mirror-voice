@@ -14,7 +14,7 @@
         class="left__marker"
         :status="status"
       />
-      <nuxt-link to="/single/fakeslug1">
+      <nuxt-link to="/single/fakeslug1" @click.native.stop>
         <p
           :class="[
             'left__title',

@@ -2,7 +2,7 @@
   <div :class="[ 'player', `player--${type}` ]">
     <audio ref="audio" />
     <div v-if="type === 'long'" class="player__cover cover">
-      <img class="cover__img" src alt>
+      <img class="cover__img" :src="currentSound.cover" alt>
     </div>
     <PlayerNavs
       class="player__navs"
@@ -254,8 +254,10 @@ export default {
   d = 34px
   width d
   height d
-  background-color black
-  // &__img
+  &__img
+    width 100%
+    height 100%
+    object-fit cover
 
 .middle
   display flex
