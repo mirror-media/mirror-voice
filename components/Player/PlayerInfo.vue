@@ -1,10 +1,13 @@
 <template>
   <div class="info">
     <template v-if="showTitle">
-      <p class="info__first">
+      <nuxt-link
+        class="info__first info__first--truncate"
+        to="/single/fakeslug"
+      >
         {{ title }}
-      </p>
-      <p class="info__second">
+      </nuxt-link>
+      <p class="info__second info__second--fixed-width">
         <span>{{ secondsToHms(played) }}</span> / {{ secondsToHms(duration) }}
       </p>
     </template>
@@ -73,9 +76,16 @@ export default {
   &__first
     line-height 1
     color #e5e5e5
+    &--truncate
+      white-space nowrap
+      overflow hidden
+      text-overflow ellipsis
   &__second
     line-height 1
     color #7d7d7d
     span
       color #e5e5e5
+    &--fixed-width
+      min-width max-content
+      margin 0 0 0 5px
 </style>

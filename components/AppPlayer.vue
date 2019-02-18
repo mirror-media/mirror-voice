@@ -3,12 +3,8 @@
     <Player
       class="player-wrapper__player"
       :type="'long'"
-      :sound="{
-        title: '前前前世',
-        artist: 'RADWIMPS',
-        src: 'https://cn-east-17-aplayer-35525609.oss.dogecdn.com/yourname.mp3',
-        cover: 'https://cn-east-17-aplayer-35525609.oss.dogecdn.com/yourname.jpg'
-      }"
+      :sound.sync="sound"
+      :list="list"
       :volume.sync="playerVolume"
       :muted.sync="playerMuted"
       :playback-rate.sync="playerplaybackRate"
@@ -17,6 +13,9 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import { mapState } from 'vuex'
+
 import Player from '~/components/Player/Player.vue'
 
 export default {
@@ -25,9 +24,24 @@ export default {
   },
   data() {
     return {
+      internalSound: {},
       playerVolume: 1,
       playerMuted: false,
       playerplaybackRate: 1
+    }
+  },
+  computed: {
+    ...mapState({
+      list: state => state.appPlayer.list
+    }),
+    sound: {
+      get() {
+        return _.isEmpty(this.internalSound) ? this.list[0] : this.internalSound
+      },
+      set(sound) {
+        const index = _.findIndex(this.list, o => o.src === sound.src)
+        this.internalSound = this.list[index]
+      }
     }
   }
 }

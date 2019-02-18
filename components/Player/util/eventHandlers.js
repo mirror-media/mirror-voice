@@ -1,26 +1,19 @@
 export default function(player) {
-  player.audio.addEventListener('play', onAudioPlay.bind(player))
-  player.audio.addEventListener('pause', onAudioPause.bind(player))
-  player.audio.addEventListener('abort', onAudioPause.bind(player))
-  player.audio.addEventListener('waiting', onAudioWaiting.bind(player))
-  player.audio.addEventListener('canplay', onAudioCanplay.bind(player))
-  player.audio.addEventListener('progress', onAudioProgress.bind(player))
-  player.audio.addEventListener(
-    'durationchange',
-    onAudioDurationChange.bind(player)
-  )
-  player.audio.addEventListener('seeking', onAudioSeeking.bind(player))
-  player.audio.addEventListener('seeked', onAudioSeeked.bind(player))
-  player.audio.addEventListener('timeupdate', onAudioTimeUpdate.bind(player))
-  player.audio.addEventListener(
-    'volumechange',
-    onAudioVolumeChange.bind(player)
-  )
+  const { audio } = player
+
+  audio.addEventListener('play', onAudioPlay.bind(player))
+  audio.addEventListener('pause', onAudioPause.bind(player))
+  audio.addEventListener('abort', onAudioPause.bind(player))
+  audio.addEventListener('waiting', onAudioWaiting.bind(player))
+  audio.addEventListener('canplay', onAudioCanplay.bind(player))
+  audio.addEventListener('progress', onAudioProgress.bind(player))
+  audio.addEventListener('durationchange', onAudioDurationChange.bind(player))
+  audio.addEventListener('seeking', onAudioSeeking.bind(player))
+  audio.addEventListener('seeked', onAudioSeeked.bind(player))
+  audio.addEventListener('timeupdate', onAudioTimeUpdate.bind(player))
+  audio.addEventListener('volumechange', onAudioVolumeChange.bind(player))
   // player.audio.addEventListener('ended', player.onAudioEnded)
-  player.audio.addEventListener(
-    'loadedmetadata',
-    onAudioLoadedMetadata.bind(player)
-  )
+  audio.addEventListener('loadedmetadata', onAudioLoadedMetadata.bind(player))
 }
 
 function onAudioPlay() {

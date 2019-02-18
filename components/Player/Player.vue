@@ -2,16 +2,18 @@
   <div :class="[ 'player', `player--${type}` ]">
     <audio ref="audio" />
     <div v-if="type === 'long'" class="player__cover cover">
-      <img class="cover__img" :src="currentSound.cover" alt>
+      <nuxt-link to="/single/fakeslug">
+        <img class="cover__img" :src="currentSound.cover" alt>
+      </nuxt-link>
     </div>
     <PlayerNavs
       class="player__navs"
       :show-nav="type === 'long'"
       :is-playing="isPlaying"
-      @backward="''"
+      @backward="playIndex -= 1"
       @pause="pause"
       @play="play"
-      @forward="''"
+      @forward="playIndex += 1"
     />
     <div :class="[ 'player__middle', 'middle', `middle--${type}` ]">
       <PlayerInfo
@@ -46,6 +48,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 import PlayerNavs from './PlayerNavs.vue'
 import PlayerInfo from './PlayerInfo.vue'
 import PlayerRate from './PlayerRate.vue'
@@ -128,6 +132,16 @@ export default {
       return this.$refs.audio
     },
 
+    playIndex: {
+      get() {
+        return _.findIndex(this.list, o => o.src === this.currentSound.src)
+      },
+      set(val) {
+        val = val < 0 ? this.list.length - 1 : val
+        this.currentSound = this.list[val % this.list.length]
+      }
+    },
+
     // observers
     // inform parent component in setters
     currentSound: {
@@ -169,6 +183,9 @@ export default {
   },
   watch: {
     // observe mutable properties
+    currentSound() {
+      this.audio.src = this.currentSound.src
+    },
     currentVolume() {
       this.audio.volume = this.currentVolume
     },
