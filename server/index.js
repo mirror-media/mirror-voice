@@ -32,4 +32,8 @@ async function start() {
     badge: true
   })
 }
+
+// API
+app.use('/api', require('./api'))
+
 start()
