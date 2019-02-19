@@ -2,6 +2,8 @@ const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const app = express()
+const compression = require('compression')
+const bodyParser = require('body-parser')
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -32,6 +34,9 @@ async function start() {
     badge: true
   })
 }
+
+app.use(bodyParser.json())
+app.use(compression({ threshold: 0 }))
 
 // API
 app.use('/api', require('./api'))
