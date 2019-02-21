@@ -5,15 +5,18 @@
   >
     <div class="swiper-wrapper">
       <div
-        v-for="(banner, i) in banners"
+        v-for="(item, i) in items"
         :key="i"
         class="swiper-slide"
       >
         <nuxt-link to="/album/fake">
-          <div
-            class="swper-slide__slide"
-            :style="{ backgroundColor: banner }"
-          />
+          <div class="swper-slide__slide">
+            <img
+              class="swper-slide__image"
+              :src="item.heroImage.image.url"
+              alt=""
+            >
+          </div>
         </nuxt-link>
       </div>
     </div>
@@ -23,9 +26,17 @@
 
 <script>
 export default {
+  props: {
+    items: {
+      type: Array,
+      default() {
+        return []
+      },
+      require: true
+    }
+  },
   data() {
     return {
-      banners: ['#7f0000', '#004000', '#00007f'],
       swiperOption: {
         loop: true,
         slidesPerView: 'auto',
@@ -36,31 +47,10 @@ export default {
           dynamicBullets: false,
           clickable: true
         },
-        on: {
-          // slideChange() {
-          //   console.log('onSlideChangeEnd', this)
-          // },
-          // tap() {
-          //   console.log('onTap', this)
-          // }
-        },
         grabCursor: false,
         autoplay: true
       }
     }
-  },
-  mounted() {
-    // console.log('app init', this)
-    // setTimeout(() => {
-    //   this.banners.push('/5.jpg')
-    //   console.log('banners update')
-    // }, 3000)
-    // console.log(
-    //   'This is current swiper instance object',
-    //   this.mySwiper,
-    //   'I will slideTo banners 3'
-    // )
-    // this.mySwiper.slideTo(3)
   }
 }
 </script>
@@ -68,12 +58,15 @@ export default {
 <style lang="stylus" scoped>
 .slider
   height 335px
-  // background-color black
 
 .swper-slide
   &__slide
     width 100%
     height 100%
+  &__image
+    width 100%
+    height 100%
+    object-fit cover
 
 .swiper-pagination
   bottom 16px

@@ -1,8 +1,14 @@
 <template>
   <AppMainAsideWrapper>
     <div slot="main" class="main">
-      <Slider />
-      <AppDiv class="main__wrapper showcase">
+      <Slider
+        :items="sliderItems"
+      />
+      <AppDiv
+        v-for="(section, i) in sections"
+        :key="i"
+        class="main__wrapper showcase"
+      >
         <DivHeader
           class="showcase__header header"
           :size="'large'"
@@ -12,38 +18,14 @@
           <nuxt-link
             slot="left"
             class="header__left"
-            to="/section/section1"
+            :to="`/section/${section.name}`"
           >
-            類別一
+            {{ section.title }}
           </nuxt-link>
           <nuxt-link
             slot="right"
             class="header__right"
-            to="/section/section1"
-          >
-            更多
-          </nuxt-link>
-        </DivHeader>
-        <ShowcaseList class="showcase__showcase" />
-      </AppDiv>
-      <AppDiv class="main__wrapper showcase">
-        <DivHeader
-          class="showcase__header header"
-          :size="'large'"
-          :weight="'bold'"
-          :align-items="'flex-end'"
-        >
-          <nuxt-link
-            slot="left"
-            class="header__left"
-            to="/section/section2"
-          >
-            類別二
-          </nuxt-link>
-          <nuxt-link
-            slot="right"
-            class="header__right"
-            to="/section/section2"
+            :to="`/section/${section.name}`"
           >
             更多
           </nuxt-link>
@@ -53,11 +35,14 @@
     </div>
     <PageNavsVertical
       slot="aside"
+      :sections="sections"
     />
   </AppMainAsideWrapper>
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
+
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
@@ -73,6 +58,20 @@ export default {
     Slider,
     ShowcaseList,
     PageNavsVertical
+  },
+  computed: {
+    ...mapState({
+      sliderItems: state => state.audioPromotions.items
+    }),
+    ...mapGetters({
+      sections: 'sections/AUDIO_SECTIONS'
+    })
+  },
+  fetch({ store }) {
+    return Promise.all([
+      store.dispatch('audioPromotions/FETCH'),
+      store.dispatch('sections/FETCH')
+    ])
   }
 }
 </script>
