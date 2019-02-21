@@ -1,111 +1,86 @@
 <template>
   <nav class="navs">
     <ul class="navs__list section-list">
-      <li class="section-list__list-item">
-        <nuxt-link to="/section/section1">
-          類別一
-        </nuxt-link>
-      </li>
-      <li class="section-list__list-item">
-        <nuxt-link to="/section/section2">
-          類別二
+      <li
+        v-for="(section, i) in sections"
+        :key="i"
+        class="section-list__list-item"
+      >
+        <nuxt-link
+          :class="{ 'black': section.name === sectionName }"
+          :to="`/section/${section.name}`"
+        >
+          {{ section.title }}
         </nuxt-link>
       </li>
     </ul>
     <ul class="navs__list category-list">
       <li class="category-list__list-item">
-        <nuxt-link to="/section/section1">
+        <nuxt-link :to="`/section/${sectionName}`">
           全部
         </nuxt-link>
       </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category1">
-          文學
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category2">
-          懸疑
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category3">
-          生活
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category4">
-          都市
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category5">
-          教材
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category6">
-          幻想
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category7">
-          經典
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category8">
-          武俠
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category9">
-          童書
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category10">
-          歷史小說
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category11">
-          勵志
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category12">
-          外文原版
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category13">
-          社科
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category14">
-          商業
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category15">
-          言情
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category16">
-          官場商戰
-        </nuxt-link>
-      </li>
-      <li class="category-list__list-item">
-        <nuxt-link to="/category/category17">
-          諸如此類
+      <li
+        v-for="(category, i) in categoryListItems"
+        :key="i"
+        class="category-list__list-item"
+      >
+        <nuxt-link :to="`/category/${category.name}`">
+          {{ category.title }}
         </nuxt-link>
       </li>
     </ul>
   </nav>
 </template>
+
+<script>
+import _ from 'lodash'
+
+export default {
+  props: {
+    sections: {
+      type: Array,
+      default() {
+        return []
+      },
+      required: true
+    },
+    categories: {
+      type: Array,
+      default() {
+        return []
+      },
+      required: true
+    }
+  },
+  computed: {
+    routeName() {
+      return this.$route.name
+    },
+    routeParam() {
+      return this.$route.params.name
+    },
+    sectionName() {
+      let sectionName
+      if (this.routeName.includes('section')) {
+        sectionName = this.routeParam
+      } else if (this.routeName.includes('category')) {
+        const category = _.find(
+          this.categories,
+          o => o.name === this.routeParam
+        )
+        sectionName = _.get(category, 'section', '')
+      }
+      return sectionName
+    },
+    categoryListItems() {
+      const section = _.find(this.sections, o => o.name === this.sectionName)
+      const categories = _.get(section, 'categories', [])
+      return categories
+    }
+  }
+}
+</script>
 
 <style lang="stylus" scoped>
 .navs
@@ -132,7 +107,8 @@
       border-left 2px solid #7d7d7d
     a
       color #7d7d7d
-      &.nuxt-link-active
+      // &.nuxt-link-active
+      &.black
         color black
 
 .category-list

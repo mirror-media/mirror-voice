@@ -1,7 +1,10 @@
 <template>
   <section class="section">
     <AppDiv class="section__wrapper top-wrapper">
-      <PageNavsHorizontal />
+      <PageNavsHorizontal
+        :sections="sections"
+        :categories="categories"
+      />
     </AppDiv>
     <AppDiv class="section__wrapper bottom-wrapper">
       <DivHeader>
@@ -24,6 +27,8 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import AppDiv from '~/components/AppDiv.vue'
 import PageNavsHorizontal from '~/components/PageNavs/PageNavsHorizontal.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
@@ -37,6 +42,15 @@ export default {
     DivHeader,
     ShowcaseList,
     AppPagination
+  },
+  computed: {
+    ...mapGetters({
+      sections: 'sections/AUDIO_SECTIONS',
+      categories: 'sections/AUDIO_SECTIONS_CATEGORIES'
+    })
+  },
+  fetch({ store }) {
+    return Promise.all([store.dispatch('sections/FETCH')])
   }
 }
 </script>

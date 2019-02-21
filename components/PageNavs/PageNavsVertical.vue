@@ -1,7 +1,11 @@
 <template>
   <nav class="navs">
-    <PageNavsVerticalList class="navs__list" />
-    <PageNavsVerticalList class="navs__list" />
+    <PageNavsVerticalList
+      v-for="(section, i) in sections"
+      :key="i"
+      class="navs__list"
+      :list="section"
+    />
   </nav>
 </template>
 
@@ -11,6 +15,15 @@ import PageNavsVerticalList from './PageNavsVerticalList.vue'
 export default {
   components: {
     PageNavsVerticalList
+  },
+  props: {
+    sections: {
+      type: Array,
+      default() {
+        return []
+      },
+      required: true
+    }
   }
 }
 </script>
