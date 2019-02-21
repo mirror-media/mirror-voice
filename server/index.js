@@ -9,6 +9,9 @@ const bodyParser = require('body-parser')
 const config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
 
+// const { messageLogger, fullLogger, errorLogger } = require('./logger')
+const { messageLogger, errorLogger } = require('./logger')
+
 async function start() {
   // Init Nuxt.js
   const nuxt = new Nuxt(config)
@@ -24,8 +27,17 @@ async function start() {
     await builder.build()
   }
 
+  // Request Logging
+  app.use([messageLogger])
+
+  // API
+  app.use('/api', require('./api'))
+
   // Give nuxt middleware to express
   app.use(nuxt.render)
+
+  // Error Logging
+  app.use(errorLogger)
 
   // Listen the server
   app.listen(port, host)
@@ -37,8 +49,5 @@ async function start() {
 
 app.use(bodyParser.json())
 app.use(compression({ threshold: 0 }))
-
-// API
-app.use('/api', require('./api'))
 
 start()
