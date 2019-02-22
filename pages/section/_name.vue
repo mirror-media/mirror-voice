@@ -21,6 +21,7 @@
         :list="showcase.items"
       />
       <AppPagination
+        v-if="18 < total"
         class="bottom-wrapper__pagination"
         :total="total"
         :items-per-page="18"
