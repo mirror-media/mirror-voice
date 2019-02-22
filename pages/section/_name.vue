@@ -12,12 +12,13 @@
           全部類別一
         </template>
         <template slot="right">
-          共 180 筆
+          共 {{ total }} 筆
         </template>
       </DivHeader>
       <ShowcaseList
         class="bottom-wrapper__showcase"
         :list-item-layout="'horizontal'"
+        :list="showcase.items"
       />
       <AppPagination
         class="bottom-wrapper__pagination"
@@ -27,7 +28,8 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
+import _ from 'lodash'
 
 import AppDiv from '~/components/AppDiv.vue'
 import PageNavsHorizontal from '~/components/PageNavs/PageNavsHorizontal.vue'
@@ -44,13 +46,54 @@ export default {
     AppPagination
   },
   computed: {
+    ...mapState({
+      showcase: state => state.showcase
+    }),
+    total() {
+      return this.showcase.meta.total
+    },
     ...mapGetters({
       sections: 'sections/AUDIO_SECTIONS',
       categories: 'sections/AUDIO_SECTIONS_CATEGORIES'
     })
   },
-  fetch({ store }) {
-    return Promise.all([store.dispatch('sections/FETCH')])
+  fetch({ store, route }) {
+    const routeName = route.name
+    const routeParam = route.params.name
+
+    const getShowcaseParam = () => {
+      let where
+      let getterName
+      if (routeName.includes('section')) {
+        where = 'sections'
+        getterName = 'AUDIO_SECTIONS'
+      } else if (routeName.includes('category')) {
+        where = 'categories'
+        getterName = 'AUDIO_SECTIONS_CATEGORIES'
+      }
+
+      const data = _.find(
+        store.getters[`sections/${getterName}`],
+        o => o.name === routeParam
+      )
+      const ids = [_.get(data, 'id', '')]
+
+      return { where, ids }
+    }
+
+    return store.dispatch('sections/FETCH', { max_results: 20 }).then(() => {
+      const { where, ids } = getShowcaseParam()
+      return store.dispatch('showcase/FETCH', {
+        max_results: 18,
+        page: 1,
+        sort: '-publishedDate',
+        where: {
+          [where]: {
+            $in: ids
+          }
+        }
+      })
+    })
   }
 }
 </script>

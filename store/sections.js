@@ -20,10 +20,13 @@ export const mutations = {
 }
 
 export const actions = {
-  FETCH({ commit }) {
-    return this.$fetch('/api/sections?max_results=20').then(res => {
+  FETCH({ commit }, params) {
+    const query = this.$buildQuery(params)
+    const url = `/api/sections?${query}`
+    return this.$fetch(url).then(res => {
       commit('SET_ITEMS', res.items)
       commit('SET_META', res.meta)
+      return res
     })
   }
 }

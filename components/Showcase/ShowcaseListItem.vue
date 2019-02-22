@@ -10,7 +10,7 @@
   >
     <div class="list-item__cover" />
     <div :class="[ 'list-item__info', `list-item__info--${layout}`, 'info' ]">
-      <nuxt-link to="/album/fakeslug">
+      <nuxt-link :to="`/${toRoute}/${item.name}`">
         <h1
           :class="[ 'info__title', { 'info__title--hover': isMouseover } ]"
         >
@@ -43,6 +43,17 @@ export default {
       validator(value) {
         return ['vertical', 'horizontal'].includes(value)
       }
+    },
+    item: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    toRoute: {
+      type: String,
+      default: 'album',
+      required: true
     }
   },
   data() {
@@ -54,10 +65,7 @@ export default {
   },
   computed: {
     title() {
-      const text =
-        '高難度對話：如何與挑剔的人高難度對話：如何與挑剔的人高難度對話：如何與挑剔的人'
-      const textRandom = text.slice(0, Math.floor(Math.random() * 30))
-      return _.truncate(textRandom, { length: this.limitTitle })
+      return _.truncate(this.item.title, { length: this.limitTitle })
     },
     author() {
       const text =

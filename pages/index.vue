@@ -4,44 +4,52 @@
       <Slider
         :items="sliderItems"
       />
-      <AppDiv
+      <template
         v-for="(section, i) in sections"
-        :key="i"
-        class="main__wrapper showcase"
       >
-        <DivHeader
-          class="showcase__header header"
-          :size="'large'"
-          :weight="'bold'"
-          :align-items="'flex-end'"
+        <AppDiv
+          v-if="getSectionAlbums(section.name).length > 0"
+          :key="i"
+          class="main__wrapper showcase"
         >
-          <nuxt-link
-            slot="left"
-            class="header__left"
-            :to="`/section/${section.name}`"
+          <DivHeader
+            class="showcase__header header"
+            :size="'large'"
+            :weight="'bold'"
+            :align-items="'flex-end'"
           >
-            {{ section.title }}
-          </nuxt-link>
-          <nuxt-link
-            slot="right"
-            class="header__right"
-            :to="`/section/${section.name}`"
-          >
-            更多
-          </nuxt-link>
-        </DivHeader>
-        <ShowcaseList class="showcase__showcase" />
-      </AppDiv>
+            <nuxt-link
+              slot="left"
+              class="header__left"
+              :to="`/section/${section.name}`"
+            >
+              {{ section.title }}
+            </nuxt-link>
+            <nuxt-link
+              slot="right"
+              class="header__right"
+              :to="`/section/${section.name}`"
+            >
+              更多
+            </nuxt-link>
+          </DivHeader>
+          <ShowcaseList
+            class="showcase__showcase"
+            :list="getSectionAlbums(section.name)"
+          />
+        </AppDiv>
+      </template>
     </div>
     <PageNavsVertical
       slot="aside"
-      :sections="sections"
+      :items="sections"
     />
   </AppMainAsideWrapper>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import _ from 'lodash'
 
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
@@ -61,7 +69,8 @@ export default {
   },
   computed: {
     ...mapState({
-      sliderItems: state => state.audioPromotions.items
+      sliderItems: state => state.audioPromotions.items,
+      showcase: state => state.showcase.items
     }),
     ...mapGetters({
       sections: 'sections/AUDIO_SECTIONS'
@@ -70,8 +79,36 @@ export default {
   fetch({ store }) {
     return Promise.all([
       store.dispatch('audioPromotions/FETCH'),
-      store.dispatch('sections/FETCH')
+      store.dispatch('sections/FETCH', { max_results: 20 }).then(res => {
+        const sectionIds = store.getters['sections/AUDIO_SECTIONS'].map(
+          section => section.id
+        )
+        store.commit('showcase/SET_ITEMS', [])
+        return Promise.all(
+          sectionIds.map(id => {
+            return store.dispatch('showcase/FETCH', {
+              mode: 'push',
+              max_results: 10,
+              page: 1,
+              sort: '-publishedDate',
+              where: {
+                sections: {
+                  $in: [id]
+                }
+              }
+            })
+          })
+        )
+      })
     ])
+  },
+  methods: {
+    getSectionAlbums(sectionName) {
+      return this.showcase.filter(album => {
+        const { sections = [] } = album
+        return _.findIndex(sections, o => o.name === sectionName) !== -1
+      })
+    }
   }
 }
 </script>

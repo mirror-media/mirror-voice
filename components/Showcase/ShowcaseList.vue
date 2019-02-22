@@ -1,64 +1,12 @@
 <template>
   <ul :class="[ 'list', `list--${listItemLayout}` ]">
     <ShowcaseListItem
+      v-for="(item, i) in list"
+      :key="i"
       :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
       :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
-    />
-    <ShowcaseListItem
-      :class="[ 'list__list-item', `list__list-item--${listItemLayout}` ]"
-      :layout="listItemLayout"
+      :item="item"
+      :to-route="'album'"
     />
   </ul>
 </template>
@@ -76,6 +24,12 @@ export default {
       default: 'vertical',
       validator(value) {
         return ['vertical', 'horizontal'].includes(value)
+      }
+    },
+    list: {
+      type: Array,
+      default() {
+        return []
       }
     }
   }
