@@ -31,7 +31,11 @@ module.exports = {
   /*
   ** Plugins to load before mounting the App
   */
-  plugins: [{ src: '~/plugins/swiper.js', ssr: false }, '~/plugins/fetch.js'],
+  plugins: [
+    { src: '~/plugins/swiper.js', ssr: false },
+    '~/plugins/fetch.js',
+    '~/plugins/buildQuery.js'
+  ],
 
   /*
   ** Nuxt.js modules
