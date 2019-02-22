@@ -1,0 +1,11 @@
+# Docker for stage environment
+FROM node:10.15.1-alpine
+
+ENV NODE_SOURCE /usr/src
+WORKDIR $NODE_SOURCE
+
+COPY . .
+
+EXPOSE 80
+
+CMD ["yarn", "start"]
