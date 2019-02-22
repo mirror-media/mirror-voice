@@ -9,7 +9,7 @@
     <AppDiv class="section__wrapper bottom-wrapper">
       <DivHeader>
         <template slot="left">
-          全部類別一
+          {{ showcaseTitle }}
         </template>
         <template slot="right">
           共 {{ total }} 筆
@@ -55,7 +55,23 @@ export default {
     ...mapGetters({
       sections: 'sections/AUDIO_SECTIONS',
       categories: 'sections/AUDIO_SECTIONS_CATEGORIES'
-    })
+    }),
+
+    routeName() {
+      return this.$route.name
+    },
+    routeParam() {
+      return this.$route.params.name
+    },
+    showcaseTitle() {
+      let data
+      if (this.routeName.includes('section')) {
+        data = this.sections
+      } else if (this.routeName.includes('category')) {
+        data = this.categories
+      }
+      return _.get(_.find(data, o => o.name === this.routeParam), 'title', '')
+    }
   },
   fetch({ store, route }) {
     const routeName = route.name
@@ -82,6 +98,7 @@ export default {
     }
 
     return store.dispatch('sections/FETCH', { max_results: 20 }).then(() => {
+      // The "where" variable should will be: sections or categories
       const { where, ids } = getShowcaseParam()
       return store.dispatch('showcase/FETCH', {
         max_results: 18,
