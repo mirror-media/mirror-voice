@@ -1,10 +1,10 @@
 <template>
   <nav class="navs">
     <PageNavsVerticalList
-      v-for="(section, i) in sections"
+      v-for="(item, i) in items"
       :key="i"
       class="navs__list"
-      :list="section"
+      :list="item"
     />
   </nav>
 </template>
@@ -17,7 +17,7 @@ export default {
     PageNavsVerticalList
   },
   props: {
-    sections: {
+    items: {
       type: Array,
       default() {
         return []

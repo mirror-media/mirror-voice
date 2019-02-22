@@ -1,12 +1,12 @@
 <template>
   <ul class="list">
     <li
-      v-for="(category, i) in categories"
+      v-for="(item, i) in items"
       :key="i"
       class="list__list-item"
     >
-      <nuxt-link :to="`/category/${category.name}`">
-        {{ category.title }}
+      <nuxt-link :to="`/category/${item.name}`">
+        {{ item.title }}
       </nuxt-link>
     </li>
   </ul>
@@ -26,7 +26,7 @@ export default {
     }
   },
   computed: {
-    categories() {
+    items() {
       return _.take(_.get(this.list, 'categories', []), 7)
     }
   }
