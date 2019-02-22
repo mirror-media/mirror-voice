@@ -23,6 +23,7 @@
       <AppDate
         v-if="layout === 'horizontal'"
         class="info__date"
+        :date="date"
       />
     </div>
   </li>
@@ -72,6 +73,9 @@ export default {
         '夏綠節慶室內樂團夏綠節慶室內樂團夏綠節慶室內樂團夏綠節慶室內樂團'
       const textRandom = text.slice(0, Math.floor(Math.random() * 30))
       return _.truncate(textRandom, { length: this.limitAuthor })
+    },
+    date() {
+      return new Date(_.get(this.item, 'updatedAt', ''))
     }
   },
   methods: {
