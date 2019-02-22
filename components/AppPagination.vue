@@ -40,13 +40,26 @@ export default {
     VueAdsPagination,
     VueAdsPageButton
   },
+  props: {
+    total: {
+      type: Number,
+      required: true
+    },
+    itemsPerPage: {
+      type: Number,
+      required: true
+    }
+  },
   data() {
     return {
       page: 0,
       start: 0,
-      end: 0,
-      total: 200,
-      itemsPerPage: 10
+      end: 0
+    }
+  },
+  watch: {
+    page() {
+      this.$emit('pageChange', this.page + 1)
     }
   },
   // computed: {

@@ -22,6 +22,9 @@
       />
       <AppPagination
         class="bottom-wrapper__pagination"
+        :total="total"
+        :items-per-page="18"
+        @pageChange="fetchShowcase"
       />
     </AppDiv>
   </section>
@@ -36,6 +39,39 @@ import PageNavsHorizontal from '~/components/PageNavs/PageNavsHorizontal.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import ShowcaseList from '~/components/Showcase/ShowcaseList.vue'
 import AppPagination from '~/components/AppPagination.vue'
+
+const getShowcaseParam = (store, routeName, routeParam) => {
+  let where
+  let getterName
+  if (routeName.includes('section')) {
+    where = 'sections'
+    getterName = 'AUDIO_SECTIONS'
+  } else if (routeName.includes('category')) {
+    where = 'categories'
+    getterName = 'AUDIO_SECTIONS_CATEGORIES'
+  }
+
+  const data = _.find(
+    store.getters[`sections/${getterName}`],
+    o => o.name === routeParam
+  )
+  const ids = [_.get(data, 'id', '')]
+
+  return { where, ids }
+}
+
+const fetchShowcase = (store, where, ids, page = 1) => {
+  return store.dispatch('showcase/FETCH', {
+    max_results: 18,
+    page,
+    sort: '-publishedDate',
+    where: {
+      [where]: {
+        $in: ids
+      }
+    }
+  })
+}
 
 export default {
   components: {
@@ -77,40 +113,21 @@ export default {
     const routeName = route.name
     const routeParam = route.params.name
 
-    const getShowcaseParam = () => {
-      let where
-      let getterName
-      if (routeName.includes('section')) {
-        where = 'sections'
-        getterName = 'AUDIO_SECTIONS'
-      } else if (routeName.includes('category')) {
-        where = 'categories'
-        getterName = 'AUDIO_SECTIONS_CATEGORIES'
-      }
-
-      const data = _.find(
-        store.getters[`sections/${getterName}`],
-        o => o.name === routeParam
-      )
-      const ids = [_.get(data, 'id', '')]
-
-      return { where, ids }
-    }
-
     return store.dispatch('sections/FETCH', { max_results: 20 }).then(() => {
       // The "where" variable should will be: sections or categories
-      const { where, ids } = getShowcaseParam()
-      return store.dispatch('showcase/FETCH', {
-        max_results: 18,
-        page: 1,
-        sort: '-publishedDate',
-        where: {
-          [where]: {
-            $in: ids
-          }
-        }
-      })
+      const { where, ids } = getShowcaseParam(store, routeName, routeParam)
+      return fetchShowcase(store, where, ids)
     })
+  },
+  methods: {
+    fetchShowcase(page) {
+      const { where, ids } = getShowcaseParam(
+        this.$store,
+        this.routeName,
+        this.routeParam
+      )
+      return fetchShowcase(this.$store, where, ids, page)
+    }
   }
 }
 </script>
