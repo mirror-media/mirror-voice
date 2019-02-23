@@ -89,7 +89,7 @@ module.exports = {
       }
 
       // lodash-webpack-plugin
-      config.plugins.push(new LodashModuleReplacementPlugin())
+      config.plugins.push(new LodashModuleReplacementPlugin({ paths: true }))
     },
     babel: {
       plugins: ['@babel/plugin-syntax-dynamic-import', 'lodash'],
