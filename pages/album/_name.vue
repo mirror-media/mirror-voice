@@ -2,21 +2,21 @@
   <AppMainAsideWrapper>
     <div slot="main" class="main">
       <AppDiv class="main__wrapper info-wrapper">
-        <Info :layout="'album'" />
+        <Info
+          :layout="'album'"
+          :info="album"
+        />
       </AppDiv>
       <AppDiv class="main__wrapper body-wrapper">
         <AppH1 class="body-wrapper__title">
           簡介
         </AppH1>
-        <div class="body-wrapper__body" v-html="body" />
+        <div class="body-wrapper__body" v-html="brief" />
       </AppDiv>
       <AppDiv class="main__wrapper tracks-wrapper">
-        <DivHeader
-          class="tracks-wrapper__header"
-          :title="'專輯音檔（18）'"
-        >
+        <DivHeader class="tracks-wrapper__header">
           <template slot="left">
-            專輯音檔（18）
+            專輯音檔（{{ tracks.meta.total }}）
           </template>
           <div
             slot="right"
@@ -33,6 +33,7 @@
         <TrackList
           class="tracks-wrapper__tracks"
           :show-list-order="true"
+          :tracks="tracks.items"
         />
         <AppPagination
           class="tracks-wrapper__pagination"
@@ -53,6 +54,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import sanitizeHtml from 'sanitize-html'
+import _ from 'lodash'
+
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
@@ -75,15 +80,44 @@ export default {
     TrackList,
     AppPagination
   },
-  data() {
-    return {
-      body: `
-        <p>人足個舉；在我邊家；了確電又！家年有代校，士可超好古的什火球子級修！</p>
-        <p>我急家題：向會的數而媽件陸外企服變政資山美裡：油但更有之義農原於而青候館這防畫頭修到軍的作走會行他走他營家維會財水……指用辦統教期關國古岸，亞無度木看化這金手？</p>
-        <p>的龍來爸，古大運的要的中錢女必經地先之盡重院動，在最是近善居視多港但高老化龍共無無市的學那子行子處華決一集什為數話一：心動時傳至印飛兩大上海車大、便呢臺斯。知際去而公總。馬許看財觀如導問教得他的示工：到大布印中有勢書票回道人區自平死手施難始人開所道環再那養樂人舉，天發族；科文商院他意民整小演、山雄產約調費際的長字此指難不老算……水五心話要，出生黃回用時生奇到王們風日經，市水部形品是一的百師積平分史經，有女引，我劇說果、國就都文亞這親，心我靜經日自簡不要，大依下分論表神發，球然了遠語不謝天雖些才眼合何、升則展官二差行！作新引成加要定賣在子人斷使羅念日光少學大……以少三紀覺是為平都建成也原可！地分所皮，好半藝、小們本條一油成教時交來民都品！全結位日政家變學臺們我景了了是告調；日支用：房國路、見深是月大在傳甚其興人定學活前才邊，其她突事全。</p>
-        <p>願現結改主有印成接後出心吃外我以與看題作小外的動的行是老標如語過遊十主影回推反，病靈一要運有……地同千的而的生然需上；然信究遊回開……親話喜最她得另天於養關成太水價話後手！</p>
-      `
+  computed: {
+    ...mapState({
+      album: state => state.album.info,
+      tracks: state => state.tracks
+    }),
+    brief() {
+      return sanitizeHtml(_.get(this.album, ['brief', 'html'], ''), {
+        // TODO: refacor this options to constants
+        allowedTags: ['div', 'p', 'a']
+      })
     }
+  },
+  fetch({ store, route }) {
+    const routeParam = route.params.name
+    return store
+      .dispatch('album/FETCH_ALBUM', {
+        where: {
+          name: {
+            $in: [routeParam]
+          }
+        }
+      })
+      .then(() => {
+        const albumId = _.get(store.state.album, ['info', 'id'], '')
+        return store.dispatch('tracks/FETCH', {
+          max_results: 10,
+          page: 1,
+          sort: '-publishedDate',
+          where: {
+            albums: {
+              $in: [albumId]
+            }
+          }
+        })
+      })
+  },
+  mounted() {
+    console.log(this.$sanitizeHTML)
   }
 }
 </script>

@@ -24,12 +24,7 @@ export default {
   },
   data() {
     return {
-      internalSound: {
-        title: '',
-        artist: '',
-        src: '',
-        cover: ''
-      },
+      internalSound: {},
       playerVolume: 1,
       playerMuted: false,
       playerplaybackRate: 1

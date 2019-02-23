@@ -13,6 +13,7 @@
         v-show="showListOrder || isMouseover"
         class="left__marker"
         :status="status"
+        :order="order"
       />
       <nuxt-link to="/single/fakeslug1" @click.native.stop>
         <p
@@ -20,7 +21,7 @@
             'left__title',
             { 'left__title--hover': !showListOrder && isMouseover } ]"
         >
-          {{ '高難度對話：如何與挑剔的人高難度對話：如何與挑剔的人高難度對話：如何與挑剔的人' }}
+          {{ item.title }}
         </p>
       </nuxt-link>
     </div>
@@ -29,23 +30,34 @@
       class="list-item__right right"
     >
       <p class="right__date">
-        {{ '12 小時前' }}
+        {{ relativeTime }}
       </p>
     </div>
   </li>
 </template>
 
 <script>
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+import 'dayjs/locale/zh-tw'
+
 import TrackMarker from './TrackMarker.vue'
+
+dayjs.locale('zh-tw')
+dayjs.extend(relativeTime)
 
 export default {
   components: {
     TrackMarker
   },
   props: {
-    showListOrder: {
-      type: Boolean,
-      defalut: false
+    order: {
+      type: Number,
+      default: 0
+    },
+    item: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -54,12 +66,18 @@ export default {
     }
   },
   computed: {
+    showListOrder() {
+      return this.order !== 0
+    },
     status() {
       if (this.isMouseover) {
         return 'play'
       }
 
       return this.showListOrder ? 'order' : 'play'
+    },
+    relativeTime() {
+      return dayjs().from(dayjs(this.item.publishedDate))
     }
   },
   methods: {

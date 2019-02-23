@@ -22,12 +22,12 @@ export const state = () => ({
     //     'https://media.devchat.tv/viewsonvue/VoV_047_Games_&_Other_Novel_Uses_for_Vue_with_Kevin_Drum.mp3',
     //   cover: 'https://devchat.tv/wp-content/uploads/2018/03/viewsonvue.jpg'
     // },
-    // {
-    //   title: 'VoV 048: Vue Beginners Workshop with Dobromir Hristov',
-    //   artist: 'Devchat.tv',
-    //   src:
-    //     'https://media.devchat.tv/viewsonvue/VoV_048_Vue_Beginners_Workshop_with_Dobromir_Hristov.mp3',
-    //   cover: 'https://devchat.tv/wp-content/uploads/2018/03/viewsonvue.jpg'
-    // }
+    {
+      title: 'VoV 048: Vue Beginners Workshop with Dobromir Hristov',
+      artist: 'Devchat.tv',
+      src:
+        'http://www.mirrormedia.mg/assets/audios/5c6fc2bc8cea330e004efc82.wav',
+      cover: 'https://devchat.tv/wp-content/uploads/2018/03/viewsonvue.jpg'
+    }
   ]
 })

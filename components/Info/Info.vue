@@ -14,9 +14,12 @@
         :size="'large'"
         :weight="'bold'"
       >
-        有效的家庭關係
+        {{ info.title }}
       </AppH1>
-      <AppDate class="info__date" />
+      <AppDate
+        class="info__date"
+        :date="date"
+      />
       <div class="info__basic">
         <p>主播： 網路水手、網路水手、網路</p>
         <p>原著： 邁克・貝克特爾</p>
@@ -77,6 +80,10 @@ export default {
       validator(value) {
         return ['single', 'album'].includes(value)
       }
+    },
+    info: {
+      type: Object,
+      required: true
     }
   },
   data() {
@@ -87,6 +94,9 @@ export default {
   computed: {
     cover() {
       return this.$refs.cover
+    },
+    date() {
+      return new Date(_.get(this.info, 'updatedAt', ''))
     }
   },
   mounted() {

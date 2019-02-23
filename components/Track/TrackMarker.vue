@@ -4,7 +4,7 @@
       v-show="status === 'order'"
       class="marker__order"
     >
-      1
+      {{ order }}
     </div>
     <img
       v-show="status === 'play'"
@@ -24,6 +24,10 @@ export default {
       validator(value) {
         return ['order', 'play', 'pause'].includes(value)
       }
+    },
+    order: {
+      type: Number,
+      default: 0
     }
   }
 }

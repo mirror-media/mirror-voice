@@ -1,23 +1,11 @@
 <template>
   <ol class="list">
     <TrackListItem
-      class="list__list-item"
-      :show-list-order="showListOrder"
-      @click.native="TOGGLE_APP_PLAYER"
-    />
-    <TrackListItem
-      class="list__list-item"
-      :show-list-order="showListOrder"
-      @click.native="TOGGLE_APP_PLAYER"
-    />
-    <TrackListItem
-      class="list__list-item"
-      :show-list-order="showListOrder"
-      @click.native="TOGGLE_APP_PLAYER"
-    />
-    <TrackListItem
-      :class="[ 'list__list-item', { 'list__list-item--border-bottom': showListOrder } ]"
-      :show-list-order="showListOrder"
+      v-for="(track, i) in tracks"
+      :key="i"
+      :class="[ 'list__list-item', { 'list__list-item--border-bottom': showListOrder && i === tracks.length - 1 } ]"
+      :order="i + 1"
+      :item="track"
       @click.native="TOGGLE_APP_PLAYER"
     />
   </ol>
@@ -36,6 +24,10 @@ export default {
     showListOrder: {
       type: Boolean,
       defalut: false
+    },
+    tracks: {
+      type: Array,
+      required: true
     }
   },
   methods: {
