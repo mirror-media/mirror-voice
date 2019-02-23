@@ -4,7 +4,7 @@
       v-for="(track, i) in tracks"
       :key="i"
       :class="[ 'list__list-item', { 'list__list-item--border-bottom': showListOrder && i === tracks.length - 1 } ]"
-      :order="i + 1"
+      :order="getOrder(i)"
       :item="track"
       @click.native="TOGGLE_APP_PLAYER"
     />
@@ -28,10 +28,33 @@ export default {
     tracks: {
       type: Array,
       required: true
+    },
+    isLatestFirst: {
+      type: Boolean,
+      default: true
+    },
+    page: {
+      type: Number,
+      default: 1
+    },
+    itemsPerPage: {
+      type: Number,
+      required: true
+    },
+    total: {
+      type: Number,
+      required: true
     }
   },
   methods: {
-    ...mapMutations(['TOGGLE_APP_PLAYER'])
+    ...mapMutations(['TOGGLE_APP_PLAYER']),
+    getOrder(i) {
+      if (this.isLatestFirst) {
+        return this.total - i - this.itemsPerPage * (this.page - 1)
+      } else {
+        return i + 1 + this.itemsPerPage * (this.page - 1)
+      }
+    }
   }
 }
 </script>

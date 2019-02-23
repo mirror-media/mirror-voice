@@ -22,21 +22,36 @@
             slot="right"
             class="sorts"
           >
-            <button class="sorts__sort">
+            <button
+              :class="[ 'sorts__sort', { 'sorts__sort--dimmed': isTracksSortLatestFirst } ]"
+              @click="isTracksSortLatestFirst = true"
+            >
               最新
             </button>
-            <button class="sorts__sort">
+            <button
+              :class="[ 'sorts__sort', { 'sorts__sort--dimmed': !isTracksSortLatestFirst } ]"
+              @click="isTracksSortLatestFirst = false"
+            >
               最舊
             </button>
           </div>
         </DivHeader>
         <TrackList
+          v-show="isTracksFetched"
           class="tracks-wrapper__tracks"
           :show-list-order="true"
+          :is-latest-first="isTracksSortLatestFirst"
           :tracks="tracks.items"
+          :page="page"
+          :total="tracks.meta.total"
+          :items-per-page="10"
         />
         <AppPagination
+          v-if="10 < tracks.meta.total"
           class="tracks-wrapper__pagination"
+          :total="tracks.meta.total"
+          :items-per-page="10"
+          :page.sync="page"
         />
       </AppDiv>
     </div>
@@ -68,6 +83,20 @@ import AsideAlbumList from '~/components/Aside/AsideAlbumList.vue'
 import TrackList from '~/components/Track/TrackList.vue'
 import AppPagination from '~/components/AppPagination.vue'
 
+const fetchTracks = (store, isLatestFirst = true, page = 1) => {
+  const albumId = _.get(store.state.album, ['info', 'id'], '')
+  return store.dispatch('tracks/FETCH', {
+    max_results: 10,
+    page,
+    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
+    where: {
+      albums: {
+        $in: [albumId]
+      }
+    }
+  })
+}
+
 export default {
   components: {
     AppMainAsideWrapper,
@@ -79,6 +108,14 @@ export default {
     AsideAlbumList,
     TrackList,
     AppPagination
+  },
+  data() {
+    return {
+      isTracksLoading: false,
+      isTracksFetched: true,
+      isTracksSortLatestFirst: true,
+      page: 1
+    }
   },
   computed: {
     ...mapState({
@@ -92,6 +129,14 @@ export default {
       })
     }
   },
+  watch: {
+    isTracksSortLatestFirst() {
+      this.fetchTracks(1)
+    },
+    page() {
+      this.fetchTracks(this.page)
+    }
+  },
   fetch({ store, route }) {
     const routeParam = route.params.name
     return store
@@ -103,21 +148,17 @@ export default {
         }
       })
       .then(() => {
-        const albumId = _.get(store.state.album, ['info', 'id'], '')
-        return store.dispatch('tracks/FETCH', {
-          max_results: 10,
-          page: 1,
-          sort: '-publishedDate',
-          where: {
-            albums: {
-              $in: [albumId]
-            }
-          }
-        })
+        return fetchTracks(store)
       })
   },
-  mounted() {
-    console.log(this.$sanitizeHTML)
+  methods: {
+    fetchTracks(page) {
+      this.page = page
+      this.isTracksFetched = false
+      fetchTracks(this.$store, this.isTracksSortLatestFirst, page).then(() => {
+        this.isTracksFetched = true
+      })
+    }
   }
 }
 </script>
@@ -152,6 +193,8 @@ export default {
     font-size 14px
     color #7d7d7d
     cursor pointer
+    &--dimmed
+      color black
     &:focus
       outline none
     &:first-child

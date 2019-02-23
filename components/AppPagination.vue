@@ -3,7 +3,7 @@
     <no-ssr>
       <VueAdsPagination
         :total-items="total"
-        :page="page"
+        :page="internalPage"
         :items-per-page="itemsPerPage"
       >
         <template><div /></template>
@@ -20,7 +20,7 @@
               { 'button--no-border': button.page === '...' }
             ]"
             v-bind="button"
-            @page-change="page = button.page"
+            @page-change="internalPage = button.page"
             @range-change="start = button.start; end = button.end"
             v-text="getText(button, key, props.buttons.length)"
           />
@@ -48,25 +48,28 @@ export default {
     itemsPerPage: {
       type: Number,
       required: true
+    },
+    page: {
+      type: Number,
+      default: 0
     }
   },
   data() {
     return {
-      page: 0,
+      internalPage: this.page <= 0 ? 0 : this.page - 1,
       start: 0,
       end: 0
     }
   },
   watch: {
     page() {
-      this.$emit('pageChange', this.page + 1)
+      this.internalPage = this.page <= 0 ? 0 : this.page - 1
+    },
+    internalPage() {
+      this.$emit('pageChange', this.internalPage + 1)
+      this.$emit('update:page', this.internalPage + 1)
     }
   },
-  // computed: {
-  //   pages() {
-  //     return Math.ceil(this.total / this.itemsPerPage)
-  //   }
-  // },
   methods: {
     getText(button, index, totalPages) {
       switch (index) {
