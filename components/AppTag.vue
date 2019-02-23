@@ -1,8 +1,24 @@
 <template>
   <div class="tag">
-    {{ '自我提升'.slice(0, Math.floor(Math.random() * 5)) }}
+    {{ tag.name }}
   </div>
 </template>
+
+<script>
+export default {
+  props: {
+    tag: {
+      type: Object,
+      default() {
+        return {}
+      },
+      validator(value) {
+        return !!value.name
+      }
+    }
+  }
+}
+</script>
 
 <style lang="stylus" scoped>
 .tag

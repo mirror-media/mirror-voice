@@ -28,23 +28,12 @@
         v-if="layout === 'single'"
         class="info__tags tags"
       >
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
-        <AppTag class="tags__tag" />
+        <AppTag
+          v-for="(tag, i) in tags"
+          :key="i"
+          class="tags__tag"
+          :tag="tag"
+        />
       </div>
       <div
         class="info__toggle-play toggle-play"
@@ -97,6 +86,9 @@ export default {
     },
     date() {
       return new Date(_.get(this.info, 'updatedAt', ''))
+    },
+    tags() {
+      return _.get(this.info, 'tags', [])
     }
   },
   mounted() {

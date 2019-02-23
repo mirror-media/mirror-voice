@@ -5,19 +5,23 @@
         class="main__wrapper info-wrapper"
         :padding="'0'"
       >
-        <Info class="info-wrapper__info" />
+        <Info
+          class="info-wrapper__info"
+          :info="single"
+        />
       </AppDiv>
       <AppDiv class="main__wrapper body-wrapper">
         <AppH1 class="body-wrapper__title">
           文稿
         </AppH1>
-        <div class="body-wrapper__body" v-html="body" />
+        <div class="body-wrapper__body" v-html="content" />
       </AppDiv>
     </div>
     <div slot="aside" class="aside">
       <AsideIntro
         class="aside__wrapper album"
         :title="'收錄於'"
+        :intro="album"
       />
       <AsideTrackList
         class="aside__wrapper"
@@ -27,6 +31,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import sanitizeHtml from 'sanitize-html'
+import _ from 'lodash'
+
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
@@ -52,6 +60,40 @@ export default {
         <p>願現結改主有印成接後出心吃外我以與看題作小外的動的行是老標如語過遊十主影回推反，病靈一要運有……地同千的而的生然需上；然信究遊回開……親話喜最她得另天於養關成太水價話後手！</p>
       `
     }
+  },
+  computed: {
+    ...mapState({
+      single: state => state.single.info,
+      album: state => state.album.info
+    }),
+    content() {
+      return sanitizeHtml(_.get(this.single, ['content', 'html'], ''), {
+        // TODO: refacor this options to constants
+        allowedTags: ['div', 'p', 'a']
+      })
+    }
+  },
+  fetch({ store, route }) {
+    const routeParam = route.params.slug
+    return store
+      .dispatch('single/FETCH_SINGLE', {
+        where: {
+          slug: {
+            $in: [routeParam]
+          }
+        }
+      })
+      .then(() => {
+        const single = store.state.single.info
+        const albumId = _.get(single, ['albums', 0], '')
+        return store.dispatch('album/FETCH_ALBUM', {
+          where: {
+            _id: {
+              $in: [albumId]
+            }
+          }
+        })
+      })
   }
 }
 </script>

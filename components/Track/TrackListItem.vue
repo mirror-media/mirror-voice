@@ -15,7 +15,7 @@
         :status="status"
         :order="order"
       />
-      <nuxt-link to="/single/fakeslug1" @click.native.stop>
+      <nuxt-link :to="`/single/${item.slug}`" @click.native.stop>
         <p
           :class="[
             'left__title',
