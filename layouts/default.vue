@@ -50,6 +50,9 @@ export default {
   &__view-wrapper
     margin 18px auto 60px auto
   &__player
+    position fixed
+    bottom 0
+    left 0
     opacity 1
     transform translate(0, 0)
     transition transform .25s ease-out, opacity .25s ease-out

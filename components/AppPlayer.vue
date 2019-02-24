@@ -49,9 +49,6 @@ export default {
 
 <style lang="stylus" scoped>
 .player-wrapper
-  position fixed
-  bottom 0
-  left 0
   width 100vw
   height 60px
   background-color #313131
