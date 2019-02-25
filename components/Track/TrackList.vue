@@ -4,7 +4,7 @@
       v-for="(track, i) in tracks"
       :key="i"
       :class="[ 'list__list-item', { 'list__list-item--border-bottom': showListOrder && i === tracks.length - 1 } ]"
-      :order="getOrder(i)"
+      :order="showListOrder ? getOrder(i) : 0"
       :item="track"
       @click.native="TOGGLE_APP_PLAYER"
     />

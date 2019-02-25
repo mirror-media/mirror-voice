@@ -183,6 +183,8 @@ export default {
     text-align justify
     & >>> *
       margin 20px 0 0 0
+    & >>> a
+      color #21516f
 
 .sorts
   &__sort

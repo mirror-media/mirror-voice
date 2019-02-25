@@ -73,6 +73,8 @@ export default {
       line-height 1.71
       text-align justify
       color #7d7d7d
+    & >>> a
+      color #21516f
 
 .figure
   display flex

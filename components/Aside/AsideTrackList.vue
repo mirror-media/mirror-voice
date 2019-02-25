@@ -6,25 +6,30 @@
     <DivHeader class="album-relateds-wrapper__header">
       <nuxt-link
         slot="left"
-        to="/album/fakeslug"
+        :to="`/album/${albumName}`"
       >
         同專輯的其他音檔
       </nuxt-link>
       <nuxt-link
         slot="right"
         class="album"
-        to="/album/fakeslug"
+        :to="`/album/${albumName}`"
       >
         更多
       </nuxt-link>
     </DivHeader>
     <TrackList
       class="album-relateds-wrapper__track-list"
+      :tracks="tracks"
+      :items-per-page="5"
+      :total="5"
     />
   </AppDiv>
 </template>
 
 <script>
+import _ from 'lodash'
+
 import AppDiv from '~/components/AppDiv.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import TrackList from '~/components/Track/TrackList.vue'
@@ -34,6 +39,25 @@ export default {
     AppDiv,
     DivHeader,
     TrackList
+  },
+  props: {
+    album: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
+    tracks: {
+      type: Array,
+      default() {
+        return []
+      }
+    }
+  },
+  computed: {
+    albumName() {
+      return _.get(this.album, 'name', '')
+    }
   }
 }
 </script>
