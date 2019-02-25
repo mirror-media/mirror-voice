@@ -43,7 +43,7 @@
       </div>
       <div
         class="info__toggle-play toggle-play"
-        @click="TOGGLE_APP_PLAYER"
+        @click="SHOW_APP_PLAYER"
       >
         <img class="toggle-play__icon" src="~/assets/img/btn_play.png" alt="">
         <span class="toggle-play__text">
@@ -104,7 +104,9 @@ export default {
     this.coverHeight = _.get(this.cover, ['offsetHeight'], 0)
   },
   methods: {
-    ...mapMutations(['TOGGLE_APP_PLAYER'])
+    ...mapMutations({
+      SHOW_APP_PLAYER: 'appPlayer/SHOW_APP_PLAYER'
+    })
   }
 }
 </script>

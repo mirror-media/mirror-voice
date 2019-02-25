@@ -36,6 +36,7 @@
           <ShowcaseList
             class="showcase__showcase"
             :list="getSectionAlbums(section.name)"
+            @clickItem="playAlbum"
           />
         </AppDiv>
       </template>
@@ -57,6 +58,19 @@ import DivHeader from '~/components/Div/DivHeader.vue'
 import Slider from '~/components/Slider/Slider.vue'
 import ShowcaseList from '~/components/Showcase/ShowcaseList.vue'
 import PageNavsVertical from '~/components/PageNavs/PageNavsVertical.vue'
+
+const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
+  return store.dispatch('appPlayer/FETCH', {
+    max_results: 10,
+    page,
+    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
+    where: {
+      albums: {
+        $in: [albumId]
+      }
+    }
+  })
+}
 
 export default {
   components: {
@@ -108,6 +122,9 @@ export default {
         const { sections = [] } = album
         return _.findIndex(sections, o => o.name === sectionName) !== -1
       })
+    },
+    playAlbum(albumId) {
+      fetchPlayerTracks(this.$store, albumId)
     }
   }
 }

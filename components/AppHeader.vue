@@ -3,24 +3,8 @@
     <nuxt-link to="/">
       <img class="header__logo" src="~/assets/img/logo.svg" alt="">
     </nuxt-link>
-    <!-- <div @click="tooglePlayerFixed">
-      toggle fixed player
-    </div> -->
   </header>
 </template>
-
-<script>
-import { mapMutations } from 'vuex'
-
-export default {
-  methods: {
-    ...mapMutations(['TOGGLE_APP_PLAYER']),
-    tooglePlayerFixed() {
-      this.TOGGLE_APP_PLAYER()
-    }
-  }
-}
-</script>
 
 <style lang="stylus" scoped>
 .header

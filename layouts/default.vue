@@ -31,7 +31,7 @@ export default {
   },
   computed: {
     ...mapState({
-      showPlayer: state => state.showAppPlayer
+      showPlayer: state => state.appPlayer.showAppPlayer
     }),
     hideBreadcrumb() {
       const paths = ['/', '/tos']

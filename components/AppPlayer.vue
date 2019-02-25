@@ -42,6 +42,9 @@ export default {
         const index = _.findIndex(this.list, o => o.src === sound.src)
         this.internalSound = this.list[index]
       }
+    },
+    isSoundReady() {
+      return !_.isEmpty(this.sound)
     }
   }
 }
@@ -55,4 +58,5 @@ export default {
   display flex
   justify-content center
   align-items center
+  z-index 1000
 </style>

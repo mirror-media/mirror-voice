@@ -6,7 +6,7 @@
       :class="[ 'list__list-item', { 'list__list-item--border-bottom': showListOrder && i === tracks.length - 1 } ]"
       :order="showListOrder ? getOrder(i) : 0"
       :item="track"
-      @click.native="TOGGLE_APP_PLAYER"
+      @click.native="SHOW_APP_PLAYER"
     />
   </ol>
 </template>
@@ -47,7 +47,9 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['TOGGLE_APP_PLAYER']),
+    ...mapMutations({
+      SHOW_APP_PLAYER: 'appPlayer/SHOW_APP_PLAYER'
+    }),
     getOrder(i) {
       if (this.isLatestFirst) {
         return this.total - i - this.itemsPerPage * (this.page - 1)

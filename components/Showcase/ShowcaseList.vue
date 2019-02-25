@@ -7,6 +7,7 @@
       :layout="listItemLayout"
       :item="item"
       :to-route="'album'"
+      @click.native="$emit('clickItem', item.id)"
     />
   </ul>
 </template>

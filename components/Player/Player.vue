@@ -3,7 +3,7 @@
     <audio ref="audio" />
     <div v-if="type === 'long'" class="player__cover cover">
       <nuxt-link to="/single/fakeslug">
-        <img class="cover__img" :src="currentSound.cover" alt>
+        <!-- <img class="cover__img" :src="currentSound.cover" alt> -->
       </nuxt-link>
     </div>
     <PlayerNavs
@@ -185,6 +185,7 @@ export default {
     // observe mutable properties
     currentSound() {
       this.audio.src = this.currentSound.src
+      this.play()
     },
     currentVolume() {
       this.audio.volume = this.currentVolume
@@ -197,6 +198,9 @@ export default {
     },
 
     // sync muted, volume if parent component mutate the props
+    sound() {
+      this.internalSound = this.sound
+    },
     volume() {
       this.internalVolume = this.volume
     },
@@ -236,9 +240,11 @@ export default {
     },
     play() {
       this.audio.play()
+      this.$emit('play')
     },
     pause() {
       this.audio.pause()
+      this.$emit('pause')
     },
     seek(percentage) {
       this.audio.currentTime = this.audio.duration * percentage

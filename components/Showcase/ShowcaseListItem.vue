@@ -13,15 +13,18 @@
         v-if="imgUrl !== ''"
         :key="imgUrl"
         v-lazy="imgUrl"
-        class="cover__img"
+        :class="[ 'cover__img', { 'cover__img--dimmed': isMouseover } ]"
+        alt=""
+      >
+      <img
+        :class="[ 'cover__play-icon', { 'cover__play-icon--show': isMouseover } ]"
+        src="~/assets/img/btn_play.png"
         alt=""
       >
     </div>
     <div :class="[ 'list-item__info', `list-item__info--${layout}`, 'info' ]">
-      <nuxt-link :to="`/${toRoute}/${item.name}`">
-        <h1
-          :class="[ 'info__title', { 'info__title--hover': isMouseover } ]"
-        >
+      <nuxt-link :to="`/${toRoute}/${item.name}`" @click.native.stop>
+        <h1 class="info__title">
           {{ title }}
         </h1>
       </nuxt-link>
@@ -106,6 +109,7 @@ export default {
 <style lang="stylus" scoped>
 .list-item
   display flex
+  cursor pointer
   &--vertical
     width 120px
     flex-direction column
@@ -128,10 +132,29 @@ export default {
       margin 0 0 0 15px
 
 .cover
+  display flex
+  justify-content center
+  align-items center
+  position relative
   &__img
+    position absolute
+    left 0
+    top 0
     width 100%
     height 100%
     object-fit cover
+    // transition filter .1s ease-out
+    &--dimmed
+      filter brightness(50%)
+  &__play-icon
+    d = 48px
+    width d
+    height d
+    z-index 2
+    opacity 0
+    // transition opacity .1s ease-out
+    &--show
+      opacity 1
 
 .info
   position relative
@@ -141,7 +164,7 @@ export default {
     line-height 1.38
     margin 0
     color black
-    &--hover
+    &:hover
       color #d84939
   &__author
     font-size 14px

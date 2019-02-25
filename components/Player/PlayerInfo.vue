@@ -3,7 +3,7 @@
     <template v-if="showTitle">
       <nuxt-link
         class="info__first info__first--truncate"
-        to="/single/fakeslug"
+        :to="`/single/${slug}`"
       >
         {{ title }}
       </nuxt-link>
@@ -50,6 +50,9 @@ export default {
   computed: {
     title() {
       return _.get(this.sound, 'title', '')
+    },
+    slug() {
+      return _.get(this.sound, 'slug', '')
     }
   },
   methods: {
