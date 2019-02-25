@@ -8,7 +8,15 @@
     @mouseover="onMouseover"
     @mouseout="onMouseout"
   >
-    <div class="list-item__cover" />
+    <div class="list-item__cover cover">
+      <img
+        v-if="imgUrl !== ''"
+        :key="imgUrl"
+        v-lazy="imgUrl"
+        class="cover__img"
+        alt=""
+      >
+    </div>
     <div :class="[ 'list-item__info', `list-item__info--${layout}`, 'info' ]">
       <nuxt-link :to="`/${toRoute}/${item.name}`">
         <h1
@@ -76,6 +84,12 @@ export default {
     },
     date() {
       return new Date(_.get(this.item, 'updatedAt', ''))
+    },
+    imgUrl() {
+      return _.get(this.$getImgs(this.item), ['mobile', 'url'], '')
+    },
+    imgResizedTargets() {
+      return _.get(this.item, ['heroImage', 'image', 'resizedTargets'], {})
     }
   },
   methods: {
@@ -107,12 +121,17 @@ export default {
     min-width d
     height d
     min-height d
-    background-color black
   &__info
     &--vertical
       margin 13px 0 0 0
     &--horizontal
       margin 0 0 0 15px
+
+.cover
+  &__img
+    width 100%
+    height 100%
+    object-fit cover
 
 .info
   position relative

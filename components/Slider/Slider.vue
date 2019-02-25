@@ -13,7 +13,7 @@
           <div class="swper-slide__slide">
             <img
               class="swper-slide__image"
-              :src="item.heroImage.image.url"
+              :src="getImgUrl(item)"
               alt=""
             >
           </div>
@@ -25,6 +25,16 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
+// use plugin at component level rather than app level,
+// prevent big swiper.js chunk included in vendor.app.js
+import Vue from 'vue'
+if (process.browser) {
+  const VueAwesomeSwiper = require('vue-awesome-swiper/dist/ssr')
+  Vue.use(VueAwesomeSwiper)
+}
+
 export default {
   props: {
     items: {
@@ -50,6 +60,11 @@ export default {
         grabCursor: false,
         autoplay: true
       }
+    }
+  },
+  methods: {
+    getImgUrl(item) {
+      return _.get(this.$getImgs(item), ['tablet', 'url'], '')
     }
   }
 }

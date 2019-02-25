@@ -5,7 +5,13 @@
     </AppH1>
     <div class="intro-wrapper__intro intro">
       <figure class="intro__info figure">
-        <img :class="[ 'figure__img', `figure__img--${imgStyle}` ]" src="" alt="">
+        <img
+          v-if="imgUrl !== ''"
+          :key="imgUrl"
+          v-lazy="imgUrl"
+          :class="[ 'figure__img', `figure__img--${imgStyle}` ]"
+          alt=""
+        >
         <figcaption class="figure__figcaption">
           {{ figcaption }}
         </figcaption>
@@ -53,6 +59,9 @@ export default {
         // TODO: refacor this options to constants
         allowedTags: ['div', 'p', 'a']
       })
+    },
+    imgUrl() {
+      return _.get(this.$getImgs(this.intro), ['mobile', 'url'], '')
     }
   }
 }
@@ -80,7 +89,7 @@ export default {
   display flex
   &__img
     display block
-    background-color black
+    object-fit cover
     &--square
       d = 70px
       min-width d

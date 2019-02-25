@@ -3,10 +3,16 @@
     <div
       v-if="layout !== 'single'"
       ref="cover"
-      class="info-wrapper__cover"
+      class="info-wrapper__cover cover"
       :style="{ minWidth: `${coverHeight}px`, maxWidth: `${coverHeight}px` }"
     >
-      <!-- <img src="" alt=""> -->
+      <img
+        v-if="imgUrl !== ''"
+        :key="imgUrl"
+        v-lazy="imgUrl"
+        class="cover__img"
+        alt=""
+      >
     </div>
     <div class="info-wrapper__info info">
       <AppH1
@@ -89,6 +95,9 @@ export default {
     },
     tags() {
       return _.get(this.info, 'tags', [])
+    },
+    imgUrl() {
+      return _.get(this.$getImgs(this.info), ['mobile', 'url'], '')
     }
   },
   mounted() {
@@ -107,8 +116,13 @@ export default {
     min-height 100%
     max-height 100%
     width 0
-    background-color black
     margin 0 22px 0 0
+
+.cover
+  &__img
+    width 100%
+    height 100%
+    object-fit cover
 
 .info
   &__date
