@@ -9,7 +9,7 @@
         :key="i"
         class="swiper-slide"
       >
-        <nuxt-link to="/album/fake">
+        <nuxt-link :to="item.href">
           <div class="swper-slide__slide">
             <img
               class="swper-slide__image"
