@@ -61,7 +61,7 @@ import PageNavsVertical from '~/components/PageNavs/PageNavsVertical.vue'
 
 const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
   return store.dispatch('appPlayer/FETCH', {
-    max_results: 10,
+    max_results: 50,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,
     where: {

@@ -23,6 +23,7 @@
       :tracks="tracks"
       :items-per-page="5"
       :total="5"
+      @playTrack="v => $emit('playTrack', v)"
     />
   </AppDiv>
 </template>

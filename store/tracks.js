@@ -8,7 +8,8 @@ export const state = () => ({
     maxResults: 0,
     total: 0,
     page: 0
-  }
+  },
+  links: {}
 })
 
 export const mutations = {
@@ -20,6 +21,9 @@ export const mutations = {
   },
   SET_META(state, meta) {
     Vue.set(state, 'meta', meta)
+  },
+  SET_LINKS(state, links) {
+    Vue.set(state, 'links', links)
   }
 }
 
@@ -32,6 +36,7 @@ export const actions = {
       commit('SET_ALBUM_ID', albumId)
       commit('SET_ITEMS', res.items)
       commit('SET_META', res.meta)
+      commit('SET_LINKS', res.links)
       return res
     })
   }

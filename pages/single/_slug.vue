@@ -26,14 +26,15 @@
       <AsideTrackList
         class="aside__wrapper"
         :album="album"
-        :tracks="tracks"
+        :tracks="tracks.items"
+        @playTrack="playTrack"
       />
     </div>
   </AppMainAsideWrapper>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import _ from 'lodash'
 
@@ -58,6 +59,19 @@ const fetchTracks = (store, isLatestFirst = true, page = 1) => {
   })
 }
 
+const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
+  return store.dispatch('appPlayer/FETCH', {
+    max_results: 10,
+    page,
+    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
+    where: {
+      albums: {
+        $in: [albumId]
+      }
+    }
+  })
+}
+
 export default {
   components: {
     AppMainAsideWrapper,
@@ -71,7 +85,7 @@ export default {
     ...mapState({
       single: state => state.single.info,
       album: state => state.album.info,
-      tracks: state => state.tracks.items
+      tracks: state => state.tracks
     }),
     content() {
       return sanitizeHtml(_.get(this.single, ['content', 'html'], ''), {
@@ -107,6 +121,36 @@ export default {
           return fetchTracks(store)
         })
     )
+  },
+  methods: {
+    ...mapActions({
+      PLAY: 'appPlayer/PLAY'
+    }),
+    playAlbum(albumId = this.album.id) {
+      const albumIdTracks = _.get(this.tracks, 'albumId', '')
+
+      // NOTE: always true in single's page, this may be for refactoring purposes
+      // prevent additional request of fetching album's tracks
+      if (albumId === albumIdTracks) {
+        this.PLAY({
+          sounds: this.tracks.items,
+          meta: this.tracks.meta,
+          links: this.tracks.links,
+          albumId
+        })
+      } else {
+        fetchPlayerTracks(this.$store, albumId)
+      }
+    },
+
+    ...mapMutations({
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX'
+    }),
+    playTrack(slug) {
+      const playingIndex = _.findIndex(this.tracks.items, o => o.slug === slug)
+      this.SET_PLAYING_INDEX(playingIndex)
+      this.playAlbum()
+    }
   }
 }
 </script>

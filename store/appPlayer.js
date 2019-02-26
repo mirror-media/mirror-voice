@@ -18,6 +18,7 @@ export const state = () => ({
     total: 0,
     page: 0
   },
+  links: {},
   playingIndex: 0,
   albumId: ''
 })
@@ -51,6 +52,10 @@ export const mutations = {
   },
   UNSHIFT_ITEMS(state, items) {
     state.list.unshift(...items)
+  },
+
+  SET_LINKS(state, links) {
+    Vue.set(state, 'links', links)
   }
 }
 
@@ -68,6 +73,7 @@ export const actions = {
           mode,
           sounds: res.items,
           meta: res.meta,
+          links: res.links,
           albumId,
           page
         })
@@ -81,6 +87,7 @@ export const actions = {
       mode = 'set',
       sounds,
       meta = { maxResults: 0, total: 0, page: 0 },
+      links = {},
       albumId,
       page = 0
     }
@@ -101,6 +108,7 @@ export const actions = {
     }
     commit('SET_ALBUM_ID', albumId)
     commit('SET_META', meta)
+    commit('SET_LINKS', links)
 
     commit('SHOW_APP_PLAYER')
   }

@@ -180,12 +180,16 @@ export default {
     }),
     playAlbum(albumId = this.album.id) {
       const albumIdTracks = _.get(this.tracks, 'albumId', '')
-      const tracksMeta = _.get(this.tracks, 'meta', {})
 
       // NOTE: always true in album's page, this may be for refactoring purposes
       // prevent additional request of fetching album's tracks
       if (albumId === albumIdTracks) {
-        this.PLAY({ sounds: this.tracks.items, meta: tracksMeta, albumId })
+        this.PLAY({
+          sounds: this.tracks.items,
+          meta: this.tracks.meta,
+          links: this.tracks.links,
+          albumId
+        })
       } else {
         fetchPlayerTracks(this.$store, albumId)
       }
