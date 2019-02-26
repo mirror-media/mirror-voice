@@ -5,6 +5,11 @@ const zhTW = require('./i18n/zh-tw')
 module.exports = {
   mode: 'universal',
 
+  server: {
+    port: process.env.NODE_ENV === 'production' ? 80 : 8080,
+    host: process.env.NODE_ENV === 'production' ? '0.0.0.0' : '127.0.0.1'
+  },
+
   /*
   ** Headers of the page
   */
