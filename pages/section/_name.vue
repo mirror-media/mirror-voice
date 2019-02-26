@@ -19,6 +19,7 @@
         class="bottom-wrapper__showcase"
         :list-item-layout="'horizontal'"
         :list="showcase.items"
+        @clickItem="playAlbum"
       />
       <AppPagination
         v-if="18 < total"
@@ -69,6 +70,19 @@ const fetchShowcase = (store, where, ids, page = 1) => {
     where: {
       [where]: {
         $in: ids
+      }
+    }
+  })
+}
+
+const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
+  return store.dispatch('appPlayer/FETCH', {
+    max_results: 10,
+    page,
+    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
+    where: {
+      albums: {
+        $in: [albumId]
       }
     }
   })
@@ -128,6 +142,9 @@ export default {
         this.routeParam
       )
       return fetchShowcase(this.$store, where, ids, page)
+    },
+    playAlbum(albumId) {
+      fetchPlayerTracks(this.$store, albumId)
     }
   }
 }

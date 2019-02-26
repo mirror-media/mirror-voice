@@ -5,6 +5,7 @@
         <Info
           :layout="'album'"
           :info="album"
+          @clickPlay="playAlbum"
         />
       </AppDiv>
       <AppDiv class="main__wrapper body-wrapper">
@@ -45,6 +46,7 @@
           :page="page"
           :total="tracks.meta.total"
           :items-per-page="10"
+          @playTrack="playTrack"
         />
         <AppPagination
           v-if="10 < tracks.meta.total"
@@ -69,7 +71,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import _ from 'lodash'
 
@@ -86,6 +88,19 @@ import AppPagination from '~/components/AppPagination.vue'
 const fetchTracks = (store, isLatestFirst = true, page = 1) => {
   const albumId = _.get(store.state.album, ['info', 'id'], '')
   return store.dispatch('tracks/FETCH', {
+    max_results: 10,
+    page,
+    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
+    where: {
+      albums: {
+        $in: [albumId]
+      }
+    }
+  })
+}
+
+const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
+  return store.dispatch('appPlayer/FETCH', {
     max_results: 10,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,
@@ -158,6 +173,31 @@ export default {
       fetchTracks(this.$store, this.isTracksSortLatestFirst, page).then(() => {
         this.isTracksFetched = true
       })
+    },
+
+    ...mapActions({
+      PLAY: 'appPlayer/PLAY'
+    }),
+    playAlbum(albumId = this.album.id) {
+      const albumIdTracks = _.get(this.tracks, 'albumId', '')
+      const tracksMeta = _.get(this.tracks, 'meta', {})
+
+      // NOTE: always true in album's page, this may be for refactoring purposes
+      // prevent additional request of fetching album's tracks
+      if (albumId === albumIdTracks) {
+        this.PLAY({ sounds: this.tracks.items, meta: tracksMeta, albumId })
+      } else {
+        fetchPlayerTracks(this.$store, albumId)
+      }
+    },
+
+    ...mapMutations({
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX'
+    }),
+    playTrack(slug) {
+      const playingIndex = _.findIndex(this.tracks.items, o => o.slug === slug)
+      this.SET_PLAYING_INDEX(playingIndex)
+      this.playAlbum()
     }
   }
 }

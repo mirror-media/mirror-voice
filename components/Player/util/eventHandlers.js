@@ -12,7 +12,7 @@ export default function(player) {
   audio.addEventListener('seeked', onAudioSeeked.bind(player))
   audio.addEventListener('timeupdate', onAudioTimeUpdate.bind(player))
   audio.addEventListener('volumechange', onAudioVolumeChange.bind(player))
-  // player.audio.addEventListener('ended', player.onAudioEnded)
+  audio.addEventListener('ended', onAudioEnded.bind(player))
   audio.addEventListener('loadedmetadata', onAudioLoadedMetadata.bind(player))
 }
 
@@ -61,6 +61,9 @@ function onAudioTimeUpdate() {
 function onAudioVolumeChange() {
   this.audioVolume = this.audio.volume
   this.isAudioMuted = this.audio.muted
+}
+function onAudioEnded() {
+  this.playIndex += 1
 }
 function onAudioLoadedMetadata() {
   if (this.audio.buffered.length) {

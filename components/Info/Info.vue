@@ -43,7 +43,7 @@
       </div>
       <div
         class="info__toggle-play toggle-play"
-        @click="SHOW_APP_PLAYER"
+        @click="$emit('clickPlay')"
       >
         <img class="toggle-play__icon" src="~/assets/img/btn_play.png" alt="">
         <span class="toggle-play__text">
@@ -56,7 +56,6 @@
 
 <script>
 import _ from 'lodash'
-import { mapMutations } from 'vuex'
 
 import AppH1 from '~/components/AppH1.vue'
 import AppDate from '~/components/AppDate.vue'
@@ -102,11 +101,6 @@ export default {
   },
   mounted() {
     this.coverHeight = _.get(this.cover, ['offsetHeight'], 0)
-  },
-  methods: {
-    ...mapMutations({
-      SHOW_APP_PLAYER: 'appPlayer/SHOW_APP_PLAYER'
-    })
   }
 }
 </script>

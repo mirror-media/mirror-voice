@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import _ from 'lodash'
 
 export const state = () => ({
   showAppPlayer: false,
@@ -11,7 +12,14 @@ export const state = () => ({
   **   slug: 'sound's slug
   ** }
   */
-  list: []
+  list: [],
+  meta: {
+    maxResults: 0,
+    total: 0,
+    page: 0
+  },
+  playingIndex: 0,
+  albumId: ''
 })
 
 export const mutations = {
@@ -27,27 +35,73 @@ export const mutations = {
 
   SET_LIST(state, list) {
     Vue.set(state, 'list', list)
+  },
+  SET_PLAYING_INDEX(state, value) {
+    state.playingIndex = value
+  },
+  SET_ALBUM_ID(state, id) {
+    Vue.set(state, 'albumId', id)
+  },
+
+  SET_META(state, meta) {
+    Vue.set(state, 'meta', meta)
+  },
+  PUSH_ITEMS(state, items) {
+    state.list.push(...items)
+  },
+  UNSHIFT_ITEMS(state, items) {
+    state.list.unshift(...items)
   }
 }
 
 export const actions = {
   FETCH({ dispatch }, params) {
+    const albumId = _.get(params, ['where', 'albums', '$in', 0], '')
+    const page = _.get(params, 'page', 1)
+
     const query = this.$buildQuery(params)
     const url = `/api/listing?${query}`
+    const { mode = 'set' } = params
     return this.$fetch(url).then(res => {
       if (res.items.length > 0) {
-        dispatch('PLAY', res.items)
+        dispatch('PLAY', {
+          mode,
+          sounds: res.items,
+          meta: res.meta,
+          albumId,
+          page
+        })
       }
       return res
     })
   },
-  PLAY({ commit }, sounds) {
+  PLAY(
+    { commit, state },
+    {
+      mode = 'set',
+      sounds,
+      meta = { maxResults: 0, total: 0, page: 0 },
+      albumId,
+      page = 0
+    }
+  ) {
     sounds = sounds.map(sound => ({
       title: sound.title,
       src: `http://www.mirrormedia.mg/assets/audios/${sound.id}.wav`,
       slug: sound.name
     }))
-    commit('SET_LIST', sounds)
+    if (mode === 'set') {
+      commit('SET_LIST', sounds)
+    } else if (mode === 'push') {
+      if (page > state.meta.page) {
+        commit('PUSH_ITEMS', sounds)
+      } else {
+        commit('UNSHIFT_ITEMS', sounds)
+      }
+    }
+    commit('SET_ALBUM_ID', albumId)
+    commit('SET_META', meta)
+
     commit('SHOW_APP_PLAYER')
   }
 }

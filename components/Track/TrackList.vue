@@ -6,14 +6,12 @@
       :class="[ 'list__list-item', { 'list__list-item--border-bottom': showListOrder && i === tracks.length - 1 } ]"
       :order="showListOrder ? getOrder(i) : 0"
       :item="track"
-      @click.native="SHOW_APP_PLAYER"
+      @click.native="$emit('playTrack', track.slug)"
     />
   </ol>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
-
 import TrackListItem from './TrackListItem.vue'
 
 export default {
@@ -47,9 +45,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
-      SHOW_APP_PLAYER: 'appPlayer/SHOW_APP_PLAYER'
-    }),
     getOrder(i) {
       if (this.isLatestFirst) {
         return this.total - i - this.itemsPerPage * (this.page - 1)
