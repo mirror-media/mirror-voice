@@ -14,14 +14,19 @@
         <AppH1 class="body-wrapper__title">
           文稿
         </AppH1>
-        <div class="body-wrapper__body" v-html="content" />
+        <!-- NoSSR due to SEO concerns -->
+        <NoSSR>
+          <div class="body-wrapper__body" v-html="content" />
+        </NoSSR>
       </AppDiv>
     </div>
     <div slot="aside" class="aside">
       <AsideIntro
         class="aside__wrapper album"
         :title="'收錄於'"
-        :intro="album"
+        :fig="asideIntroFig"
+        :figcaption="asideIntroFigcaption"
+        :description="asideIntroDescription"
       />
       <AsideTrackList
         class="aside__wrapper"
@@ -44,6 +49,7 @@ import AppH1 from '~/components/AppH1.vue'
 import Info from '~/components/Info/Info.vue'
 import AsideIntro from '~/components/Aside/AsideIntro.vue'
 import AsideTrackList from '~/components/Aside/AsideTrackList.vue'
+import NoSSR from 'vue-no-ssr'
 
 const fetchTracks = (store, isLatestFirst = true, page = 1) => {
   const albumId = _.get(store.state.album, ['info', 'id'], '')
@@ -79,7 +85,8 @@ export default {
     AppH1,
     Info,
     AsideIntro,
-    AsideTrackList
+    AsideTrackList,
+    NoSSR
   },
   computed: {
     ...mapState({
@@ -90,6 +97,20 @@ export default {
     content() {
       return sanitizeHtml(
         _.get(this.single, ['content', 'html'], ''),
+        this.$SANITIZE_HTML_DEFAULT_OPTIONS
+      )
+    },
+
+    // For aside intro
+    asideIntroFig() {
+      return _.get(this.$getImgs(this.album), ['mobile', 'url'], '')
+    },
+    asideIntroFigcaption() {
+      return _.get(this.album, 'title', '')
+    },
+    asideIntroDescription() {
+      return sanitizeHtml(
+        _.get(this.album, ['brief', 'html'], ''),
         this.$SANITIZE_HTML_DEFAULT_OPTIONS
       )
     }

@@ -27,8 +27,8 @@
         :date="date"
       />
       <div class="info__basic">
-        <p>主播： 網路水手、網路水手、網路</p>
-        <p>原著： 邁克・貝克特爾</p>
+        <p>主播： {{ writer }}</p>
+        <p>原著： 不知道</p>
       </div>
       <div
         v-if="layout === 'single'"
@@ -97,6 +97,9 @@ export default {
     },
     imgUrl() {
       return _.get(this.$getImgs(this.info), ['mobile', 'url'], '')
+    },
+    writer() {
+      return _.get(this.info, ['writers', 0, 'name'], '')
     }
   },
   mounted() {

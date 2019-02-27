@@ -62,6 +62,9 @@
         class="aside__wrapper anchor"
         :title="'主播'"
         :img-style="'round'"
+        :fig="asideIntroFig"
+        :figcaption="asideIntroFigcaption"
+        :description="asideIntroDescription"
       />
       <AsideAlbumList
         class="aside__wrapper anchor-relateds"
@@ -140,6 +143,20 @@ export default {
     brief() {
       return sanitizeHtml(
         _.get(this.album, ['brief', 'html'], ''),
+        this.$SANITIZE_HTML_DEFAULT_OPTIONS
+      )
+    },
+
+    // For aside intro
+    asideIntroFig() {
+      return ''
+    },
+    asideIntroFigcaption() {
+      return _.get(this.album, ['writers', 0, 'name'], '')
+    },
+    asideIntroDescription() {
+      return sanitizeHtml(
+        _.get(this.album, ['writers', 0, 'bio', 'html'], ''),
         this.$SANITIZE_HTML_DEFAULT_OPTIONS
       )
     }

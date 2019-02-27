@@ -28,8 +28,8 @@
           {{ title }}
         </h1>
       </nuxt-link>
-      <p class="info__author">
-        {{ author }}
+      <p class="info__writer">
+        {{ writer }}
       </p>
       <AppDate
         v-if="layout === 'horizontal'"
@@ -71,19 +71,13 @@ export default {
   data() {
     return {
       limitTitle: 14,
-      limitAuthor: 16,
+      limitWriter: 16,
       isMouseover: false
     }
   },
   computed: {
     title() {
       return _.truncate(this.item.title, { length: this.limitTitle })
-    },
-    author() {
-      const text =
-        '夏綠節慶室內樂團夏綠節慶室內樂團夏綠節慶室內樂團夏綠節慶室內樂團'
-      const textRandom = text.slice(0, Math.floor(Math.random() * 30))
-      return _.truncate(textRandom, { length: this.limitAuthor })
     },
     date() {
       return new Date(_.get(this.item, 'updatedAt', ''))
@@ -93,6 +87,10 @@ export default {
     },
     imgResizedTargets() {
       return _.get(this.item, ['heroImage', 'image', 'resizedTargets'], {})
+    },
+    writer() {
+      const writerName = _.get(this.item, ['writers', 0, 'name'], '')
+      return _.truncate(writerName, { length: this.limitWriter })
     }
   },
   methods: {
@@ -166,7 +164,7 @@ export default {
     color black
     &:hover
       color #d84939
-  &__author
+  &__writer
     font-size 14px
     line-height 1.29
     color #7d7d7d

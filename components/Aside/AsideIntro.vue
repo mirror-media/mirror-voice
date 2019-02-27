@@ -6,9 +6,9 @@
     <div class="intro-wrapper__intro intro">
       <figure class="intro__info figure">
         <img
-          v-if="imgUrl !== ''"
-          :key="imgUrl"
-          v-lazy="imgUrl"
+          v-if="fig !== ''"
+          :key="fig"
+          v-lazy="fig"
           :class="[ 'figure__img', `figure__img--${imgStyle}` ]"
           alt=""
         >
@@ -22,9 +22,6 @@
 </template>
 
 <script>
-import sanitizeHtml from 'sanitize-html'
-import _ from 'lodash'
-
 import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
 
@@ -45,23 +42,17 @@ export default {
         return ['square', 'round'].includes(value)
       }
     },
-    intro: {
-      type: Object,
+    fig: {
+      type: String,
       required: true
-    }
-  },
-  computed: {
-    figcaption() {
-      return _.get(this.intro, 'title', '')
     },
-    description() {
-      return sanitizeHtml(
-        _.get(this.intro, ['brief', 'html'], ''),
-        this.$SANITIZE_HTML_DEFAULT_OPTIONS
-      )
+    figcaption: {
+      type: String,
+      required: true
     },
-    imgUrl() {
-      return _.get(this.$getImgs(this.intro), ['mobile', 'url'], '')
+    description: {
+      type: String,
+      required: true
     }
   }
 }
@@ -90,6 +81,7 @@ export default {
   &__img
     display block
     object-fit cover
+    margin 0 17px 0 0
     &--square
       d = 70px
       min-width d
@@ -107,5 +99,4 @@ export default {
     font-size 16px
     line-height 1.25
     text-align justify
-    margin 0 0 0 17px
 </style>
