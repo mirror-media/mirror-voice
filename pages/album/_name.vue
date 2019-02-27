@@ -45,14 +45,14 @@
           :tracks="tracks.items"
           :page="page"
           :total="tracks.meta.total"
-          :items-per-page="10"
+          :items-per-page="$MAXRESULT_TRACKS_ALBUM"
           @playTrack="playTrack"
         />
         <AppPagination
-          v-if="10 < tracks.meta.total"
+          v-if="tracks.meta.total > $MAXRESULT_TRACKS_ALBUM"
           class="tracks-wrapper__pagination"
           :total="tracks.meta.total"
-          :items-per-page="10"
+          :items-per-page="$MAXRESULT_TRACKS_ALBUM"
           :page.sync="page"
         />
       </AppDiv>
@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import _ from 'lodash'
 
@@ -88,10 +88,9 @@ import AsideAlbumList from '~/components/Aside/AsideAlbumList.vue'
 import TrackList from '~/components/Track/TrackList.vue'
 import AppPagination from '~/components/AppPagination.vue'
 
-const fetchTracks = (store, isLatestFirst = true, page = 1) => {
-  const albumId = _.get(store.state.album, ['info', 'id'], '')
-  return store.dispatch('tracks/FETCH', {
-    max_results: 10,
+const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
+  return app.$fetchPostListing({
+    max_results: app.$MAXRESULT_TRACKS_ALBUM,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,
     where: {
@@ -136,10 +135,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      album: state => state.album.info,
-      tracks: state => state.tracks
-    }),
     brief() {
       return sanitizeHtml(
         _.get(this.album, ['brief', 'html'], ''),
@@ -169,27 +164,37 @@ export default {
       this.fetchTracks(this.page)
     }
   },
-  fetch({ store, route }) {
+  async asyncData({ app, route }) {
     const routeParam = route.params.name
-    return store
-      .dispatch('album/FETCH_ALBUM', {
-        where: {
-          name: {
-            $in: [routeParam]
-          }
+    const albums = await app.$fetchAlbums({
+      where: {
+        name: {
+          $in: [routeParam]
         }
-      })
-      .then(() => {
-        return fetchTracks(store)
-      })
+      }
+    })
+    const album = _.get(albums, ['items', 0], {})
+    const albumId = _.get(album, 'id', '')
+    const tracks = await fetchTracks(app, albumId)
+    return {
+      album,
+      tracks
+    }
   },
   methods: {
-    fetchTracks(page) {
+    async fetchTracks(page) {
       this.page = page
       this.isTracksFetched = false
-      fetchTracks(this.$store, this.isTracksSortLatestFirst, page).then(() => {
-        this.isTracksFetched = true
-      })
+      const albumId = _.get(this.album, 'id', '')
+      const tracks = await fetchTracks(
+        this,
+        albumId,
+        this.isTracksSortLatestFirst,
+        page
+      )
+      this.isTracksFetched = true
+
+      this.$set(this, 'tracks', tracks)
     },
 
     ...mapActions({

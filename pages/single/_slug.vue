@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import _ from 'lodash'
 
@@ -51,10 +51,9 @@ import AsideIntro from '~/components/Aside/AsideIntro.vue'
 import AsideTrackList from '~/components/Aside/AsideTrackList.vue'
 import NoSSR from 'vue-no-ssr'
 
-const fetchTracks = (store, isLatestFirst = true, page = 1) => {
-  const albumId = _.get(store.state.album, ['info', 'id'], '')
-  return store.dispatch('tracks/FETCH', {
-    max_results: 5,
+const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
+  return app.$fetchPostListing({
+    max_results: app.$MAXRESULT_TRACKS_SINGLE,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,
     where: {
@@ -89,11 +88,6 @@ export default {
     NoSSR
   },
   computed: {
-    ...mapState({
-      single: state => state.single.info,
-      album: state => state.album.info,
-      tracks: state => state.tracks
-    }),
     content() {
       return sanitizeHtml(
         _.get(this.single, ['content', 'html'], ''),
@@ -115,33 +109,36 @@ export default {
       )
     }
   },
-  fetch({ store, route }) {
+  async asyncData({ app, route }) {
+    // TODO: maybe we could have better implement
     const routeParam = route.params.slug
-    return (
-      store
-        .dispatch('single/FETCH_SINGLE', {
-          where: {
-            slug: {
-              $in: [routeParam]
-            }
-          }
-        })
-        .then(() => {
-          const single = store.state.single.info
-          const albumId = _.get(single, ['albums', 0], '')
-          return store.dispatch('album/FETCH_ALBUM', {
-            where: {
-              _id: {
-                $in: [albumId]
-              }
-            }
-          })
-        })
-        // TODO: could fetch without waiting album fetched
-        .then(() => {
-          return fetchTracks(store)
-        })
-    )
+
+    const singles = await app.$fetchPost({
+      where: {
+        slug: {
+          $in: [routeParam]
+        }
+      }
+    })
+    const single = _.get(singles, ['items', 0], {})
+
+    const albumId = _.get(single, ['albums', 0], '')
+
+    const albums = await app.$fetchAlbums({
+      where: {
+        _id: {
+          $in: [albumId]
+        }
+      }
+    })
+    const album = _.get(albums, ['items', 0], {})
+    const tracks = await fetchTracks(app, albumId)
+
+    return {
+      single,
+      album,
+      tracks
+    }
   },
   methods: {
     ...mapActions({

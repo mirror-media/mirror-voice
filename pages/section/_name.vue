@@ -22,10 +22,10 @@
         @clickItem="playAlbum"
       />
       <AppPagination
-        v-if="18 < total"
+        v-if="total > $MAXRESULT_SHOWCASE_SECTION_CATEGORY"
         class="bottom-wrapper__pagination"
         :total="total"
-        :items-per-page="18"
+        :items-per-page="$MAXRESULT_SHOWCASE_SECTION_CATEGORY"
         @pageChange="fetchShowcase"
       />
     </AppDiv>
@@ -33,7 +33,6 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import _ from 'lodash'
 
 import AppDiv from '~/components/AppDiv.vue'
@@ -42,29 +41,26 @@ import DivHeader from '~/components/Div/DivHeader.vue'
 import ShowcaseList from '~/components/Showcase/ShowcaseList.vue'
 import AppPagination from '~/components/AppPagination.vue'
 
-const getShowcaseParam = (store, routeName, routeParam) => {
+const getShowcaseParam = (collection, routeName, routeParam) => {
   let where
   let getterName
   if (routeName.includes('section')) {
     where = 'sections'
-    getterName = 'AUDIO_SECTIONS'
+    getterName = 'audioSections'
   } else if (routeName.includes('category')) {
     where = 'categories'
-    getterName = 'AUDIO_SECTIONS_CATEGORIES'
+    getterName = 'audioCategories'
   }
 
-  const data = _.find(
-    store.getters[`sections/${getterName}`],
-    o => o.name === routeParam
-  )
+  const data = _.find(collection[getterName], o => o.name === routeParam)
   const ids = [_.get(data, 'id', '')]
 
   return { where, ids }
 }
 
-const fetchShowcase = (store, where, ids, page = 1) => {
-  return store.dispatch('showcase/FETCH', {
-    max_results: 18,
+const fetchShowcase = (app, where, ids, page = 1) => {
+  return app.$fetchAlbums({
+    max_results: app.$MAXRESULT_SHOWCASE_SECTION_CATEGORY,
     page,
     sort: '-publishedDate',
     where: {
@@ -97,17 +93,9 @@ export default {
     AppPagination
   },
   computed: {
-    ...mapState({
-      showcase: state => state.showcase
-    }),
     total() {
       return this.showcase.meta.total
     },
-    ...mapGetters({
-      sections: 'sections/AUDIO_SECTIONS',
-      categories: 'sections/AUDIO_SECTIONS_CATEGORIES'
-    }),
-
     routeName() {
       return this.$route.name
     },
@@ -124,24 +112,45 @@ export default {
       return _.get(_.find(data, o => o.name === this.routeParam), 'title', '')
     }
   },
-  fetch({ store, route }) {
+  async asyncData({ app, route }) {
     const routeName = route.name
     const routeParam = route.params.name
 
-    return store.dispatch('sections/FETCH', { max_results: 20 }).then(() => {
-      // The "where" variable should will be: sections or categories
-      const { where, ids } = getShowcaseParam(store, routeName, routeParam)
-      return fetchShowcase(store, where, ids)
-    })
+    const { items } = await app.$fetchSections({ max_results: 20 })
+    const audioSections = app.$filterAudioSections(items)
+    const audioCategories = _.flatten(
+      audioSections.map(section => {
+        return section.categories.map(category =>
+          Object.assign(category, { section: section.name })
+        )
+      })
+    )
+
+    // The "where" variable should will be: sections or categories
+    const { where, ids } = getShowcaseParam(
+      { audioSections, audioCategories },
+      routeName,
+      routeParam
+    )
+    const showcase = await fetchShowcase(app, where, ids)
+    return {
+      sections: audioSections,
+      categories: audioCategories,
+      showcase: showcase
+    }
   },
   methods: {
-    fetchShowcase(page) {
+    async fetchShowcase(page) {
       const { where, ids } = getShowcaseParam(
-        this.$store,
+        {
+          audioSections: this.sections,
+          audioCategories: this.categories
+        },
         this.routeName,
         this.routeParam
       )
-      return fetchShowcase(this.$store, where, ids, page)
+      const showcase = await fetchShowcase(this, where, ids, page)
+      this.$set(this, 'showcase', showcase)
     },
     playAlbum(albumId) {
       fetchPlayerTracks(this.$store, albumId)

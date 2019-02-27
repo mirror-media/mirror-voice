@@ -48,7 +48,8 @@ module.exports = {
     '~/plugins/fetch.js',
     '~/plugins/vuePlugins.js',
     '~/plugins/util/index.js',
-    '~/plugins/constants/index.js'
+    '~/plugins/constants/index.js',
+    '~/plugins/requests/index.js'
   ],
 
   /*

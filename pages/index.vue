@@ -2,7 +2,7 @@
   <AppMainAsideWrapper>
     <div slot="main" class="main">
       <Slider
-        :items="sliderItems"
+        :items="audioPromotions.items"
       />
       <template
         v-for="(section, i) in sections"
@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import _ from 'lodash'
 
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
@@ -81,28 +80,23 @@ export default {
     ShowcaseList,
     PageNavsVertical
   },
-  computed: {
-    ...mapState({
-      sliderItems: state => state.audioPromotions.items,
-      showcase: state => state.showcase.items
-    }),
-    ...mapGetters({
-      sections: 'sections/AUDIO_SECTIONS'
-    })
-  },
-  fetch({ store }) {
-    return Promise.all([
-      store.dispatch('audioPromotions/FETCH'),
-      store.dispatch('sections/FETCH', { max_results: 20 }).then(res => {
-        const sectionIds = store.getters['sections/AUDIO_SECTIONS'].map(
-          section => section.id
-        )
-        store.commit('showcase/SET_ITEMS', [])
-        return Promise.all(
-          sectionIds.map(id => {
-            return store.dispatch('showcase/FETCH', {
-              mode: 'push',
-              max_results: 10,
+  async asyncData({ app }) {
+    const fetchAudioPromotions = () => {
+      return app.$fetchAudioPromotions()
+    }
+
+    /*
+    ** 1. Fetch all sections
+    ** 2. Filter audio sections
+    ** 3. Fetch albums belong to each audio sections
+    */
+    const getAudioSectionsAndAlbums = async () => {
+      const getSectionAlbums = async sectionIds => {
+        // requests in parallel
+        const result = await Promise.all(
+          sectionIds.map(id =>
+            app.$fetchAlbums({
+              max_results: app.$MAXRESULT_SHOWCASE_HOME,
               page: 1,
               sort: '-publishedDate',
               where: {
@@ -111,14 +105,33 @@ export default {
                 }
               }
             })
-          })
+          )
         )
-      })
+        return result.map(d => d.items)
+      }
+      const { items } = await app.$fetchSections({ max_results: 20 })
+      const audioSections = app.$filterAudioSections(items)
+      let albums = await getSectionAlbums(
+        audioSections.map(section => section.id)
+      )
+      albums = _.flatten(albums)
+      return { sections: audioSections, albums }
+    }
+
+    // Run requests in parallel
+    const [audioPromotions, { sections, albums }] = await Promise.all([
+      fetchAudioPromotions(),
+      getAudioSectionsAndAlbums()
     ])
+    return {
+      audioPromotions,
+      sections,
+      albums
+    }
   },
   methods: {
     getSectionAlbums(sectionName) {
-      return this.showcase.filter(album => {
+      return this.albums.filter(album => {
         const { sections = [] } = album
         return _.findIndex(sections, o => o.name === sectionName) !== -1
       })
