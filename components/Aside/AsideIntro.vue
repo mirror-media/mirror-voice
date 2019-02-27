@@ -55,10 +55,10 @@ export default {
       return _.get(this.intro, 'title', '')
     },
     description() {
-      return sanitizeHtml(_.get(this.intro, ['brief', 'html'], ''), {
-        // TODO: refacor this options to constants
-        allowedTags: ['div', 'p', 'a']
-      })
+      return sanitizeHtml(
+        _.get(this.intro, ['brief', 'html'], ''),
+        this.$SANITIZE_HTML_DEFAULT_OPTIONS
+      )
     },
     imgUrl() {
       return _.get(this.$getImgs(this.intro), ['mobile', 'url'], '')

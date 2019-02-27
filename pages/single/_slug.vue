@@ -88,10 +88,10 @@ export default {
       tracks: state => state.tracks
     }),
     content() {
-      return sanitizeHtml(_.get(this.single, ['content', 'html'], ''), {
-        // TODO: refacor this options to constants
-        allowedTags: ['div', 'p', 'a']
-      })
+      return sanitizeHtml(
+        _.get(this.single, ['content', 'html'], ''),
+        this.$SANITIZE_HTML_DEFAULT_OPTIONS
+      )
     }
   },
   fetch({ store, route }) {

@@ -138,10 +138,10 @@ export default {
       tracks: state => state.tracks
     }),
     brief() {
-      return sanitizeHtml(_.get(this.album, ['brief', 'html'], ''), {
-        // TODO: refacor this options to constants
-        allowedTags: ['div', 'p', 'a']
-      })
+      return sanitizeHtml(
+        _.get(this.album, ['brief', 'html'], ''),
+        this.$SANITIZE_HTML_DEFAULT_OPTIONS
+      )
     }
   },
   watch: {
