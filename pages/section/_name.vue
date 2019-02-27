@@ -169,7 +169,7 @@ export default {
 
 .bottom-wrapper
   &__showcase
-    margin 26px 0 0 0
+    margin 26px 0 0 0 !important
   &__pagination
     margin 75px 0 0 0
 </style>
