@@ -100,11 +100,9 @@ export const actions = {
     if (mode === 'set') {
       commit('SET_LIST', sounds)
     } else if (mode === 'push') {
-      if (page > state.meta.page) {
-        commit('PUSH_ITEMS', sounds)
-      } else {
-        commit('UNSHIFT_ITEMS', sounds)
-      }
+      commit('PUSH_ITEMS', sounds)
+    } else if (mode === 'unshift') {
+      commit('UNSHIFT_ITEMS', sounds)
     }
     commit('SET_ALBUM_ID', albumId)
     commit('SET_META', meta)

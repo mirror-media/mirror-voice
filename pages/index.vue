@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import _ from 'lodash'
 
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
@@ -60,7 +61,7 @@ import PageNavsVertical from '~/components/PageNavs/PageNavsVertical.vue'
 
 const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
   return store.dispatch('appPlayer/FETCH', {
-    max_results: 50,
+    max_results: 10,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,
     where: {
@@ -130,6 +131,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations({
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX'
+    }),
     getSectionAlbums(sectionName) {
       return this.albums.filter(album => {
         const { sections = [] } = album
@@ -138,6 +142,7 @@ export default {
     },
     playAlbum(albumId) {
       fetchPlayerTracks(this.$store, albumId)
+      this.SET_PLAYING_INDEX(0)
     }
   }
 }

@@ -89,16 +89,18 @@ import TrackList from '~/components/Track/TrackList.vue'
 import AppPagination from '~/components/AppPagination.vue'
 
 const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
-  return app.$fetchPostListing({
-    max_results: app.$MAXRESULT_TRACKS_ALBUM,
-    page,
-    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
-    where: {
-      albums: {
-        $in: [albumId]
+  return app
+    .$fetchSingleListing({
+      max_results: app.$MAXRESULT_TRACKS_ALBUM,
+      page,
+      sort: `${isLatestFirst ? '-' : ''}publishedDate`,
+      where: {
+        albums: {
+          $in: [albumId]
+        }
       }
-    }
-  })
+    })
+    .then(res => Object.assign(res, { albumId }))
 }
 
 const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
@@ -209,6 +211,7 @@ export default {
         this.PLAY({
           sounds: this.tracks.items,
           meta: this.tracks.meta,
+          // NOTE: enable links field to auto loadmore next page of singles
           links: this.tracks.links,
           albumId
         })

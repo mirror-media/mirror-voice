@@ -52,7 +52,7 @@ import AsideTrackList from '~/components/Aside/AsideTrackList.vue'
 import NoSSR from 'vue-no-ssr'
 
 const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
-  return app.$fetchPostListing({
+  return app.$fetchSingleListing({
     max_results: app.$MAXRESULT_TRACKS_SINGLE,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,
@@ -113,7 +113,7 @@ export default {
     // TODO: maybe we could have better implement
     const routeParam = route.params.slug
 
-    const singles = await app.$fetchPost({
+    const singles = await app.$fetchSingle({
       where: {
         slug: {
           $in: [routeParam]

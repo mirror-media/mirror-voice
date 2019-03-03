@@ -19,12 +19,12 @@ export default ({ $axios }, inject) => {
     const url = `/api/albums?${query}`
     return _axios.get(url).then(res => res)
   })
-  inject('fetchPostListing', params => {
+  inject('fetchSingleListing', params => {
     const query = buildQuery(params)
     const url = `/api/listing?${query}`
     return _axios.get(url).then(res => res)
   })
-  inject('fetchPost', params => {
+  inject('fetchSingle', params => {
     const query = buildQuery(params)
     const url = `/api/posts?${query}`
     return _axios.get(url).then(res => res)

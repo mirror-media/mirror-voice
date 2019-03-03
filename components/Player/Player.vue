@@ -137,8 +137,9 @@ export default {
         return _.findIndex(this.list, o => o.src === this.currentSound.src)
       },
       set(val) {
-        val = val < 0 ? this.list.length - 1 : val
-        this.currentSound = this.list[val % this.list.length]
+        if (val >= 0 && val <= this.list.length - 1) {
+          this.currentSound = this.list[val]
+        }
       }
     },
 

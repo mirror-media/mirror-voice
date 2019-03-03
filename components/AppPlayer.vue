@@ -18,6 +18,26 @@ import { mapState, mapMutations } from 'vuex'
 
 import Player from '~/components/Player/Player.vue'
 
+const fetchPlayerTracks = (
+  store,
+  albumId,
+  isLatestFirst = true,
+  page = 1,
+  mode
+) => {
+  return store.dispatch('appPlayer/FETCH', {
+    mode,
+    max_results: 10,
+    page,
+    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
+    where: {
+      albums: {
+        $in: [albumId]
+      }
+    }
+  })
+}
+
 export default {
   components: {
     Player
@@ -43,9 +63,40 @@ export default {
         return this.list[this.playingIndex]
       },
       set(sound) {
-        const index = _.findIndex(this.list, o => o.src === sound.src)
-        this.SET_PLAYING_INDEX(index)
+        let index = _.findIndex(this.list, o => o.src === sound.src)
+        // Should fetch next page
+        if (index === this.list.length - 1 && this.isListHaveNext) {
+          fetchPlayerTracks(
+            this.$store,
+            this.albumId,
+            true,
+            this.meta.page + 1,
+            'push'
+          ).then(() => {
+            index = _.findIndex(this.list, o => o.src === sound.src)
+            this.SET_PLAYING_INDEX(index)
+          })
+        } else if (index === 0 && this.isListHavePrev) {
+          fetchPlayerTracks(
+            this.$store,
+            this.albumId,
+            true,
+            this.meta.page - 1,
+            'unshift'
+          ).then(() => {
+            index = _.findIndex(this.list, o => o.src === sound.src)
+            this.SET_PLAYING_INDEX(index)
+          })
+        } else {
+          this.SET_PLAYING_INDEX(index)
+        }
       }
+    },
+    isListHavePrev() {
+      return 'prev' in this.links
+    },
+    isListHaveNext() {
+      return 'next' in this.links
     }
   },
   methods: {
