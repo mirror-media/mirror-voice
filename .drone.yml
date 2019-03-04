@@ -1,0 +1,110 @@
+workspace:
+  base: /mirror-media
+  path: mirror-voice
+pipeline:
+  stage_notify:
+    image: plugins/slack
+    channel: jenkins
+    secrets: [slack_webhook]
+    username: drone
+    icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
+    template: >
+      Build <${DRONE_BUILD_LINK}|#{{build.number}}> *{{repo.name}}:${DRONE_COMMIT_SHA:0:7}* start.
+      {{build.author}} gave *{{build.branch}}* a little {{build.event}}.
+    when:
+      event: [push, pull_request, tag]
+      branch: [master]
+
+  restore-cache:
+    image: drillster/drone-volume-cache
+    restore: true
+    mount:
+      - node_modules
+    volumes:
+      - /tmp/cache:/cache
+    when:
+      event: [push, pull_request]
+      branch: [master]
+
+  get-stage-config:
+    image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
+    secrets: [google_credentials]
+    commands:
+      - gcloud source repos clone configs ../configs
+      - cp ../configs/mirror-media/mirror-voice/dev/config.js ./server/config.js
+    when:
+      event: [push]
+      branch: [master]
+
+  build:
+    image: gcr.io/mirrormedia-1470651750304/mirror-voice:node-10.15.1-builder
+    commands:
+      - yarn install
+      - yarn run build
+      - yarn cache clean
+    when:
+      event: [push, tag]
+
+  publish:
+    image: plugins/gcr
+    repo: mirrormedia-1470651750304/${DRONE_REPO_NAME}
+    tag: ${DRONE_COMMIT_SHA:0:7}
+    environment:
+      - DOCKER_LAUNCH_DEBUG=true
+    secrets: [google_credentials]
+    dockerfile: docker/Dockerfile
+    when:
+      event: [push]
+      branch: [master]
+
+  rebuild-cache:
+    image: drillster/drone-volume-cache
+    rebuild: true
+    mount:
+      - node_modules
+    volumes:
+      - /tmp/cache:/cache
+
+  download-charts:
+    image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
+    secrets: [google_credentials]
+    commands:
+      - gcloud source repos clone helm ../helm
+      - mkdir ./helm
+      - cp -rf ../helm/mirror-voice ./helm/
+
+  helm_deploy_staging:
+    image: quay.io/ipedrazas/drone-helm
+    skip_tls_verify: true
+    chart: ./helm/mirror-voice
+    release: "mirror-voice"
+    wait: true
+    debug: true
+    upgrade: true
+    reuse_values: true
+    recreate_pods: false
+    client_only: true
+    service_account: tiller
+    secrets: [api_server, kubernetes_token]
+    values: image.tag=${DRONE_COMMIT_SHA:0:7}
+    # values_files: ["helm/staging.yml"]
+    namespace: default
+    when:
+      event: push
+      branch: master
+
+  finish_notify:
+    image: plugins/slack
+    channel: jenkins
+    secrets: [slack_webhook]
+    username: drone
+    icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
+    when:
+      status: [success, failure]
+      event: [push, pull_request, tag]
+    template: >
+      {{#success build.status}}
+        ${DRONE_REPO_NAME}:${DRONE_COMMIT_SHA:0:7} was locked and loaded.
+      {{else}}
+        Houston, we have a problem. Build <${DRONE_BUILD_LINK}|#{{build.number}}> failed.
+      {{/success}}

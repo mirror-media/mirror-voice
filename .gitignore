@@ -79,7 +79,7 @@ dist
 
 # IDE
 .idea
-
+*.swp
 # Service worker
 sw.*
 
