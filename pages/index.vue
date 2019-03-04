@@ -49,7 +49,6 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import _ from 'lodash'
 
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
@@ -131,9 +130,6 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
-      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX'
-    }),
     getSectionAlbums(sectionName) {
       return this.albums.filter(album => {
         const { sections = [] } = album
@@ -142,7 +138,6 @@ export default {
     },
     playAlbum(albumId) {
       fetchPlayerTracks(this.$store, albumId)
-      this.SET_PLAYING_INDEX(0)
     }
   }
 }

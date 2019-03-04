@@ -29,10 +29,7 @@ export default {
   props: {
     sound: {
       type: Object,
-      required: true,
-      validator(sound) {
-        return !!sound.src
-      }
+      required: true
     },
     showTitle: {
       type: Boolean,

@@ -74,7 +74,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations, mapGetters } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import _ from 'lodash'
 
@@ -89,23 +89,8 @@ import TrackList from '~/components/Track/TrackList.vue'
 import AppPagination from '~/components/AppPagination.vue'
 
 const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
-  return app
-    .$fetchSingleListing({
-      max_results: app.$MAXRESULT_TRACKS_ALBUM,
-      page,
-      sort: `${isLatestFirst ? '-' : ''}publishedDate`,
-      where: {
-        albums: {
-          $in: [albumId]
-        }
-      }
-    })
-    .then(res => Object.assign(res, { albumId }))
-}
-
-const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
-  return store.dispatch('appPlayer/FETCH', {
-    max_results: 10,
+  return app.$fetchSingleListing({
+    max_results: app.$MAXRESULT_TRACKS_ALBUM,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,
     where: {
@@ -137,6 +122,10 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      list: 'appPlayer/LIST'
+    }),
+
     brief() {
       return sanitizeHtml(
         _.get(this.album, ['brief', 'html'], ''),
@@ -200,33 +189,22 @@ export default {
     },
 
     ...mapActions({
-      PLAY: 'appPlayer/PLAY'
+      PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
     }),
-    playAlbum(albumId = this.album.id) {
-      const albumIdTracks = _.get(this.tracks, 'albumId', '')
-
-      // NOTE: always true in album's page, this may be for refactoring purposes
-      // prevent additional request of fetching album's tracks
-      if (albumId === albumIdTracks) {
-        this.PLAY({
-          sounds: this.tracks.items,
-          meta: this.tracks.meta,
-          // NOTE: enable links field to auto loadmore next page of singles
-          links: this.tracks.links,
-          albumId
-        })
-      } else {
-        fetchPlayerTracks(this.$store, albumId)
-      }
+    playAlbum(slug) {
+      this.PREPARE_SINGLES({ page: this.page, res: this.tracks }).then(() => {
+        const playingIndex = _.findIndex(this.list, o => o.slug === slug)
+        this.SET_PLAYING_INDEX(playingIndex)
+      })
     },
 
     ...mapMutations({
-      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX'
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID'
     }),
     playTrack(slug) {
-      const playingIndex = _.findIndex(this.tracks.items, o => o.slug === slug)
-      this.SET_PLAYING_INDEX(playingIndex)
-      this.playAlbum()
+      this.SET_ALBUM_ID(this.album.id)
+      this.playAlbum(slug)
     }
   }
 }

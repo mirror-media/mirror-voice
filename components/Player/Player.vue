@@ -80,8 +80,12 @@ export default {
     sound: {
       type: Object,
       required: true,
-      validator(sound) {
-        return !!sound.src
+      default() {
+        return {
+          title: '',
+          src: '',
+          slug: ''
+        }
       }
     },
     list: {

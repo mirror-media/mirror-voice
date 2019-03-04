@@ -14,19 +14,12 @@
 
 <script>
 import _ from 'lodash'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapGetters } from 'vuex'
 
 import Player from '~/components/Player/Player.vue'
 
-const fetchPlayerTracks = (
-  store,
-  albumId,
-  isLatestFirst = true,
-  page = 1,
-  mode
-) => {
+const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
   return store.dispatch('appPlayer/FETCH', {
-    mode,
     max_results: 10,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,
@@ -52,12 +45,27 @@ export default {
   },
   computed: {
     ...mapState({
-      list: state => state.appPlayer.list,
-      meta: state => state.appPlayer.meta,
-      links: state => state.appPlayer.links,
+      pages: state => state.appPlayer.pages,
       albumId: state => state.appPlayer.albumId,
       playingIndex: state => state.appPlayer.playingIndex
     }),
+    ...mapGetters({
+      list: 'appPlayer/LIST'
+    }),
+    currentPageIndex() {
+      return _.findKey(this.pages, o =>
+        o.items.map(item => item.slug).includes(this.sound.slug)
+      )
+    },
+    currentPage() {
+      return this.pages[this.currentPageIndex]
+    },
+    currentPageLinks() {
+      return _.get(this.currentPage, 'links', {})
+    },
+    currentPageMeta() {
+      return _.get(this.currentPage, 'meta', {})
+    },
     sound: {
       get() {
         return this.list[this.playingIndex]
@@ -70,8 +78,7 @@ export default {
             this.$store,
             this.albumId,
             true,
-            this.meta.page + 1,
-            'push'
+            this.currentPageMeta.page + 1
           ).then(() => {
             index = _.findIndex(this.list, o => o.src === sound.src)
             this.SET_PLAYING_INDEX(index)
@@ -81,8 +88,7 @@ export default {
             this.$store,
             this.albumId,
             true,
-            this.meta.page - 1,
-            'unshift'
+            this.currentPageMeta.page - 1
           ).then(() => {
             index = _.findIndex(this.list, o => o.src === sound.src)
             this.SET_PLAYING_INDEX(index)
@@ -93,10 +99,12 @@ export default {
       }
     },
     isListHavePrev() {
-      return 'prev' in this.links
+      // return 'prev' in this.links
+      return 'prev' in this.currentPageLinks
     },
     isListHaveNext() {
-      return 'next' in this.links
+      // return 'next' in this.links
+      return 'next' in this.currentPageLinks
     }
   },
   methods: {
