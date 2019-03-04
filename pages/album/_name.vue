@@ -255,7 +255,7 @@ export default {
 
 .tracks-wrapper
   &__tracks
-    margin 18px 0 0 0
+    margin 18px 0 0 0 !important
   &__pagination
     margin 20px 0 0 0
 </style>
