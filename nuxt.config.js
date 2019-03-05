@@ -82,7 +82,6 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    https: isProd,
     host: isProd ? SERVER_HOST : '127.0.0.1',
     port: isProd ? SERVER_PORT : 8080
   },
