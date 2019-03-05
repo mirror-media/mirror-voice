@@ -4,7 +4,10 @@
       v-if="layout !== 'single'"
       ref="cover"
       class="info-wrapper__cover cover"
-      :style="{ minWidth: `${coverHeight}px`, maxWidth: `${coverHeight}px` }"
+      :style="{
+        minWidth: `${coverHeight}px`,
+        maxWidth: `${coverHeight}px`
+      }"
     >
       <img
         v-if="imgUrl !== ''"
@@ -12,6 +15,10 @@
         v-lazy="imgUrl"
         class="cover__img"
         alt=""
+        :style="{
+          minHeight: `${coverHeight}px`,
+          maxHeight: `${coverHeight}px`
+        }"
       >
     </div>
     <div class="info-wrapper__info info">
