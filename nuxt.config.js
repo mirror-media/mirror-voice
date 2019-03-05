@@ -44,7 +44,6 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/fetch.js',
     '~/plugins/vuePlugins.js',
     '~/plugins/util/index.js',
     '~/plugins/constants/index.js',
@@ -83,8 +82,7 @@ module.exports = {
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
     host: isProd ? SERVER_HOST : '127.0.0.1',
-    port: isProd ? SERVER_PORT : 8080,
-    https: isProd
+    port: isProd ? SERVER_PORT : 8080
   },
 
   /*
