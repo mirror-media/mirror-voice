@@ -1,7 +1,7 @@
 <template>
   <ol class="list">
     <TrackListItem
-      v-for="(track, i) in tracks"
+      v-for="(track, i) in tracks.slice(0, itemsPerPage)"
       :key="i"
       :class="[ 'list__list-item', { 'list__list-item--border-bottom': showListOrder && i === tracks.length - 1 } ]"
       :order="showListOrder ? getOrder(i) : 0"

@@ -68,6 +68,7 @@
       />
       <AsideAlbumList
         class="aside__wrapper anchor-relateds"
+        :data="writerAlbums"
       />
     </div>
   </AppMainAsideWrapper>
@@ -91,6 +92,19 @@ import AppPagination from '~/components/AppPagination.vue'
 const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
   return app.$fetchSingleListing({
     max_results: app.$MAXRESULT_TRACKS_ALBUM,
+    page,
+    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
+    where: {
+      albums: {
+        $in: [albumId]
+      }
+    }
+  })
+}
+
+const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
+  return store.dispatch('appPlayer/FETCH', {
+    max_results: 10,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,
     where: {
@@ -166,10 +180,24 @@ export default {
     })
     const album = _.get(albums, ['items', 0], {})
     const albumId = _.get(album, 'id', '')
-    const tracks = await fetchTracks(app, albumId)
+    const writerId = _.get(album, ['writers', 0, 'id'], '')
+
+    const [tracks, writerAlbums] = await Promise.all([
+      fetchTracks(app, albumId),
+      app.$fetchAlbums({
+        max_results: app.$MAXRESULT_ASIDEALBUMLIST_ALBUM,
+        page: 1,
+        sort: '-publishedDate',
+        where: {
+          $or: [{ writers: writerId }]
+        }
+      })
+    ])
+
     return {
       album,
-      tracks
+      tracks,
+      writerAlbums
     }
   },
   methods: {
@@ -191,20 +219,35 @@ export default {
     ...mapActions({
       PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
     }),
-    playAlbum(slug) {
-      this.PREPARE_SINGLES({ page: this.page, res: this.tracks }).then(() => {
-        const playingIndex = _.findIndex(this.list, o => o.slug === slug)
-        this.SET_PLAYING_INDEX(playingIndex)
-      })
+    playAlbum(albumId = this.album.id) {
+      fetchPlayerTracks(this.$store, albumId)
     },
 
     ...mapMutations({
       SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
-      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID'
+      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
+      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
     }),
     playTrack(slug) {
       this.SET_ALBUM_ID(this.album.id)
-      this.playAlbum(slug)
+      this.CLEAR_PAGES()
+
+      /*
+      ** Check track items are sorted by latest published date or not
+      ** if not, reverse track items.
+      */
+      let tracks
+      if (this.isTracksSortLatestFirst) {
+        tracks = this.tracks
+      } else {
+        const itemsReversed = [...this.tracks.items].reverse()
+        tracks = { ...this.tracks, items: itemsReversed }
+      }
+
+      this.PREPARE_SINGLES({ page: this.page, res: tracks }).then(() => {
+        const playingIndex = _.findIndex(this.list, o => o.slug === slug)
+        this.SET_PLAYING_INDEX(playingIndex)
+      })
     }
   }
 }
