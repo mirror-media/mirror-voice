@@ -109,7 +109,7 @@ export default {
       )
     }
   },
-  async asyncData({ app, route }) {
+  async asyncData({ app, route, error }) {
     // TODO: maybe we could have better implement
     const routeParam = route.params.slug
 
@@ -123,6 +123,10 @@ export default {
     const single = _.get(singles, ['items', 0], {})
 
     const albumId = _.get(single, ['albums', 0], '')
+    const isNotFound = _.isEmpty(single)
+    if (isNotFound) {
+      error({ statusCode: 404, message: 'single not found' })
+    }
 
     const albums = await app.$fetchAlbums({
       where: {

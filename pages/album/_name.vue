@@ -169,7 +169,7 @@ export default {
       this.fetchTracks(this.page)
     }
   },
-  async asyncData({ app, route }) {
+  async asyncData({ app, route, error }) {
     const routeParam = route.params.name
     const albums = await app.$fetchAlbums({
       where: {
@@ -180,6 +180,11 @@ export default {
     })
     const album = _.get(albums, ['items', 0], {})
     const albumId = _.get(album, 'id', '')
+    const isNotFound = albumId === ''
+    if (isNotFound) {
+      error({ statusCode: 404, message: 'album not found' })
+    }
+
     const writerId = _.get(album, ['writers', 0, 'id'], '')
 
     const [tracks, writerAlbums] = await Promise.all([

@@ -112,7 +112,7 @@ export default {
       return _.get(_.find(data, o => o.name === this.routeParam), 'title', '')
     }
   },
-  async asyncData({ app, route }) {
+  async asyncData({ app, route, error }) {
     const routeName = route.name
     const routeParam = route.params.name
 
@@ -126,6 +126,16 @@ export default {
       })
     )
 
+    // Validate route
+    const isNotFound =
+      (routeName.includes('section') &&
+        _.findIndex(audioSections, o => o.name === routeParam) === -1) ||
+      (routeName.includes('category') &&
+        _.findIndex(audioCategories, o => o.name === routeParam) === -1)
+    if (isNotFound) {
+      error({ statusCode: 404, message: 'section/category not found' })
+    }
+
     // The "where" variable should will be: sections or categories
     const { where, ids } = getShowcaseParam(
       { audioSections, audioCategories },
@@ -133,6 +143,7 @@ export default {
       routeParam
     )
     const showcase = await fetchShowcase(app, where, ids)
+
     return {
       sections: audioSections,
       categories: audioCategories,
