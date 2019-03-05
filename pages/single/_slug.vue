@@ -8,6 +8,7 @@
         <Info
           class="info-wrapper__info"
           :info="single"
+          @clickPlay="playSingle"
         />
       </AppDiv>
       <AppDiv class="main__wrapper body-wrapper">
@@ -39,7 +40,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations } from 'vuex'
+import { mapActions, mapMutations, mapGetters } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import _ from 'lodash'
 
@@ -64,19 +65,6 @@ const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
   })
 }
 
-const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
-  return store.dispatch('appPlayer/FETCH', {
-    max_results: 10,
-    page,
-    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
-    where: {
-      albums: {
-        $in: [albumId]
-      }
-    }
-  })
-}
-
 export default {
   components: {
     AppMainAsideWrapper,
@@ -88,6 +76,10 @@ export default {
     NoSSR
   },
   computed: {
+    ...mapGetters({
+      list: 'appPlayer/LIST'
+    }),
+
     content() {
       return sanitizeHtml(
         _.get(this.single, ['content', 'html'], ''),
@@ -168,32 +160,30 @@ export default {
   },
   methods: {
     ...mapActions({
-      PLAY: 'appPlayer/PLAY'
+      PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
     }),
-    playAlbum(albumId = this.album.id) {
-      const albumIdTracks = _.get(this.tracks, 'albumId', '')
-
-      // NOTE: always true in single's page, this may be for refactoring purposes
-      // prevent additional request of fetching album's tracks
-      if (albumId === albumIdTracks) {
-        this.PLAY({
-          sounds: this.tracks.items,
-          meta: this.tracks.meta,
-          links: this.tracks.links,
-          albumId
-        })
-      } else {
-        fetchPlayerTracks(this.$store, albumId)
-      }
-    },
-
     ...mapMutations({
-      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX'
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
+      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
     }),
     playTrack(slug) {
-      const playingIndex = _.findIndex(this.tracks.items, o => o.slug === slug)
-      this.SET_PLAYING_INDEX(playingIndex)
-      this.playAlbum()
+      this.SET_ALBUM_ID(this.album.id)
+      this.CLEAR_PAGES()
+
+      this.PREPARE_SINGLES({ page: 1, res: this.tracks }).then(() => {
+        const playingIndex = _.findIndex(this.list, o => o.slug === slug)
+        this.SET_PLAYING_INDEX(playingIndex)
+      })
+    },
+    playSingle() {
+      this.SET_ALBUM_ID(this.album.id)
+      this.CLEAR_PAGES()
+      this.PREPARE_SINGLES({ page: 1, res: { items: [this.single] } }).then(
+        () => {
+          this.SET_PLAYING_INDEX(0)
+        }
+      )
     }
   }
 }

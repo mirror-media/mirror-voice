@@ -8,7 +8,7 @@
     </div>
     <PlayerNavs
       class="player__navs"
-      :show-nav="type === 'long'"
+      :show-nav="type === 'long' && list.length > 1"
       :is-playing="isPlaying"
       @backward="playIndex -= 1"
       @pause="pause"

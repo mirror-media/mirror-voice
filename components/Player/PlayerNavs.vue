@@ -1,20 +1,20 @@
 <template>
   <nav class="navs">
     <img
-      v-if="showNav"
+      v-show="showNav"
       class="navs__backward"
       src="~/assets/img/btn_forward_normal.png"
       alt=""
       @click="$emit('backward')"
     >
     <img
-      :class="[ 'navs__play', `navs__play--${showNav ? 'small' : 'large'}` ]"
+      :class="[ 'navs__play', 'navs__play--small' ]"
       :src="require(`~/assets/img/btn_${isPlaying ? 'pause' : 'play'}.png`)"
       alt=""
       @click="$emit(isPlaying ? 'pause' : 'play')"
     >
     <img
-      v-if="showNav"
+      v-show="showNav"
       class="navs__forward"
       src="~/assets/img/btn_backward_normal.png"
       alt=""
@@ -44,14 +44,13 @@ export default {
   align-items center
   &__backward
     height 14px
-    margin 0 18px 0 0
     cursor pointer
   &__forward
     height 14px
-    margin 0 0 0 18px
     cursor pointer
   &__play
     cursor pointer
+    margin 0 18px
     &--small
       height 28px
     &--large
