@@ -169,7 +169,7 @@ export default {
       this.fetchTracks(this.page)
     }
   },
-  async asyncData({ app, route, error }) {
+  async asyncData({ app, store, route, error }) {
     const routeParam = route.params.name
     const albums = await app.$fetchAlbums({
       where: {
@@ -185,8 +185,24 @@ export default {
       error({ statusCode: 404, message: 'album not found' })
     }
 
-    const writerId = _.get(album, ['writers', 0, 'id'], '')
+    // Breadcrumb
+    // TODO: Refactoring with /single
+    const crumbSection = {
+      title: _.get(album, ['sections', 0, 'title'], ''),
+      path: `/section/${_.get(album, ['sections', 0, 'name'], '')}`
+    }
+    const crumbCategory = {
+      title: _.get(album, ['categories', 0, 'title'], ''),
+      path: `/category/${_.get(album, ['categories', 0, 'name'], '')}`
+    }
+    const crumbAlbum = {
+      title: _.get(album, 'title', ''),
+      path: `/album/${_.get(album, 'name', '')}`
+    }
+    const crumbs = [crumbSection, crumbCategory, crumbAlbum]
+    store.commit('appBreadcrumb/PUSH', crumbs)
 
+    const writerId = _.get(album, ['writers', 0, 'id'], '')
     const [tracks, writerAlbums] = await Promise.all([
       fetchTracks(app, albumId),
       app.$fetchAlbums({

@@ -1,19 +1,26 @@
 <template>
   <div class="breadcrumb">
-    <nuxt-link to="/">
-      首頁
-    </nuxt-link>
-    <nuxt-link to="/section/fakeslug">
-      有聲書
-    </nuxt-link>
-    <nuxt-link to="/album/fakename">
-      高難度對話
-    </nuxt-link>
-    <nuxt-link to="/album/fakeslug">
-      有效的家庭關係
+    <nuxt-link
+      v-for="(crumb, i) in crumbs"
+      :key="i"
+      :to="crumb.path"
+    >
+      {{ crumb.title }}
     </nuxt-link>
   </div>
 </template>
+
+<script>
+import { mapState } from 'vuex'
+
+export default {
+  computed: {
+    ...mapState({
+      crumbs: state => state.appBreadcrumb.crumbs
+    })
+  }
+}
+</script>
 
 <style lang="stylus" scoped>
 .breadcrumb

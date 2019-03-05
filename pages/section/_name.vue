@@ -112,7 +112,7 @@ export default {
       return _.get(_.find(data, o => o.name === this.routeParam), 'title', '')
     }
   },
-  async asyncData({ app, route, error }) {
+  async asyncData({ app, store, route, error }) {
     const routeName = route.name
     const routeParam = route.params.name
 
@@ -121,7 +121,10 @@ export default {
     const audioCategories = _.flatten(
       audioSections.map(section => {
         return section.categories.map(category =>
-          Object.assign(category, { section: section.name })
+          Object.assign(category, {
+            sectionName: section.name,
+            sectionTitle: section.title
+          })
         )
       })
     )
@@ -135,6 +138,28 @@ export default {
     if (isNotFound) {
       error({ statusCode: 404, message: 'section/category not found' })
     }
+
+    // Breadcrumb
+    const crumbs = []
+    if (routeName.includes('section')) {
+      const section = _.find(audioSections, o => o.name === routeParam)
+      const title = _.get(section, 'title', '')
+      const path = route.path
+
+      crumbs.push({ title, path })
+    } else if (routeName.includes('category')) {
+      const category = _.find(audioCategories, o => o.name === routeParam)
+      const titleCategory = _.get(category, 'title', '')
+      const pathCategory = route.path
+      const titleSection = _.get(category, 'sectionTitle', '')
+      const pathSection = `/section/${_.get(category, 'sectionName', '')}`
+
+      crumbs.push(
+        { title: titleSection, path: pathSection },
+        { title: titleCategory, path: pathCategory }
+      )
+    }
+    store.commit('appBreadcrumb/PUSH', crumbs)
 
     // The "where" variable should will be: sections or categories
     const { where, ids } = getShowcaseParam(

@@ -109,7 +109,7 @@ export default {
       )
     }
   },
-  async asyncData({ app, route, error }) {
+  async asyncData({ app, store, route, error }) {
     // TODO: maybe we could have better implement
     const routeParam = route.params.slug
 
@@ -136,6 +136,28 @@ export default {
       }
     })
     const album = _.get(albums, ['items', 0], {})
+
+    // Breadcrumb
+    // TODO: Refactoring with /album
+    const crumbSection = {
+      title: _.get(album, ['sections', 0, 'title'], ''),
+      path: `/section/${_.get(album, ['sections', 0, 'name'], '')}`
+    }
+    const crumbCategory = {
+      title: _.get(album, ['categories', 0, 'title'], ''),
+      path: `/category/${_.get(album, ['categories', 0, 'name'], '')}`
+    }
+    const crumbAlbum = {
+      title: _.get(album, 'title', ''),
+      path: `/album/${_.get(album, 'name', '')}`
+    }
+    const crumbSingle = {
+      title: _.get(single, 'title', ''),
+      path: `/single/${_.get(single, 'slug', '')}`
+    }
+    const crumbs = [crumbSection, crumbCategory, crumbAlbum, crumbSingle]
+    store.commit('appBreadcrumb/PUSH', crumbs)
+
     const tracks = await fetchTracks(app, albumId)
 
     return {

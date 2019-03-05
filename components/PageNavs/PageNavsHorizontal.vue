@@ -69,7 +69,7 @@ export default {
           this.categories,
           o => o.name === this.routeParam
         )
-        sectionName = _.get(category, 'section', '')
+        sectionName = _.get(category, 'sectionName', '')
       }
       return sectionName
     },
