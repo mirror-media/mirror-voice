@@ -1,0 +1,9 @@
+ARG STAGE_VERSION=latest
+FROM gcr.io/mirrormedia-1470651750304/mirror-voice:${STAGE_VERSION}
+
+ENV NODE_SOURCE /usr/src
+# WORKDIR $NODE_SOURCE
+
+COPY ./server/config.js $NODE_SOURCE/server/config.js
+
+CMD ["npm", "start"]
