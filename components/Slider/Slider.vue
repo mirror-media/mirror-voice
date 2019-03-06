@@ -95,4 +95,24 @@ export default {
     background-color #7d7d7d
   & >>> .swiper-pagination-bullet-active
     background-color #d84939
+
+@media (max-width 768px)
+  .slider
+    height calc(100vw * 0.464)
+
+  .swiper-pagination
+    bottom 10px
+    text-align center
+    padding 0
+    & >>> [role=button]
+      width 4px
+      height 4px
+    & >>> .swiper-pagination-bullet
+      background-color white !important
+      background none
+      opacity 1
+    & >>> .swiper-pagination-bullet-active
+      background-color #d84939 !important
+      background none
+      opacity 1
 </style>

@@ -15,4 +15,9 @@
   align-items center
   &__logo
     width 100px
+
+@media (max-width 768px)
+  .header
+    height 72px
+    padding 0 0 0 14px
 </style>

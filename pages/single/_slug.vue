@@ -3,7 +3,6 @@
     <div slot="main" class="main">
       <AppDiv
         class="main__wrapper info-wrapper"
-        :padding="'0'"
       >
         <Info
           class="info-wrapper__info"
@@ -200,9 +199,6 @@ export default {
     & + &
       margin 20px 0 0 0
 
-.info-wrapper
-  &__info
-    padding 25px
 
 .body-wrapper
   &__body

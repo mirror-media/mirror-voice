@@ -39,4 +39,19 @@ export default {
     font-weight 400
   &--bold
     font-weight 600
+
+@media (max-width 768px)
+  .h1
+    margin 0
+    line-height 1
+    & >>> a
+      color black !important
+    &--large
+      font-size 15px
+    &--small
+      font-size 15px
+    &--normal
+      font-weight 400
+    &--bold
+      font-weight 400
 </style>

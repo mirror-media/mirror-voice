@@ -43,6 +43,7 @@
     </div>
     <PageNavsVertical
       slot="aside"
+      class="aside"
       :items="sections"
     />
   </AppMainAsideWrapper>
@@ -157,4 +158,13 @@ export default {
     font-size 14px
     color #7d7d7d
     cursor pointer
+
+@media (max-width 768px)
+  .aside
+    display none
+
+  .showcase
+    border-top 6px solid #d84939
+    & + &
+      margin 16px 0 0 0
 </style>

@@ -1,25 +1,15 @@
 <template>
-  <div
-    class="div"
-    :style="{ padding: padding }"
-  >
+  <div class="div">
     <slot />
   </div>
 </template>
 
-<script>
-export default {
-  props: {
-    padding: {
-      type: String,
-      default: '25px'
-    }
-  }
-}
-</script>
-
-
 <style lang="stylus" scoped>
 .div
+  padding 25px
   background-color white
+
+@media (max-width 768px)
+  .div
+    padding 12px 18px
 </style>

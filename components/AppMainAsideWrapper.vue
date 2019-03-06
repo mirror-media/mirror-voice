@@ -19,4 +19,16 @@
   &__aside
     width 256px
     margin 0 0 0 20px
+
+@media (max-width 768px)
+  .wrapper
+    max-width 100%
+    margin 0
+    display flex
+    flex-direction column
+    &__main
+      width 100%
+    &__aside
+      width 100%
+      margin 0
 </style>

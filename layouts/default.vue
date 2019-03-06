@@ -59,4 +59,11 @@ export default {
     &--hide
       opacity 0
       transform translate(0, 60px)
+
+@media (max-width 768px)
+  .app
+    &__breadcrumb
+      display none
+    &__view-wrapper
+      margin 0
 </style>

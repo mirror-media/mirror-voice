@@ -1,7 +1,6 @@
 <template>
   <AppDiv
     class="aside__wrapper album-relateds-wrapper"
-    :padding="'25px 8px 7px 8px'"
   >
     <DivHeader class="album-relateds-wrapper__header">
       <nuxt-link
@@ -65,6 +64,7 @@ export default {
 
 <style lang="stylus" scoped>
 .album-relateds-wrapper
+  padding 25px 8px 7px 8px !important
   &__header
     margin 0 17px
   &__track-list
