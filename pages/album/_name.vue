@@ -318,8 +318,13 @@ export default {
       border-left 2px solid #7d7d7d
 
 .tracks-wrapper
+  min-height 555px
+  position relative
   &__tracks
     margin 18px 0 0 0 !important
   &__pagination
     margin 20px 0 0 0
+    position absolute
+    bottom 25px
+    width calc(100% - 25px - 25px)
 </style>
