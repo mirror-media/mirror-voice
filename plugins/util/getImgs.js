@@ -1,5 +1,6 @@
 import _ from 'lodash'
 
 export default o => {
-  return _.get(o, ['heroImage', 'image', 'resizedTargets'], {})
+  const imageKey = 'heroImage' in o ? 'heroImage' : 'image'
+  return _.get(o, [imageKey, 'image', 'resizedTargets'], {})
 }

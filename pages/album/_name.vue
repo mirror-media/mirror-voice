@@ -148,15 +148,18 @@ export default {
     },
 
     // For aside intro
+    writer() {
+      return _.get(this.album, ['writers', 0], {})
+    },
     asideIntroFig() {
-      return ''
+      return _.get(this.$getImgs(this.writer), ['mobile', 'url'], '')
     },
     asideIntroFigcaption() {
-      return _.get(this.album, ['writers', 0, 'name'], '')
+      return _.get(this.writer, 'name', '')
     },
     asideIntroDescription() {
       return sanitizeHtml(
-        _.get(this.album, ['writers', 0, 'bio', 'html'], ''),
+        _.get(this.writer, ['bio', 'html'], ''),
         this.$SANITIZE_HTML_DEFAULT_OPTIONS
       )
     }
@@ -172,6 +175,7 @@ export default {
   async asyncData({ app, store, route, error }) {
     const routeParam = route.params.name
     const albums = await app.$fetchAlbums({
+      writers: 'full',
       where: {
         name: {
           $in: [routeParam]

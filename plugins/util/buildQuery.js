@@ -11,7 +11,8 @@ export default (params = {}) => {
     'related',
     'clean',
     'clientInfo',
-    'id'
+    'id',
+    'writers'
   ]
   whitelist.forEach(ele => {
     if (params.hasOwnProperty(ele)) {

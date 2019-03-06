@@ -4,7 +4,7 @@
       {{ title }}
     </AppH1>
     <div class="intro-wrapper__intro intro">
-      <figure class="intro__info figure">
+      <figure :class="[ 'intro__info', 'figure', `figure--${imgStyle}`]">
         <img
           v-if="fig !== ''"
           :key="fig"
@@ -78,6 +78,10 @@ export default {
 
 .figure
   display flex
+  &--square
+    align-items flex-start
+  &--round
+    align-items center
   &__img
     display block
     object-fit cover
