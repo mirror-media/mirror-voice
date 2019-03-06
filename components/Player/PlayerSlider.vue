@@ -55,7 +55,7 @@ export default {
     return {
       internalValue: this.value,
       options: {
-        interval: 0.1,
+        interval: 0.001,
         direction: this.direction,
         width: this.direction === 'vertical' ? 4 : 'auto',
         height: this.direction === 'vertical' ? 126 : 4,
