@@ -4,6 +4,7 @@ const { Nuxt, Builder } = require('nuxt')
 const app = express()
 const compression = require('compression')
 const bodyParser = require('body-parser')
+const useragent = require('express-useragent')
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -34,6 +35,8 @@ async function start() {
 
   // API
   app.use('/api', require('./api'))
+
+  app.use(useragent.express())
 
   // Give nuxt middleware to express
   app.use(nuxt.render)
