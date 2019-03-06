@@ -168,7 +168,7 @@ export default {
     font-size 14px
     line-height 1.29
     color #7d7d7d
-    margin 13px 0 0 0
+    margin 8px 0 0 0
   &__date
     position absolute
     bottom 0
