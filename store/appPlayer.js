@@ -42,8 +42,8 @@ export const actions = {
     if (state.albumId !== albumId) {
       commit('SET_ALBUM_ID', albumId)
       commit('CLEAR_PAGES')
-      commit('SET_PLAYING_INDEX', 0)
     }
+    commit('SET_PLAYING_INDEX', 0)
 
     return this.$fetchSingleListing(params).then(res => {
       dispatch('PREPARE_SINGLES', { page, res })
