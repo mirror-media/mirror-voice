@@ -2,7 +2,8 @@ workspace:
   base: /mirror-media
   path: mirror-voice
 pipeline:
-  stage_notify:
+  # Send build start message to slack when pull_request and push
+  build_start:
     image: plugins/slack
     channel: ground_control
     secrets: [slack_webhook]
@@ -12,10 +13,11 @@ pipeline:
       Build <${DRONE_BUILD_LINK}|#{{build.number}}> *{{repo.name}}:${DRONE_COMMIT_SHA:0:7}* start.
       {{build.author}} gave *{{build.branch}}* a little {{build.event}}.
     when:
-      event: [push, pull_request]
-      branch: [master]
+      event:
+      - push
+      - pull_request
 
-  release_notify:
+  release_start:
     image: plugins/slack
     channel: ground_control
     secrets: [slack_webhook]
@@ -27,6 +29,7 @@ pipeline:
       event: [tag]
       branch: [master]
 
+  # Only need to restore cache if building is necessary, which is pull_request and push
   restore-cache:
     image: drillster/drone-volume-cache
     restore: true
@@ -36,9 +39,9 @@ pipeline:
       - /tmp/cache:/cache
     when:
       event:
-        exclude:
-        - tag
-        - deployment
+        include:
+        - pull_request
+        - push
 
   get-configs:
     image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
@@ -46,16 +49,32 @@ pipeline:
     commands:
       - gcloud source repos clone configs ../configs
     when:
-      event: [push, pull_request, tag]
-      branch: [master]
+      event:
+      - push
+      - pull_request
+      - tag
 
   configure-dev:
     image: busybox:latest
     commands:
-      - cp ../configs/mirror-media/mirror-voice/dev/config.js ./server/config.js
+      - cp ../configs/mirror-media/mirror-voice/${DRONE_BRANCH}/config.js ./server/config.js
     when:
-      event: [push, pull_request]
-      branch: [master]
+      event:
+        exclude:
+        - tag
+      branch:
+        exclude:
+        - master
+
+  configure-stage:
+    image: busybox:latest
+    commands:
+      - cp ../configs/mirror-media/mirror-voice/stage/config.js ./server/config.js
+    when:
+      event:
+      - push
+      branch:
+      - master
 
   configure-prod:
     image: busybox:latest
@@ -65,6 +84,7 @@ pipeline:
       event: [tag]
       branch: [master]
 
+  # Build when pull_request are issued or commits pushed
   build:
     image: gcr.io/mirrormedia-1470651750304/mirror-voice:node-10.15.1-builder
     commands:
@@ -72,20 +92,24 @@ pipeline:
       - yarn run build
       - yarn cache clean
     when:
-      event: [push]
+      event: [push, pull_request]
 
-  publish-stage:
+  publish:
     image: plugins/gcr
     repo: mirrormedia-1470651750304/${DRONE_REPO_NAME}
-    tag: ${DRONE_COMMIT_SHA:0:7}
+    tag:
+    - ${DRONE_BRANCH}
+    - ${DRONE_COMMIT_SHA:0:7}
     environment:
       - DOCKER_LAUNCH_DEBUG=true
     secrets: [google_credentials]
     dockerfile: docker/Dockerfile
-    build_args: STAGE_VERSION=${DRONE_COMMIT_BEFORE:0:7}
+    # build_args: STAGE_VERSION=${DRONE_COMMIT_BEFORE:0:7}
+    target: stage
     when:
-      event: [push]
-      branch: [master]
+      event:
+      - push
+      - pull_request
 
   publish-prod:
     image: plugins/gcr
@@ -94,8 +118,9 @@ pipeline:
     environment:
       - DOCKER_LAUNCH_DEBUG=true
     secrets: [google_credentials]
-    dockerfile: docker/Dockerfile.production
+    dockerfile: docker/Dockerfile
     build_args: STAGE_VERSION=${DRONE_COMMIT_SHA:0:7}
+    target: stable
     when:
       event: [tag]
       branch: [master]
@@ -121,17 +146,18 @@ pipeline:
       - cp -rf ../helm/mirror-voice ./helm/
     when:
       branch:
-      - master
+        exclude:
+        - master
       event:
         include:
         - push
-        - tag
+        - pull_request
 
   helm_deploy_staging:
     image: quay.io/ipedrazas/drone-helm
     skip_tls_verify: true
     chart: ./helm/mirror-voice
-    release: "mirror-voice"
+    release: ${DRONE_BRANCH}
     wait: true
     debug: true
     upgrade: true
@@ -140,12 +166,16 @@ pipeline:
     client_only: true
     service_account: tiller
     secrets: [api_server, kubernetes_token]
-    values: image.tag=${DRONE_COMMIT_SHA:0:7}
+    values: image.tag=${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_BRANCH}
     # values_files: ["helm/staging.yml"]
     namespace: default
     when:
-      event: push
-      branch: master
+      event:
+      - push
+      - pull_request
+      branch:
+        exclude:
+        - master
 
   finish_notify:
     image: plugins/slack
