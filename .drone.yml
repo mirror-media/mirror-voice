@@ -179,7 +179,8 @@ pipeline:
 
   check-service-address:
     image: gcr.io/mirrormedia-1470651750304/drone-gke-cli:latest
-    kubernetes_cluster: dev
+    cluster: dev
+    zone: asia-east1-a
     namespace: review
     secrets: [google_credentials]
     when:
