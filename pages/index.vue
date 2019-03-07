@@ -165,6 +165,13 @@ export default {
 
   .showcase
     border-top 6px solid #d84939
+    padding 18px 18px 0 18px !important
     & + &
       margin 16px 0 0 0
+
+  .header
+    &__right
+      font-size 11px
+      color #4a4a4a
+      text-decoration underline
 </style>

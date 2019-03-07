@@ -4,10 +4,6 @@
       v-if="layout !== 'single'"
       ref="cover"
       class="info-wrapper__cover cover"
-      :style="{
-        minWidth: `${coverHeight}px`,
-        maxWidth: `${coverHeight}px`
-      }"
     >
       <img
         v-if="imgUrl !== ''"
@@ -15,10 +11,6 @@
         v-lazy="imgUrl"
         class="cover__img"
         alt=""
-        :style="{
-          minHeight: `${coverHeight}px`,
-          maxHeight: `${coverHeight}px`
-        }"
       >
     </div>
     <div class="info-wrapper__info info">
@@ -29,13 +21,15 @@
       >
         {{ info.title }}
       </AppH1>
-      <AppDate
-        class="info__date"
-        :date="date"
-      />
-      <div class="info__basic">
-        <p>主播： {{ writer }}</p>
-        <p>原著： 不知道</p>
+      <div class="info__content-wrapper">
+        <AppDate
+          class="info__date"
+          :date="date"
+        />
+        <div class="info__basic">
+          <p>主播： {{ writer }}</p>
+          <p>原著： 不知道</p>
+        </div>
       </div>
       <div
         v-if="layout === 'single'"
@@ -87,11 +81,6 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      coverHeight: 0
-    }
-  },
   computed: {
     cover() {
       return this.$refs.cover
@@ -108,9 +97,6 @@ export default {
     writer() {
       return _.get(this.info, ['writers', 0, 'name'], '')
     }
-  },
-  mounted() {
-    this.coverHeight = _.get(this.cover, ['offsetHeight'], 0)
   }
 }
 </script>
@@ -119,9 +105,10 @@ export default {
 .info-wrapper
   display flex
   &__cover
-    min-height 100%
-    max-height 100%
-    width 0
+    min-width 188px
+    max-width 188px
+    min-height 188px
+    max-height 188px
     margin 0 22px 0 0
 
 .cover
@@ -131,6 +118,8 @@ export default {
     object-fit cover
 
 .info
+  &__title
+    line-height 1.25
   &__date
     margin 19px 0 0 0
     line-height 1
@@ -170,4 +159,30 @@ export default {
     margin 0 0 0 16px
     font-size 18px
     color #d84939
+
+@media (max-width 768px)
+  .info-wrapper
+    &__cover
+      min-width 110px
+      max-width 110px
+      min-height 110px
+      max-height 110px
+      margin 0 15px 0 0
+
+  .info
+    &__content-wrapper
+      display flex
+      flex-direction column-reverse
+    &__date
+      margin 30px 0 0 0
+    &__basic
+      margin 5px 0 0 0
+      p
+        font-size 13px
+        color #7d7d7d
+      p + p
+        margin 0
+
+  .toggle-play
+    display none
 </style>

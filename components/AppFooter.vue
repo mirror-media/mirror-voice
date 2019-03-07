@@ -39,4 +39,19 @@
     cursor pointer
     & + &
       margin 0 0 0 53px
+
+@media (max-width 768px)
+  .footer
+    height 109px
+    background-color #eeeeee
+    padding 0
+    &__rights
+      margin 20px 0 0 0
+      font-size 11px
+
+  .navs
+    &__nav
+      font-size 13px
+      & + &
+        margin 0 0 0 51px
 </style>

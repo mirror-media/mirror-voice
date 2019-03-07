@@ -47,7 +47,7 @@ export default {
     & >>> a
       color black !important
     &--large
-      font-size 15px
+      font-size 17px
     &--small
       font-size 15px
     &--normal

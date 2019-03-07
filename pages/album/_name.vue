@@ -1,18 +1,36 @@
 <template>
   <AppMainAsideWrapper>
     <div slot="main" class="main">
-      <AppDiv class="main__wrapper info-wrapper">
+      <AppDiv class="main__wrapper infos-wrapper">
         <Info
           :layout="'album'"
           :info="album"
           @clickPlay="playAlbum"
         />
       </AppDiv>
-      <AppDiv class="main__wrapper body-wrapper">
+      <AppDiv
+        :class="[
+          'main__wrapper',
+          'body-wrapper',
+          { 'body-wrapper--fold': isBodyWrapperFold },
+          { 'body-wrapper--expand': !isBodyWrapperFold }
+        ]"
+      >
         <AppH1 class="body-wrapper__title">
           簡介
         </AppH1>
         <div class="body-wrapper__body" v-html="brief" />
+        <div
+          class="body-wrapper__read-more read-more"
+          @click="isBodyWrapperFold = !isBodyWrapperFold"
+        >
+          <div
+            :class="[
+              'read-more__icon',
+              { 'read-more__icon--reverse': !isBodyWrapperFold }
+            ]"
+          />
+        </div>
       </AppDiv>
       <AppDiv class="main__wrapper tracks-wrapper">
         <DivHeader class="tracks-wrapper__header">
@@ -24,13 +42,19 @@
             class="sorts"
           >
             <button
-              :class="[ 'sorts__sort', { 'sorts__sort--dimmed': isTracksSortLatestFirst } ]"
+              :class="[
+                'sorts__sort',
+                { 'sorts__sort--dimmed': isTracksSortLatestFirst }
+              ]"
               @click="isTracksSortLatestFirst = true"
             >
               最新
             </button>
             <button
-              :class="[ 'sorts__sort', { 'sorts__sort--dimmed': !isTracksSortLatestFirst } ]"
+              :class="[
+                'sorts__sort',
+                { 'sorts__sort--dimmed': !isTracksSortLatestFirst }
+              ]"
               @click="isTracksSortLatestFirst = false"
             >
               最舊
@@ -129,6 +153,7 @@ export default {
   },
   data() {
     return {
+      isBodyWrapperFold: true,
       isTracksLoading: false,
       isTracksFetched: true,
       isTracksSortLatestFirst: true,
@@ -301,6 +326,9 @@ export default {
     & >>> a
       color #21516f
 
+.read-more
+  display none
+
 .sorts
   &__sort
     border none
@@ -331,4 +359,57 @@ export default {
     position absolute
     bottom 25px
     width calc(100% - 25px - 25px)
+
+@media (max-width 768px)
+  .aside
+    display none
+
+  .infos-wrapper
+    background-color transparent !important
+    padding 13px !important
+
+  .body-wrapper
+    margin 0 13px !important
+    padding 13px 13px 19px 13px !important
+    border-radius 2px
+    box-shadow 0 0 2px 0 rgba(0, 0, 0, 0.1)
+    overflow-y hidden
+    position relative
+    &--fold
+      max-height 90px
+    &--expand
+      max-height none
+    &__title
+      display none
+    &__body
+      margin 0
+      color black
+      font-size 13px
+      line-height 1.54
+      text-align justify
+      & >>> *
+        margin 20px 0 0 0
+      & >>> *:nth-child(1)
+        margin 0
+    &__read-more
+      width 100%
+      height 19px
+      background-color white
+      position absolute
+      bottom 0
+      left 0
+
+  .read-more
+    display flex
+    justify-content center
+    align-items center
+    &__icon
+      width 0
+      height 0
+      border-style solid
+      border-width 5px 5px 0 5px
+      border-color #4a4a4a transparent transparent transparent
+      transform rotate(0deg)
+      &--reverse
+        transform rotate(180deg)
 </style>

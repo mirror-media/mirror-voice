@@ -208,4 +208,19 @@ export default {
     margin 26px 0 0 0 !important
   &__pagination
     margin 75px 0 0 0
+
+@media (max-width 768px)
+  .section
+    max-width 100%
+    margin 0
+    // &__wrapper
+    //   & + &
+    //     margin 18px 0 0 0
+
+  .top-wrapper
+    display none
+
+  .bottom-wrapper
+    background-color transparent !important
+    padding 0 13px !important
 </style>

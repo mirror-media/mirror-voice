@@ -38,4 +38,22 @@ export default {
     & >>> h2
       font-size 16px
       font-weight 400
+
+@media (max-width 768px)
+  .section
+    max-width 100%
+    margin 0
+
+  .tos-content
+    padding 26px !important
+    &__body
+      margin 20px 0 0 0
+      color black
+      font-size 13px
+      line-height 1.54
+      & >>> *
+        margin 10px 0 0 0
+      & >>> h2
+        font-size 13px
+        font-weight 400
 </style>

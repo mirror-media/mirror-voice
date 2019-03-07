@@ -11,5 +11,5 @@
 
 @media (max-width 768px)
   .div
-    padding 12px 18px
+    padding 18px
 </style>

@@ -37,4 +37,12 @@ export default {
     font-size 14px
     color #7d7d7d
     margin 0 0 0 10px
+
+@media (max-width 768px)
+  .date
+    &__icon
+      height 11px
+    &__text
+      font-size 11px
+      margin 0 0 0 6px
 </style>

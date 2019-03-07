@@ -58,4 +58,14 @@ export default {
       margin 18px 0 0 18px
     &--horizontal
       margin 14px 0 0 12px
+
+@media (max-width 768px)
+  .list
+    &--horizontal
+      top 0
+      left 0
+      width 100%
+    &__list-item
+      &--horizontal
+        margin 10px 0 0 0
 </style>
