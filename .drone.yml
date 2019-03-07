@@ -157,7 +157,7 @@ pipeline:
     image: quay.io/ipedrazas/drone-helm
     skip_tls_verify: true
     chart: ./helm/mirror-voice
-    release: ${DRONE_BRANCH}
+    release: ${DRONE_REPO_NAME}-${DRONE_BRANCH}
     wait: true
     debug: true
     upgrade: true
@@ -166,7 +166,7 @@ pipeline:
     client_only: true
     service_account: tiller
     secrets: [api_server, kubernetes_token]
-    values: image.tag=${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_BRANCH}
+    values: image.tag=${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_REPO_NAME}-${DRONE_BRANCH}
     # values_files: ["helm/staging.yml"]
     namespace: default
     when:
