@@ -177,6 +177,19 @@ pipeline:
         exclude:
         - master
 
+  check-service-address:
+    image: gcr.io/mirrormedia-1470651750304/drone-gke-cli:latest
+    kubernetes_cluster: dev
+    namespace: review
+    secrets: [google_credentials]
+    when:
+      event:
+      - push
+      - pull_request
+      branch:
+        exclude:
+        - master
+
   finish_notify:
     image: plugins/slack
     channel: ground_control
