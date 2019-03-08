@@ -183,6 +183,7 @@ pipeline:
     zone: asia-east1-a
     namespace: review
     secrets: [google_credentials]
+    pull: true
     when:
       event:
       - push
