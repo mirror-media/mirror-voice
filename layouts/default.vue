@@ -12,22 +12,38 @@
     <AppPlayer
       :class="[ 'app__player', { 'app__player--hide': !showPlayer } ]"
     />
+    <AppNativeNotification
+      v-show="shouldShowNativeNotification"
+      :class="[
+        'app__native-notification',
+        { 'app__native-notification--hide': !showNativeNotification }
+      ]"
+      @close="closeNativeNotification"
+    />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import AppHeader from '~/components/AppHeader.vue'
 import AppBreadcrumb from '~/components/AppBreadcrumb.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import AppPlayer from '~/components/AppPlayer.vue'
-import { mapState } from 'vuex'
+import AppNativeNotification from '~/components/AppNativeNotification.vue'
 
 export default {
   components: {
     AppHeader,
     AppFooter,
     AppBreadcrumb,
-    AppPlayer
+    AppPlayer,
+    AppNativeNotification
+  },
+  data() {
+    return {
+      showNativeNotification: true
+    }
   },
   computed: {
     ...mapState({
@@ -36,6 +52,15 @@ export default {
     hideBreadcrumb() {
       const paths = ['/', '/tos']
       return paths.includes(this.$route.path)
+    },
+    shouldShowNativeNotification() {
+      // name will be null if page is invalid and covered by 404/500
+      return this.$route.name
+    }
+  },
+  methods: {
+    closeNativeNotification() {
+      this.showNativeNotification = false
     }
   }
 }
@@ -60,10 +85,27 @@ export default {
       opacity 0
       transform translate(0, 60px)
 
+@keyframes popup
+  0%
+    transform translate(0, 320px)
+  100%
+    transform translate(0, 0)
+@keyframes fadedown
+  0%
+    transform translate(0, 0)
+  100%
+    transform translate(0, 320px)
+
 @media (max-width 768px)
   .app
     &__breadcrumb
       display none
     &__view-wrapper
       margin 0
+    &__native-notification
+      transform translate(0, 320px)
+      opacity 1
+      animation popup .25s 2s forwards ease-out
+      &--hide
+        animation fadedown .25s forwards ease-out
 </style>
