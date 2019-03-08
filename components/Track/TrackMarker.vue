@@ -38,10 +38,21 @@ export default {
   display flex
   justify-content center
   align-items center
-  width 13px
+  min-width 13px
+  max-width 13px
   &__order
     font-size 14px
     color #7d7d7d
   &__play-icon
     height 13px
+
+@media (max-width 768px)
+  .marker
+    min-width 36px
+    max-width 36px
+    &__order
+      font-size 11px
+      display initial !important
+    &__play-icon
+      display none !important
 </style>

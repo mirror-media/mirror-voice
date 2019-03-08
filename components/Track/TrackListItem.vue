@@ -3,15 +3,18 @@
     :class="[
       'list-item',
       { 'list-item--hover': isMouseover },
-      { 'list-item--more-padding': showListOrder }
+      { 'list-item--more-padding': showOrder }
     ]"
     @mouseover="onMouseover"
     @mouseout="onMouseout"
   >
     <div class="list-item__left left">
       <TrackMarker
-        v-show="showListOrder || isMouseover"
-        class="left__marker"
+        :class="[
+          'left__marker',
+          { 'left__marker--show-order': showOrder },
+          { 'left__marker--hover': isMouseover }
+        ]"
         :status="status"
         :order="order"
       />
@@ -19,14 +22,14 @@
         <p
           :class="[
             'left__title',
-            { 'left__title--hover': !showListOrder && isMouseover } ]"
+            { 'left__title--hover': !showOrder && isMouseover } ]"
         >
           {{ item.title }}
         </p>
       </nuxt-link>
     </div>
     <div
-      v-show="showListOrder || !isMouseover"
+      v-show="showOrder || !isMouseover"
       class="list-item__right right"
     >
       <p class="right__date">
@@ -51,6 +54,10 @@ export default {
     TrackMarker
   },
   props: {
+    showOrder: {
+      type: Boolean,
+      default: false
+    },
     order: {
       type: Number,
       default: 0
@@ -66,15 +73,12 @@ export default {
     }
   },
   computed: {
-    showListOrder() {
-      return this.order !== 0
-    },
     status() {
       if (this.isMouseover) {
         return 'play'
       }
 
-      return this.showListOrder ? 'order' : 'play'
+      return this.showOrder ? 'order' : 'play'
     },
     relativeTime() {
       return dayjs().from(dayjs(this.item.publishedDate))
@@ -113,6 +117,11 @@ export default {
     margin 0 9px 0 0
     position relative
     bottom 1px
+    display none
+    &--show-order
+      display flex
+    &--hover
+      display flex
   &__title
     white-space nowrap
     overflow hidden
@@ -125,4 +134,25 @@ export default {
   color #7d7d7d
   min-width max-content
   margin 0 0 0 10px
+  display flex
+  justify-content center
+  align-items center
+
+@media (max-width 768px)
+  .list-item
+    height 60px
+    padding 0 7px 0 13px
+    font-size 13px
+
+  .left
+    &__marker
+      margin 0 13px 0 0
+      display flex
+      &--show-order
+        display flex
+      &--hover
+        display flex
+
+  .right
+    font-size 11px
 </style>

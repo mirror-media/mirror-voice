@@ -74,4 +74,15 @@ export default {
   font-size 14px
   color #7d7d7d
   cursor pointer
+
+@media (max-width 768px)
+  .album-relateds-wrapper
+    padding 17px 5px 0px 5px !important
+    &__header
+      margin 0 0 0 8px
+    &__track-list
+      margin 17px 0 0 0
+
+  .album
+    display none
 </style>

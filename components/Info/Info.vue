@@ -23,7 +23,10 @@
       </AppH1>
       <div class="info__content-wrapper">
         <AppDate
-          class="info__date"
+          :class="[
+            'info__date',
+            `info__date--${layout}`
+          ]"
           :date="date"
         />
         <div class="info__basic">
@@ -174,7 +177,10 @@ export default {
       display flex
       flex-direction column-reverse
     &__date
-      margin 30px 0 0 0
+      &--album
+        margin 30px 0 0 0
+      &--single
+        margin 10px 0 0 0
     &__basic
       margin 5px 0 0 0
       p
@@ -182,6 +188,9 @@ export default {
         color #7d7d7d
       p + p
         margin 0
+
+  .tags
+    display none
 
   .toggle-play
     display none

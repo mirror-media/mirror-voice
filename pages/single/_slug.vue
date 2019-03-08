@@ -2,15 +2,22 @@
   <AppMainAsideWrapper>
     <div slot="main" class="main">
       <AppDiv
-        class="main__wrapper info-wrapper"
+        class="main__wrapper infos-wrapper"
       >
         <Info
-          class="info-wrapper__info"
+          class="infos-wrapper__info"
           :info="single"
           @clickPlay="playSingle"
         />
       </AppDiv>
-      <AppDiv class="main__wrapper body-wrapper">
+      <AppDiv
+        :class="[
+          'main__wrapper',
+          'body-wrapper',
+          { 'body-wrapper--fold': isBodyWrapperFold },
+          { 'body-wrapper--expand': !isBodyWrapperFold }
+        ]"
+      >
         <AppH1 class="body-wrapper__title">
           文稿
         </AppH1>
@@ -18,6 +25,17 @@
         <NoSSR>
           <div class="body-wrapper__body" v-html="content" />
         </NoSSR>
+        <div
+          class="body-wrapper__read-more read-more"
+          @click="isBodyWrapperFold = !isBodyWrapperFold"
+        >
+          <div
+            :class="[
+              'read-more__icon',
+              { 'read-more__icon--reverse': !isBodyWrapperFold }
+            ]"
+          />
+        </div>
       </AppDiv>
     </div>
     <div slot="aside" class="aside">
@@ -29,7 +47,7 @@
         :description="asideIntroDescription"
       />
       <AsideTrackList
-        class="aside__wrapper"
+        class="aside__wrapper tracks"
         :album="album"
         :tracks="tracks.items"
         @playTrack="playTrack"
@@ -73,6 +91,11 @@ export default {
     AsideIntro,
     AsideTrackList,
     NoSSR
+  },
+  data() {
+    return {
+      isBodyWrapperFold: true
+    }
   },
   computed: {
     ...mapGetters({
@@ -199,7 +222,6 @@ export default {
     & + &
       margin 20px 0 0 0
 
-
 .body-wrapper
   &__body
     margin 17px 0 0 0
@@ -217,4 +239,69 @@ export default {
     margin 0 17px
   &__track-list
     margin 20px 0 0 0 !important
+
+@media (max-width 768px)
+  .main
+    &__wrapper
+      margin 13px
+      & + &
+        margin 13px
+
+  .aside
+    &__wrapper
+      margin 0 13px 13px 13px
+      & + &
+        margin 13px
+  
+  .infos-wrapper
+    padding 13px 22px !important
+    border-radius 2px
+
+  .body-wrapper
+    padding 13px 13px 19px 13px !important
+    border-radius 2px
+    box-shadow 0 0 2px 0 rgba(0, 0, 0, 0.1)
+    overflow-y hidden
+    position relative
+    &--fold
+      max-height 90px
+    &--expand
+      max-height none
+    &__title
+      display none
+    &__body
+      margin 0
+      color black
+      font-size 13px
+      line-height 1.54
+      text-align justify
+      & >>> *
+        margin 20px 0 0 0
+      & >>> *:nth-child(1)
+        margin 0
+    &__read-more
+      width 100%
+      height 19px
+      background-color white
+      position absolute
+      bottom 0
+      left 0
+
+  .read-more
+    display flex
+    justify-content center
+    align-items center
+    &__icon
+      width 0
+      height 0
+      border-style solid
+      border-width 5px 5px 0 5px
+      border-color #4a4a4a transparent transparent transparent
+      transform rotate(0deg)
+      &--reverse
+        transform rotate(180deg)
+
+  .tracks
+    border-radius 2px
+    box-shadow 0 0 2px 0 rgba(0, 0, 0, 0.1)
 </style>

@@ -103,4 +103,27 @@ export default {
     font-size 16px
     line-height 1.25
     text-align justify
+
+@media (max-width 768px)
+  .intro-wrapper
+    padding 17px 5px 13px 5px !important
+    border-radius 2px
+    &__title
+      font-size 15px !important
+      padding 0 0 15px 8px
+      // border-bottom 2px solid rgba(216, 216, 216, 0.3)
+      border-bottom 1px solid #eeeeee
+    &__intro
+      margin 9px 0 0 0
+
+  .intro
+    padding 0 8px
+    &__description
+      display none
+
+  .figure
+    &--square
+      align-items center
+    &__figcaption
+      font-size 15px
 </style>

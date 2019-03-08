@@ -3,8 +3,12 @@
     <TrackListItem
       v-for="(track, i) in tracks.slice(0, itemsPerPage)"
       :key="i"
-      :class="[ 'list__list-item', { 'list__list-item--border-bottom': showListOrder && i === tracks.length - 1 } ]"
-      :order="showListOrder ? getOrder(i) : 0"
+      :class="[
+        'list__list-item',
+        { 'list__list-item--border-bottom': showListOrder && i === tracks.length - 1 }
+      ]"
+      :show-order="showListOrder"
+      :order="getOrder(i)"
       :item="track"
       @click.native="$emit('playTrack', track.slug)"
     />

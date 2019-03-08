@@ -361,6 +361,12 @@ export default {
     width calc(100% - 25px - 25px)
 
 @media (max-width 768px)
+  .main
+    &__wrapper
+      // margin 0 13px
+      & + &
+        margin 13px 13px 0 13px
+
   .aside
     display none
 
@@ -369,7 +375,6 @@ export default {
     padding 13px !important
 
   .body-wrapper
-    margin 0 13px !important
     padding 13px 13px 19px 13px !important
     border-radius 2px
     box-shadow 0 0 2px 0 rgba(0, 0, 0, 0.1)
@@ -412,4 +417,16 @@ export default {
       transform rotate(0deg)
       &--reverse
         transform rotate(180deg)
+
+  .tracks-wrapper
+    min-height auto
+    padding 0 !important
+    border-radius 2px
+    box-shadow 0 0 2px 0 rgba(0, 0, 0, 0.1)
+    &__header
+      display none
+    &__tracks
+      margin 0 !important
+    &__pagination
+      display none
 </style>
