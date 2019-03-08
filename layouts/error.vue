@@ -130,4 +130,39 @@ export default {
   &--500
     width 360px
     margin 63px 0 0 0
+
+@media (max-width 768px)
+  .error
+    &__wrapper
+      &--404
+        width 100%
+        flex-direction column-reverse
+        padding 0
+      &--500
+        width 100%
+
+  .info
+    &__status-code
+      font-size 72px
+      letter-spacing 8px
+      left calc(8px / 2)
+    &__hint
+      font-size 17px
+      line-height 1
+      letter-spacing 2.6px
+      margin 22px 0 0 0
+    &__button
+      width 150px
+      height 40px
+      font-size 15px
+      letter-spacing initial
+      margin 35px 0 0 0
+
+  .robot
+    &--404
+      width 90%
+      height auto
+      margin 0 0 45px 0
+    &--500
+      width 90%
 </style>
