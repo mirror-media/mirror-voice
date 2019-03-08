@@ -161,7 +161,7 @@ export default {
 
 @media (max-width 768px)
   .aside
-    display none
+    display none !important
 
   .showcase
     border-top 6px solid #d84939

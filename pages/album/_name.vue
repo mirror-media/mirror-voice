@@ -424,7 +424,7 @@ export default {
     border-radius 2px
     box-shadow 0 0 2px 0 rgba(0, 0, 0, 0.1)
     &__header
-      display none
+      display none !important
     &__tracks
       margin 0 !important
     &__pagination
