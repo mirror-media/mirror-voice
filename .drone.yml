@@ -184,6 +184,9 @@ pipeline:
     namespace: review
     secrets: [google_credentials]
     pull: true
+    commands:
+    - /bin/bash check-service.sh
+    - echo "http://$EXTERNAL_IP:80" > .address
     when:
       event:
       - push
@@ -191,6 +194,26 @@ pipeline:
       branch:
         exclude:
         - master
+
+  not-release-finish:
+    image: gcr.io/mirrormedia-1470651750304/drone-slack:ichiaohsu_4
+    channel: ground_control
+    secrets: [slack_webhook]
+    username: drone
+    icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
+    when:
+      event:
+      - push
+      - pull_request
+      branch:
+        exclude:
+        - master
+    template: >
+      {{#success build.status}}
+        {{repo.name}}:${DRONE_COMMIT_SHA:0:7} by {{build.author}} in branch {{build.branch}} was locked and loaded <{{service.address}}|here>.
+      {{else}}
+        Houston, we have a problem. Build <${DRONE_BUILD_LINK}|#{{build.number}}> failed.
+      {{/success}}
 
   finish_notify:
     image: plugins/slack
@@ -201,6 +224,7 @@ pipeline:
     when:
       status: [success, failure]
       event: [push, pull_request, tag]
+      branch: master
     template: >
       {{#success build.status}}
         {{repo.name}}:${DRONE_COMMIT_SHA:0:7} by {{build.author}} in branch {{build.branch}} was locked and loaded.
