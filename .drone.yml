@@ -183,10 +183,7 @@ pipeline:
     zone: asia-east1-a
     namespace: review
     secrets: [google_credentials]
-    pull: true
-    commands:
-    - /bin/bash check-service.sh
-    - echo "http://$EXTERNAL_IP:80" > .address
+    pull: always
     when:
       event:
       - push
