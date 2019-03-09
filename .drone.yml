@@ -193,7 +193,7 @@ pipeline:
         - master
 
   not-release-finish:
-    image: gcr.io/mirrormedia-1470651750304/drone-slack:ichiaohsu_5
+    image: gcr.io/mirrormedia-1470651750304/drone-slack:latest
     channel: ground_control
     secrets: [slack_webhook]
     username: drone
