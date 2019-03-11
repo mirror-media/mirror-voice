@@ -218,7 +218,9 @@ export default {
     //     margin 18px 0 0 0
 
   .top-wrapper
-    display none
+    // display none
+    padding 0 !important
+    background-color transparent !important
 
   .bottom-wrapper
     background-color transparent !important

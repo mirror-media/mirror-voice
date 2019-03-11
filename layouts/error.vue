@@ -23,7 +23,7 @@
         >
       </div>
     </template>
-    <template v-else-if="statusCode === 500">
+    <template v-else>
       <div class="error__wrapper error__wrapper--500">
         <div class="error__info info">
           <h1 class="info__status-code">
