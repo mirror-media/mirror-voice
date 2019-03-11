@@ -42,9 +42,8 @@
 
 @media (max-width 768px)
   .footer
-    height 109px
+    height 169px
     background-color #eeeeee
-    padding 0
     &__rights
       margin 20px 0 0 0
       font-size 11px
