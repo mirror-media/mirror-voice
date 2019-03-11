@@ -50,7 +50,7 @@ export default {
       showPlayer: state => state.appPlayer.showAppPlayer
     }),
     hideBreadcrumb() {
-      const paths = ['/', '/tos']
+      const paths = ['/', '/tos', '/privacy_rule']
       return paths.includes(this.$route.path)
     },
     shouldShowNativeNotification() {
