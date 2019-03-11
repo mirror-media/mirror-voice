@@ -124,4 +124,8 @@ export default {
   justify-content center
   align-items center
   z-index 1000
+
+@media (max-width 768px)
+  .player-wrapper
+    padding 0 12px
 </style>

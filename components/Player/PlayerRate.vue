@@ -11,7 +11,7 @@
     </p>
     <ol
       v-show="showPicker"
-      :class="[ 'rate__picker', `rate__picker--${type}`, 'picker' ]"
+      class="rate__picker picker"
     >
       <li
         v-for="rateAvailable in ratesAvailable"
@@ -46,13 +46,6 @@ export default {
     }
   },
   props: {
-    type: {
-      type: String,
-      default: 'short',
-      validator(value) {
-        return ['short', 'long'].includes(value)
-      }
-    },
     rate: {
       type: Number,
       default: 1.0,
@@ -97,7 +90,7 @@ export default {
   align-items center
   position relative
   &__indicator
-    min-width 55px
+    min-width 57px
     font-size 18px
     font-weight 600
     color #e5e5e5
@@ -106,13 +99,10 @@ export default {
     user-select none
   &__picker
     position absolute
+    bottom calc(100% + 3px)
     width 52px
     background-color #313131
     border-radius 2px
-    &--short
-      bottom calc(100% + 3px + 16px)
-    &--long
-      bottom calc(100% + 3px)
 
 .picker
   list-style none

@@ -11,9 +11,10 @@
     >
     <!-- do not use v-show due to vue-slider-component exception -->
     <!-- see: https://github.com/NightCatSama/vue-slider-component#exceptions -->
+    <!-- NOTE: this is resolved in newer version of vue-slider-component -->
     <div
       v-if="showSlider"
-      :class="[ 'volume__slider', `volume__slider--${type}`, 'slider' ]"
+      class="volume__slider slider"
     >
       <PlayerSlider
         :direction="'vertical'"
@@ -49,13 +50,6 @@ export default {
     PlayerSlider
   },
   props: {
-    type: {
-      type: String,
-      default: 'short',
-      validator(value) {
-        return ['short', 'long'].includes(value)
-      }
-    },
     volume: {
       type: Number,
       required: true,
@@ -92,14 +86,11 @@ export default {
     cursor pointer
   &__slider
     position absolute
+    bottom calc(100% + 3px)
     width 52px
     height 164px
     background-color #313131
     border-radius 2px
-    &--short
-      bottom calc(100% + 3px + 16px)
-    &--long
-      bottom calc(100% + 3px)
 
 .slider
   display flex

@@ -1,24 +1,14 @@
 <template>
   <div class="info">
-    <template v-if="showTitle">
-      <nuxt-link
-        class="info__first info__first--truncate"
-        :to="`/single/${slug}`"
-      >
-        {{ title }}
-      </nuxt-link>
-      <p class="info__second info__second--fixed-width">
-        <span>{{ secondsToHms(played) }}</span> / {{ secondsToHms(duration) }}
-      </p>
-    </template>
-    <template v-else>
-      <p class="info__first">
-        {{ secondsToHms(played) }}
-      </p>
-      <p class="info__second">
-        {{ secondsToHms(duration) }}
-      </p>
-    </template>
+    <nuxt-link
+      class="info__first info__first--truncate"
+      :to="`/single/${slug}`"
+    >
+      {{ title }}
+    </nuxt-link>
+    <p class="info__second info__second--fixed-width">
+      {{ secondsToHms(played) }}<span> / {{ secondsToHms(duration) }}</span>
+    </p>
   </div>
 </template>
 
@@ -30,10 +20,6 @@ export default {
     sound: {
       type: Object,
       required: true
-    },
-    showTitle: {
-      type: Boolean,
-      default: false
     },
     duration: {
       type: Number,
@@ -82,10 +68,16 @@ export default {
       text-overflow ellipsis
   &__second
     line-height 1
-    color #7d7d7d
+    color #e5e5e5
     span
-      color #e5e5e5
+      color #7d7d7d
     &--fixed-width
       min-width max-content
       margin 0 0 0 5px
+
+@media (max-width 768px)
+  .info
+    &__second
+      span
+        display none
 </style>

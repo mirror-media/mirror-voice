@@ -8,7 +8,7 @@
       @click="$emit('backward')"
     >
     <img
-      :class="[ 'navs__play', 'navs__play--small' ]"
+      class="navs__play"
       :src="require(`~/assets/img/btn_${isPlaying ? 'pause' : 'play'}.png`)"
       alt=""
       @click="$emit(isPlaying ? 'pause' : 'play')"
@@ -45,14 +45,21 @@ export default {
   &__backward
     height 14px
     cursor pointer
-  &__forward
-    height 14px
-    cursor pointer
   &__play
     cursor pointer
     margin 0 18px
-    &--small
-      height 28px
-    &--large
-      height 31px
+    height 28px
+  &__forward
+    height 14px
+    cursor pointer
+
+@media (max-width 768px)
+  .navs
+    &__backward
+      display none
+    &__play
+      height 40px
+      margin 0 18px 0 0
+    &__forward
+      height 15px
 </style>

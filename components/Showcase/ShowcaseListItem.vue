@@ -226,30 +226,13 @@ export default {
         margin 0
         padding 5px 15px
 
-  // .cover
-  //   display flex
-  //   justify-content center
-  //   align-items center
-  //   position relative
-  //   &__img
-  //     position absolute
-  //     left 0
-  //     top 0
-  //     width 100%
-  //     height 100%
-  //     object-fit cover
-  //     // transition filter .1s ease-out
-  //     &--dimmed
-  //       filter brightness(50%)
-  //   &__play-icon
-  //     d = 48px
-  //     width d
-  //     height d
-  //     z-index 2
-  //     opacity 0
-  //     // transition opacity .1s ease-out
-  //     &--show
-  //       opacity 1
+  .cover
+    &__img
+      &--dimmed
+        filter brightness(100%)
+    &__play-icon
+      &--show
+        opacity 0
 
   .info
     position relative
