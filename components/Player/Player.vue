@@ -252,7 +252,6 @@ export default {
   display flex
   align-items center
   height 60px
-  background-color #313131
   max-width 1000px
   &__cover
     margin 0 31px 0 0
@@ -287,7 +286,7 @@ export default {
       display none
     &__middle
       order 1
-      margin 0 0 0 15px
+      margin 0 0 0 10px
     &__rate
       order 0
     &__volume

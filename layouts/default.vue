@@ -87,14 +87,14 @@ export default {
 
 @keyframes popup
   0%
-    transform translate(0, 320px)
+    transform translate(0, 325px)
   100%
     transform translate(0, 0)
 @keyframes fadedown
   0%
     transform translate(0, 0)
   100%
-    transform translate(0, 320px)
+    transform translate(0, 325px)
 
 @media (max-width 768px)
   .app
@@ -103,7 +103,7 @@ export default {
     &__view-wrapper
       margin 0
     &__native-notification
-      transform translate(0, 320px)
+      transform translate(0, 325px)
       opacity 1
       animation popup .25s 2s forwards ease-out
       &--hide

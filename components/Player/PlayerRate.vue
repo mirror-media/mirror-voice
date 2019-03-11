@@ -116,4 +116,10 @@ export default {
       color #d84939
     & + &
       margin 17px 0 0 0
+
+@media (max-width 768px)
+  .rate
+    &__indicator
+      min-width 50px
+      font-size 15px
 </style>

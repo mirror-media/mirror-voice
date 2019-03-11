@@ -77,6 +77,7 @@ export default {
 
 @media (max-width 768px)
   .info
+    font-size 11px
     &__second
       span
         display none

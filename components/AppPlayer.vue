@@ -127,5 +127,6 @@ export default {
 
 @media (max-width 768px)
   .player-wrapper
+    background-color #191919
     padding 0 12px
 </style>
