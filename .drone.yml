@@ -194,6 +194,7 @@ pipeline:
 
   not-release-finish:
     image: gcr.io/mirrormedia-1470651750304/drone-slack:latest
+    pull: true
     channel: ground_control
     secrets: [slack_webhook]
     username: drone
