@@ -7,7 +7,7 @@
       {{ title }}
     </nuxt-link>
     <p class="info__second info__second--fixed-width">
-      {{ secondsToHms(played) }}<span> / {{ secondsToHms(duration) }}</span>
+      {{ $secondsToHms(played) }}<span> / {{ $secondsToHms(duration) }}</span>
     </p>
   </div>
 </template>
@@ -36,19 +36,6 @@ export default {
     },
     slug() {
       return _.get(this.sound, 'slug', '')
-    }
-  },
-  methods: {
-    secondsToHms(d) {
-      d = Number(d)
-      const h = Math.floor(d / 3600)
-      const m = Math.floor((d % 3600) / 60)
-      const s = Math.floor((d % 3600) % 60)
-
-      const hDisplay = h > 0 ? `${h}`.padStart(2, '0') : '00'
-      const mDisplay = m > 0 ? `${m}`.padStart(2, '0') : '00'
-      const sDisplay = s > 0 ? `${s}`.padStart(2, '0') : '00'
-      return `${hDisplay}:${mDisplay}:${sDisplay}`
     }
   }
 }

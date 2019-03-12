@@ -3,8 +3,11 @@ import _ from 'lodash'
 
 export const state = () => ({
   showAppPlayer: false,
+  isPlaying: false,
   pages: {},
   playingIndex: 0,
+  duration: 0,
+  playedTime: 0,
   albumId: ''
 })
 
@@ -31,6 +34,17 @@ export const mutations = {
   },
   INSERT_PAGE(state, { page, res }) {
     Vue.set(state.pages, page, res)
+  },
+
+  SET_IS_PLAYING(state, value) {
+    state.isPlaying = value
+  },
+
+  SET_DUARTION(state, value) {
+    state.duration = value
+  },
+  SET_PLAYED_TIME(state, value) {
+    state.playedTime = value
   }
 }
 

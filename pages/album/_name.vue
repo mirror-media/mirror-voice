@@ -61,6 +61,13 @@
             </button>
           </div>
         </DivHeader>
+        <AppPlayingBanner
+          v-if="tracks.meta.total > 0"
+          class="tracks-wrapper__playing-banner"
+          :is-playing.sync="isAlbumPlaying"
+        >
+          全部播放 ({{ tracks.meta.total }})
+        </AppPlayingBanner>
         <TrackList
           v-show="isTracksFetched"
           class="tracks-wrapper__tracks"
@@ -99,7 +106,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import _ from 'lodash'
 
@@ -108,6 +115,7 @@ import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
 import Info from '~/components/Info/Info.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
+import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AsideIntro from '~/components/Aside/AsideIntro.vue'
 import AsideAlbumList from '~/components/Aside/AsideAlbumList.vue'
 import TrackList from '~/components/Track/TrackList.vue'
@@ -146,6 +154,7 @@ export default {
     AppH1,
     Info,
     DivHeader,
+    AppPlayingBanner,
     AsideIntro,
     AsideAlbumList,
     TrackList,
@@ -157,6 +166,7 @@ export default {
       isTracksLoading: false,
       isTracksFetched: true,
       isTracksSortLatestFirst: true,
+      // isAlbumPlaying: false,
       page: 1
     }
   },
@@ -187,6 +197,29 @@ export default {
         _.get(this.writer, ['bio', 'html'], ''),
         this.$SANITIZE_HTML_DEFAULT_OPTIONS
       )
+    },
+
+    ...mapState(['appPlayer']),
+    isAlbumPlaying: {
+      get() {
+        return (
+          this.appPlayer.isPlaying &&
+          this.appPlayer.albumId === _.get(this.album, 'id', '')
+        )
+      },
+      set(val) {
+        if (val) {
+          if (this.appPlayer.albumId !== _.get(this.album, 'id', '')) {
+            this.playAlbum()
+          } else {
+            // continue
+            this.SET_IS_PLAYING(true)
+          }
+        } else {
+          // pause
+          this.SET_IS_PLAYING(false)
+        }
+      }
     }
   },
   watch: {
@@ -276,7 +309,8 @@ export default {
     ...mapMutations({
       SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
       SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
-      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
+      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES',
+      SET_IS_PLAYING: 'appPlayer/SET_IS_PLAYING'
     }),
     playTrack(slug) {
       this.SET_ALBUM_ID(this.album.id)
@@ -352,6 +386,8 @@ export default {
 .tracks-wrapper
   min-height 555px
   position relative
+  &__playing-banner
+    display none
   &__tracks
     margin 18px 0 0 0 !important
   &__pagination
@@ -425,6 +461,8 @@ export default {
     box-shadow 0 0 2px 0 rgba(0, 0, 0, 0.1)
     &__header
       display none !important
+    &__playing-banner
+      display flex
     &__tracks
       margin 0 !important
     &__pagination

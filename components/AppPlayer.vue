@@ -8,6 +8,13 @@
       :volume.sync="playerVolume"
       :muted.sync="playerMuted"
       :playback-rate.sync="playerplaybackRate"
+      :should-playing="isPlaying"
+      @play="syncPlay"
+      @pause="syncPause"
+      @durationchange="syncDuration"
+      @seeking="syncPlayedTime"
+      @seeked="syncPlayedTime"
+      @timeupdate="syncPlayedTime"
     />
   </div>
 </template>
@@ -47,7 +54,8 @@ export default {
     ...mapState({
       pages: state => state.appPlayer.pages,
       albumId: state => state.appPlayer.albumId,
-      playingIndex: state => state.appPlayer.playingIndex
+      playingIndex: state => state.appPlayer.playingIndex,
+      isPlaying: state => state.appPlayer.isPlaying
     }),
     ...mapGetters({
       list: 'appPlayer/LIST'
@@ -109,8 +117,25 @@ export default {
   },
   methods: {
     ...mapMutations({
-      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX'
-    })
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_IS_PLAYING: 'appPlayer/SET_IS_PLAYING',
+      SET_DUARTION: 'appPlayer/SET_DUARTION',
+      SET_PLAYED_TIME: 'appPlayer/SET_PLAYED_TIME'
+    }),
+    syncPlay() {
+      this.SET_IS_PLAYING(true)
+    },
+    syncPause() {
+      this.SET_IS_PLAYING(false)
+    },
+    syncDuration(e) {
+      const duration = _.get(e, ['target', 'duration'], 0)
+      this.SET_DUARTION(duration)
+    },
+    syncPlayedTime(e) {
+      const playedTime = _.get(e, ['target', 'currentTime'], 0)
+      this.SET_PLAYED_TIME(playedTime)
+    }
   }
 }
 </script>

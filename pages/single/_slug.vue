@@ -9,6 +9,22 @@
           :info="single"
           @clickPlay="playSingle"
         />
+
+        <audio
+          ref="audio"
+          @durationchange="setSingleDuration"
+        />
+        <AppPlayingBanner
+          class="infos-wrapper__playing-banner"
+          :is-playing.sync="isSinglePlaying"
+        >
+          <template v-if="!isSinglePlaying">
+            播放 {{ $secondsToHms(singleDuration) }}
+          </template>
+          <template v-else>
+            暫停 {{ $secondsToHms(appPlayer.playedTime) }} / {{ $secondsToHms(singleDuration) }}
+          </template>
+        </AppPlayingBanner>
       </AppDiv>
       <AppDiv
         :class="[
@@ -57,7 +73,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import sanitizeHtml from 'sanitize-html'
 import _ from 'lodash'
 
@@ -65,6 +81,7 @@ import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
 import Info from '~/components/Info/Info.vue'
+import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AsideIntro from '~/components/Aside/AsideIntro.vue'
 import AsideTrackList from '~/components/Aside/AsideTrackList.vue'
 import NoSSR from 'vue-no-ssr'
@@ -88,13 +105,15 @@ export default {
     AppDiv,
     AppH1,
     Info,
+    AppPlayingBanner,
     AsideIntro,
     AsideTrackList,
     NoSSR
   },
   data() {
     return {
-      isBodyWrapperFold: true
+      isBodyWrapperFold: true,
+      singleDuration: 0
     }
   },
   computed: {
@@ -121,6 +140,37 @@ export default {
         _.get(this.album, ['brief', 'html'], ''),
         this.$SANITIZE_HTML_DEFAULT_OPTIONS
       )
+    },
+
+    ...mapState(['appPlayer']),
+    appPlayerSingleSlug() {
+      return _.get(this.list, [this.appPlayer.playingIndex, 'slug'], '')
+    },
+    isSinglePlaying: {
+      get() {
+        return (
+          this.appPlayer.isPlaying &&
+          this.appPlayerSingleSlug === _.get(this.single, 'slug', '')
+        )
+      },
+      set(val) {
+        if (val) {
+          if (this.appPlayerSingleSlug !== _.get(this.single, 'slug', '')) {
+            this.playSingle()
+          } else {
+            // continue
+            this.SET_IS_PLAYING(true)
+          }
+        } else {
+          // pause
+          this.SET_IS_PLAYING(false)
+        }
+      }
+    },
+
+    // alias of audio element
+    audio() {
+      return this.$refs.audio
     }
   },
   async asyncData({ app, store, route, error }) {
@@ -180,6 +230,10 @@ export default {
       tracks
     }
   },
+  mounted() {
+    const id = _.get(this.single, 'id', '')
+    this.audio.src = `http://www.mirrormedia.mg/assets/audios/${id}.wav`
+  },
   methods: {
     ...mapActions({
       PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
@@ -187,7 +241,8 @@ export default {
     ...mapMutations({
       SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
       SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
-      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
+      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES',
+      SET_IS_PLAYING: 'appPlayer/SET_IS_PLAYING'
     }),
     playTrack(slug) {
       this.SET_ALBUM_ID(this.album.id)
@@ -206,6 +261,10 @@ export default {
           this.SET_PLAYING_INDEX(0)
         }
       )
+    },
+    setSingleDuration(e) {
+      const duration = _.get(e, ['target', 'duration'], 0)
+      this.singleDuration = duration
     }
   }
 }
@@ -221,6 +280,10 @@ export default {
   &__wrapper
     & + &
       margin 20px 0 0 0
+
+.infos-wrapper
+  &__playing-banner
+      display none
 
 .body-wrapper
   &__body
@@ -254,8 +317,12 @@ export default {
         margin 13px
   
   .infos-wrapper
-    padding 13px 22px !important
     border-radius 2px
+    padding 0 !important
+    &__playing-banner
+      display flex
+    &__info
+      padding 13px 22px !important
 
   .body-wrapper
     padding 13px 13px 19px 13px !important

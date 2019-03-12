@@ -157,7 +157,7 @@ export default {
 <style lang="stylus" scoped>
 .main
   &__navs
-    display none
+    display none !important
   &__wrapper
     margin 20px 0 0 0
 
@@ -174,7 +174,7 @@ export default {
 @media (max-width 768px)
   .main
     &__navs
-      display flex
+      display flex !important
       padding 0 0 0 18px !important
     &__wrapper
       margin 16px 0 0 0

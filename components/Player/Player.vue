@@ -102,6 +102,10 @@ export default {
       validator(value) {
         return ratesAvailable.includes(value)
       }
+    },
+    shouldPlaying: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -211,6 +215,10 @@ export default {
     },
     internalMuted() {
       this.internalVolume = this.internalMuted ? 0 : this.volume
+    },
+
+    shouldPlaying() {
+      this.shouldPlaying ? this.play() : this.pause()
     }
   },
   mounted() {
@@ -234,11 +242,9 @@ export default {
     },
     play() {
       this.audio.play()
-      this.$emit('play')
     },
     pause() {
       this.audio.pause()
-      this.$emit('pause')
     },
     seek(percentage) {
       this.audio.currentTime = this.audio.duration * percentage

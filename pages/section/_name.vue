@@ -7,7 +7,7 @@
       />
     </AppDiv>
     <AppDiv class="section__wrapper bottom-wrapper">
-      <DivHeader>
+      <DivHeader class="bottom-wrapper__header-desktop">
         <template slot="left">
           {{ showcaseTitle }}
         </template>
@@ -15,6 +15,9 @@
           共 {{ total }} 筆
         </template>
       </DivHeader>
+      <div class="bottom-wrapper__header-mobile">
+        共 {{ total }} 筆
+      </div>
       <ShowcaseList
         class="bottom-wrapper__showcase"
         :list-item-layout="'horizontal'"
@@ -204,6 +207,10 @@ export default {
       margin 18px 0 0 0
 
 .bottom-wrapper
+  &__header-desktop
+    display flex
+  &__header-mobile
+    display none
   &__showcase
     margin 26px 0 0 0 !important
   &__pagination
@@ -225,4 +232,12 @@ export default {
   .bottom-wrapper
     background-color transparent !important
     padding 0 13px !important
+    &__header-desktop
+      display none !important
+    &__header-mobile
+      display block
+      font-size 11px
+      color #7d7d7d
+    &__showcase
+        margin 5px 0 0 0 !important
 </style>
