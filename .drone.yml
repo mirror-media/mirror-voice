@@ -200,6 +200,14 @@ pipeline:
     username: drone
     link_names: true
     icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
+    recipient: ${DRONE_COMMIT_AUTHOR}
+    usermaps:
+      chiangkeith: chiangkeith
+      FalseChord: Yen
+      hcchien: hcchien
+      hsuehyungtan: noah.tan
+      kwhsiung: kwhsiung
+      ichiaohsu: mmich
     when:
       event:
       - push
