@@ -39,7 +39,20 @@
         </AppH1>
         <!-- NoSSR due to SEO concerns -->
         <NoSSR>
-          <div class="body-wrapper__body" v-html="content" />
+          <div class="body-wrapper__body-tags body-tags">
+            <div class="body-tags__body" v-html="content" />
+            <div
+              v-if="tags.length > 0"
+              class="body-tags__tags tags"
+            >
+              <AppTag
+                v-for="(tag, i) in tags"
+                :key="i"
+                class="tags__tag"
+                :tag="tag"
+              />
+            </div>
+          </div>
         </NoSSR>
         <div
           class="body-wrapper__read-more read-more"
@@ -82,6 +95,7 @@ import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
 import Info from '~/components/Info/Info.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
+import AppTag from '~/components/AppTag.vue'
 import AsideIntro from '~/components/Aside/AsideIntro.vue'
 import AsideTrackList from '~/components/Aside/AsideTrackList.vue'
 import NoSSR from 'vue-no-ssr'
@@ -106,6 +120,7 @@ export default {
     AppH1,
     Info,
     AppPlayingBanner,
+    AppTag,
     AsideIntro,
     AsideTrackList,
     NoSSR
@@ -171,6 +186,10 @@ export default {
     // alias of audio element
     audio() {
       return this.$refs.audio
+    },
+
+    tags() {
+      return _.get(this.single, 'tags', [])
     }
   },
   async asyncData({ app, store, route, error }) {
@@ -286,8 +305,11 @@ export default {
       display none
 
 .body-wrapper
-  &__body
+  &__body-tags
     margin 17px 0 0 0
+
+.body-tags
+  &__body
     color #7d7d7d
     font-size 14px
     line-height 1.71
@@ -296,6 +318,8 @@ export default {
       margin 20px 0 0 0
     & >>> a
       color #21516f
+  &__tags
+    display none
 
 .album-relateds-wrapper
   &__header
@@ -336,8 +360,18 @@ export default {
       max-height none
     &__title
       display none
-    &__body
+    &__body-tags
       margin 0
+    &__read-more
+      width 100%
+      height 19px
+      background-color white
+      position absolute
+      bottom 0
+      left 0
+
+  .body-tags
+    &__body
       color black
       font-size 13px
       line-height 1.54
@@ -346,13 +380,16 @@ export default {
         margin 20px 0 0 0
       & >>> *:nth-child(1)
         margin 0
-    &__read-more
-      width 100%
-      height 19px
-      background-color white
-      position absolute
-      bottom 0
-      left 0
+    &__tags
+      position relative
+      left -5px
+      margin 10px 0
+
+  .tags
+    display flex
+    flex-wrap wrap
+    &__tag
+      margin 5px
 
   .read-more
     display flex

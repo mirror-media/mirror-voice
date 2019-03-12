@@ -26,4 +26,8 @@ export default {
   background-color #eeeeee
   font-size 14px
   color #7d7d7d
+
+@media (max-width 768px)
+  .tag
+    font-size 11px
 </style>
