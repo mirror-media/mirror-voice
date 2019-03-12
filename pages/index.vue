@@ -4,6 +4,11 @@
       <Slider
         :items="audioPromotions.items"
       />
+      <PageNavsHorizontalList
+        class="main__navs"
+        :items="categories"
+        :should-wrap="false"
+      />
       <template
         v-for="(section, i) in sections"
       >
@@ -56,6 +61,7 @@ import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import Slider from '~/components/Slider/Slider.vue'
+import PageNavsHorizontalList from '~/components/PageNavs/PageNavsHorizontalList.vue'
 import ShowcaseList from '~/components/Showcase/ShowcaseList.vue'
 import PageNavsVertical from '~/components/PageNavs/PageNavsVertical.vue'
 
@@ -78,6 +84,7 @@ export default {
     AppDiv,
     DivHeader,
     Slider,
+    PageNavsHorizontalList,
     ShowcaseList,
     PageNavsVertical
   },
@@ -120,13 +127,16 @@ export default {
     }
 
     // Run requests in parallel
-    const [audioPromotions, { sections, albums }] = await Promise.all([
-      fetchAudioPromotions(),
-      getAudioSectionsAndAlbums()
-    ])
+    const [audioPromotions, { sections = [], albums = [] }] = await Promise.all(
+      [fetchAudioPromotions(), getAudioSectionsAndAlbums()]
+    )
+    const categories = _.flatten(
+      sections.map(section => _.get(section, 'categories', []))
+    )
     return {
       audioPromotions,
       sections,
+      categories,
       albums
     }
   },
@@ -146,6 +156,8 @@ export default {
 
 <style lang="stylus" scoped>
 .main
+  &__navs
+    display none
   &__wrapper
     margin 20px 0 0 0
 
@@ -160,14 +172,19 @@ export default {
     cursor pointer
 
 @media (max-width 768px)
+  .main
+    &__navs
+      display flex
+      padding 0 0 0 18px !important
+    &__wrapper
+      margin 16px 0 0 0
+
   .aside
     display none !important
 
   .showcase
     border-top 6px solid #d84939
     padding 18px 18px 0 18px !important
-    & + &
-      margin 16px 0 0 0
 
   .header
     &__right

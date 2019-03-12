@@ -22,30 +22,12 @@
         { 'navs__category-list-wrapper--expand': !isCategoriesFold }
       ]"
     >
-      <ul
+      <PageNavsHorizontalList
         ref="category-list"
-        :class="[
-          'navs__list',
-          'category-list',
-          { 'category-list--fold': isCategoriesFold },
-          { 'category-list--expand': !isCategoriesFold }
-        ]"
-      >
-        <li class="category-list__list-item">
-          <nuxt-link :to="`/section/${sectionName}`">
-            全部
-          </nuxt-link>
-        </li>
-        <li
-          v-for="(category, i) in categoryListItems"
-          :key="i"
-          class="category-list__list-item"
-        >
-          <nuxt-link :to="`/category/${category.name}`">
-            {{ category.title }}
-          </nuxt-link>
-        </li>
-      </ul>
+        class="navs__list category-list"
+        :section-name="sectionName"
+        :items="categoryListItems"
+      />
     </div>
     <div
       v-show="shouldShowReadMore"
@@ -65,7 +47,12 @@
 <script>
 import _ from 'lodash'
 
+import PageNavsHorizontalList from './PageNavsHorizontalList.vue'
+
 export default {
+  components: {
+    PageNavsHorizontalList
+  },
   props: {
     sections: {
       type: Array,
@@ -116,7 +103,7 @@ export default {
   },
   mounted() {
     // 182 is the max-height we want to display the category list
-    this.shouldShowReadMore = this.$refs['category-list'].offsetHeight > 182
+    this.shouldShowReadMore = this.$refs['category-list'].$el.offsetHeight > 182
   }
 }
 </script>
@@ -151,18 +138,7 @@ export default {
         color black
 
 .category-list
-  margin 24px 0 0 0
-  font-size 14px
-  color #7d7d7d
-  position relative
-  left -28px
-  &__list-item
-    margin 13px 0 0 28px
-    cursor pointer
-    a
-      color #7d7d7d
-      &.nuxt-link-active
-        color #d84939
+  margin 24px 0 0 0 !important
 
 @media (max-width 768px)
   .navs
@@ -205,28 +181,8 @@ export default {
           font-size 17px
 
   .category-list
-    margin 0
-    font-size 13px
-    color #4a4a4a
-    position relative
-    left -13px
-    padding 0 18px 35px 18px
-    &__list-item
-      margin 15px 0 0 13px
-      cursor pointer
-      box-shadow 1px 1px 1px 0 rgba(0, 0, 0, 0.1)
-      background-color #ffffff
-      border-radius 4px
-      a
-        display inline-block
-        width 100%
-        height 100%
-        color #4a4a4a
-        padding 10px 16px
-        border-radius 4px
-        &.nuxt-link-active
-          color white
-          background-color #273947
+    margin 0 !important
+    padding 0 18px 35px 18px !important
 
   .read-more
     display flex
