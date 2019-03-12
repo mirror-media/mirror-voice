@@ -22,6 +22,8 @@
       :tracks="tracks"
       :items-per-page="5"
       :total="5"
+      :current-sound="currentSound"
+      :is-playing="isPlaying"
       @playTrack="v => $emit('playTrack', v)"
     />
   </AppDiv>
@@ -52,6 +54,17 @@ export default {
       default() {
         return []
       }
+    },
+    currentSound: {
+      type: Object,
+      default() {
+        return {}
+      },
+      required: true
+    },
+    isPlaying: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {

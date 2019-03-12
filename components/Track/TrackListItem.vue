@@ -65,6 +65,10 @@ export default {
     item: {
       type: Object,
       required: true
+    },
+    isPlaying: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -74,6 +78,10 @@ export default {
   },
   computed: {
     status() {
+      if (this.isPlaying) {
+        return 'playing'
+      }
+
       if (this.isMouseover) {
         return 'play'
       }

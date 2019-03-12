@@ -79,6 +79,8 @@
         class="aside__wrapper tracks"
         :album="album"
         :tracks="tracks.items"
+        :current-sound="currentSound"
+        :is-playing="appPlayer.isPlaying"
         @playTrack="playTrack"
       />
     </div>
@@ -158,6 +160,9 @@ export default {
     },
 
     ...mapState(['appPlayer']),
+    currentSound() {
+      return _.get(this.list, this.appPlayer.playingIndex, {})
+    },
     appPlayerSingleSlug() {
       return _.get(this.list, [this.appPlayer.playingIndex, 'slug'], '')
     },

@@ -10,12 +10,15 @@
       :show-order="showListOrder"
       :order="getOrder(i)"
       :item="track"
+      :is-playing="getIsPlaying(track)"
       @click.native="$emit('playTrack', track.slug)"
     />
   </ol>
 </template>
 
 <script>
+import _ from 'lodash'
+
 import TrackListItem from './TrackListItem.vue'
 
 export default {
@@ -26,6 +29,17 @@ export default {
     showListOrder: {
       type: Boolean,
       defalut: false
+    },
+    currentSound: {
+      type: Object,
+      default() {
+        return {}
+      },
+      required: true
+    },
+    isPlaying: {
+      type: Boolean,
+      default: false
     },
     tracks: {
       type: Array,
@@ -55,6 +69,14 @@ export default {
       } else {
         return i + 1 + this.itemsPerPage * (this.page - 1)
       }
+    },
+    getIsPlaying(track) {
+      const slug = _.get(track, 'slug', '')
+      return (
+        this.isPlaying &&
+        slug !== '' &&
+        slug === _.get(this.currentSound, 'slug', '')
+      )
     }
   }
 }

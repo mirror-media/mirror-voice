@@ -73,6 +73,8 @@
           class="tracks-wrapper__tracks"
           :show-list-order="true"
           :is-latest-first="isTracksSortLatestFirst"
+          :current-sound="currentSound"
+          :is-playing="appPlayer.isPlaying"
           :tracks="tracks.items"
           :page="page"
           :total="tracks.meta.total"
@@ -200,6 +202,9 @@ export default {
     },
 
     ...mapState(['appPlayer']),
+    currentSound() {
+      return _.get(this.list, this.appPlayer.playingIndex, {})
+    },
     isAlbumPlaying: {
       get() {
         return (

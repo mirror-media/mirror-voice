@@ -1,8 +1,15 @@
 <template>
   <div class="marker">
+    <IconPlaying
+      v-show="status === 'playing'"
+      class="marker__playing"
+    />
     <div
       v-show="status === 'order'"
-      class="marker__order"
+      :class="[
+        'marker__order',
+        { 'marker__order--should-hide': status === 'playing' }
+      ]"
     >
       {{ order }}
     </div>
@@ -16,13 +23,18 @@
 </template>
 
 <script>
+import IconPlaying from '~/components/Icon/IconPlaying.vue'
+
 export default {
+  components: {
+    IconPlaying
+  },
   props: {
     status: {
       type: String,
       default: 'order',
       validator(value) {
-        return ['order', 'play', 'pause'].includes(value)
+        return ['order', 'play', 'pause', 'playing'].includes(value)
       }
     },
     order: {
@@ -38,8 +50,8 @@ export default {
   display flex
   justify-content center
   align-items center
-  min-width 13px
-  max-width 13px
+  min-width 20px
+  max-width 20px
   &__order
     font-size 14px
     color #7d7d7d
@@ -53,6 +65,8 @@ export default {
     &__order
       font-size 11px
       display initial !important
+      &--should-hide
+        display none !important
     &__play-icon
       display none !important
 </style>
