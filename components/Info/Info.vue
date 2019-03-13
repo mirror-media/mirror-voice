@@ -166,8 +166,10 @@ export default {
 @media (max-width 768px)
   .info-wrapper
     &__cover
+      width 110px
       min-width 110px
       max-width 110px
+      height 110px
       min-height 110px
       max-height 110px
       margin 0 15px 0 0
