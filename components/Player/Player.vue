@@ -296,7 +296,7 @@ export default {
     &__rate
       order 0
     &__volume
-      display none
+      display none !important
 
   .middle
     display flex
