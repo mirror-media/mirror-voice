@@ -49,6 +49,9 @@ export default {
   &__first
     line-height 1
     color #e5e5e5
+    display block
+    width 0px
+    flex 1 1 auto
     &--truncate
       white-space nowrap
       overflow hidden
