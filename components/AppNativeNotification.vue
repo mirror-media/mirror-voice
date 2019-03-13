@@ -82,4 +82,13 @@
       display flex
       justify-content center
       align-items center
+
+@media (max-width 320px)
+  .info
+    &__hint
+      font-size 15px
+
+  .buttons
+    &__button
+      width 140px
 </style>
