@@ -283,5 +283,5 @@ export default {
     &__showcase
       margin 5px 0 0 0 !important
     &__pagination
-      display none
+      display none !important
 </style>
