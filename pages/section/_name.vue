@@ -6,7 +6,11 @@
         :categories="categories"
       />
     </AppDiv>
-    <AppDiv class="section__wrapper bottom-wrapper">
+    <AppDiv
+      v-infinite-scroll="loadmore"
+      infinite-scroll-disabled="shouldDisableLoadmore"
+      class="section__wrapper bottom-wrapper"
+    >
       <DivHeader class="bottom-wrapper__header-desktop">
         <template slot="left">
           {{ showcaseTitle }}
@@ -37,12 +41,19 @@
 
 <script>
 import _ from 'lodash'
+import { mapState } from 'vuex'
 
 import AppDiv from '~/components/AppDiv.vue'
 import PageNavsHorizontal from '~/components/PageNavs/PageNavsHorizontal.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import ShowcaseList from '~/components/Showcase/ShowcaseList.vue'
 import AppPagination from '~/components/AppPagination.vue'
+
+import Vue from 'vue'
+if (process.browser) {
+  const infiniteScroll = require('vue-infinite-scroll')
+  Vue.use(infiniteScroll)
+}
 
 const getShowcaseParam = (collection, routeName, routeParam) => {
   let where
@@ -95,7 +106,24 @@ export default {
     ShowcaseList,
     AppPagination
   },
+  data() {
+    return {
+      loadingLoadmore: false
+    }
+  },
   computed: {
+    ...mapState({
+      isDesktop: state => _.get(state, ['appUA', 'ua', 'isDesktop'], true)
+    }),
+    haveNextPageShowcase() {
+      return 'next' in _.get(this.showcase, 'links', {})
+    },
+    shouldDisableLoadmore() {
+      return (
+        this.isDesktop || (this.loadingLoadmore || !this.haveNextPageShowcase)
+      )
+    },
+
     total() {
       return this.showcase.meta.total
     },
@@ -179,7 +207,7 @@ export default {
     }
   },
   methods: {
-    async fetchShowcase(page) {
+    async fetchShowcase(page, shouldPush = false) {
       const { where, ids } = getShowcaseParam(
         {
           audioSections: this.sections,
@@ -189,10 +217,28 @@ export default {
         this.routeParam
       )
       const showcase = await fetchShowcase(this, where, ids, page)
-      this.$set(this, 'showcase', showcase)
+
+      if (shouldPush) {
+        const { items = [], links = {}, meta = {} } = showcase
+        this.showcase.items.push(...items)
+        this.$set(this.showcase, 'links', links)
+        this.$set(this.showcase, 'meta', meta)
+      } else {
+        this.$set(this, 'showcase', showcase)
+      }
     },
     playAlbum(albumId) {
       fetchPlayerTracks(this.$store, albumId)
+    },
+
+    loadmore() {
+      const page = _.get(this.showcase, ['meta', 'page'])
+      if (page) {
+        this.loadingLoadmore = true
+        this.fetchShowcase(page + 1, true).then(() => {
+          this.loadingLoadmore = false
+        })
+      }
     }
   }
 }
@@ -220,12 +266,8 @@ export default {
   .section
     max-width 100%
     margin 0
-    // &__wrapper
-    //   & + &
-    //     margin 18px 0 0 0
 
   .top-wrapper
-    // display none
     padding 0 !important
     background-color transparent !important
 
@@ -239,5 +281,7 @@ export default {
       font-size 11px
       color #7d7d7d
     &__showcase
-        margin 5px 0 0 0 !important
+      margin 5px 0 0 0 !important
+    &__pagination
+      display none
 </style>

@@ -32,7 +32,11 @@
           />
         </div>
       </AppDiv>
-      <AppDiv class="main__wrapper tracks-wrapper">
+      <AppDiv
+        v-infinite-scroll="loadmore"
+        infinite-scroll-disabled="shouldDisableLoadmore"
+        class="main__wrapper tracks-wrapper"
+      >
         <DivHeader class="tracks-wrapper__header">
           <template slot="left">
             專輯音檔（{{ tracks.meta.total }}）
@@ -69,7 +73,7 @@
           全部播放 ({{ tracks.meta.total }})
         </AppPlayingBanner>
         <TrackList
-          v-show="isTracksFetched"
+          v-show="!isDesktop || isTracksFetched"
           class="tracks-wrapper__tracks"
           :show-list-order="true"
           :is-latest-first="isTracksSortLatestFirst"
@@ -78,7 +82,7 @@
           :tracks="tracks.items"
           :page="page"
           :total="tracks.meta.total"
-          :items-per-page="$MAXRESULT_TRACKS_ALBUM"
+          :items-per-page="isDesktop ? $MAXRESULT_TRACKS_ALBUM : tracks.meta.total"
           @playTrack="playTrack"
         />
         <AppPagination
@@ -122,6 +126,12 @@ import AsideIntro from '~/components/Aside/AsideIntro.vue'
 import AsideAlbumList from '~/components/Aside/AsideAlbumList.vue'
 import TrackList from '~/components/Track/TrackList.vue'
 import AppPagination from '~/components/AppPagination.vue'
+
+import Vue from 'vue'
+if (process.browser) {
+  const infiniteScroll = require('vue-infinite-scroll')
+  Vue.use(infiniteScroll)
+}
 
 const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
   return app.$fetchSingleListing({
@@ -225,6 +235,18 @@ export default {
           this.SET_IS_PLAYING(false)
         }
       }
+    },
+
+    ...mapState({
+      isDesktop: state => _.get(state, ['appUA', 'ua', 'isDesktop'], true)
+    }),
+    haveNextPageTracks() {
+      return 'next' in _.get(this.tracks, 'links', {})
+    },
+    shouldDisableLoadmore() {
+      return (
+        this.isDesktop || (this.isTracksLoading || !this.haveNextPageTracks)
+      )
     }
   },
   watch: {
@@ -289,8 +311,8 @@ export default {
     }
   },
   methods: {
-    async fetchTracks(page) {
-      this.page = page
+    async fetchTracks(page, shouldPush = false) {
+      // this.page = page
       this.isTracksFetched = false
       const albumId = _.get(this.album, 'id', '')
       const tracks = await fetchTracks(
@@ -301,7 +323,14 @@ export default {
       )
       this.isTracksFetched = true
 
-      this.$set(this, 'tracks', tracks)
+      if (shouldPush) {
+        const { items = [], links = {}, meta = {} } = tracks
+        this.tracks.items.push(...items)
+        this.$set(this.tracks, 'links', links)
+        this.$set(this.tracks, 'meta', meta)
+      } else {
+        this.$set(this, 'tracks', tracks)
+      }
     },
 
     ...mapActions({
@@ -337,6 +366,16 @@ export default {
         const playingIndex = _.findIndex(this.list, o => o.slug === slug)
         this.SET_PLAYING_INDEX(playingIndex)
       })
+    },
+
+    loadmore() {
+      const page = _.get(this.tracks, ['meta', 'page'])
+      if (page) {
+        this.isTracksLoading = true
+        this.fetchTracks(page + 1, true).then(() => {
+          this.isTracksLoading = false
+        })
+      }
     }
   }
 }

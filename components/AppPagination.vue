@@ -6,7 +6,9 @@
         :page="internalPage"
         :items-per-page="itemsPerPage"
       >
+        <!-- https://github.com/arnedesmedt/vue-ads-pagination/issues/11 -->
         <template><div /></template>
+
         <template
           slot="buttons"
           slot-scope="props"
