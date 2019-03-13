@@ -67,7 +67,9 @@ export default {
     &--wrap
       flex-wrap wrap
     &--no-wrap
+      width calc(100% + 13px)
       overflow-x scroll
+      -webkit-overflow-scrolling touch
       &::-webkit-scrollbar
         display none
         background-color transparent

@@ -175,7 +175,7 @@ export default {
   .main
     &__navs
       display flex !important
-      padding 0 0 0 18px !important
+      padding 0 18px !important
     &__wrapper
       margin 16px 0 0 0
 
