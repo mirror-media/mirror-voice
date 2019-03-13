@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 import _ from 'lodash'
 import AppDate from '~/components/AppDate.vue'
 
@@ -93,14 +95,21 @@ export default {
   },
   data() {
     return {
-      limitTitle: 14,
+      limitTitleDesktop: 14,
+      limitTitleMobile: 24,
       limitWriter: 16,
       isMouseover: false
     }
   },
   computed: {
+    ...mapState({
+      isDesktop: state => _.get(state, ['appUA', 'ua', 'isDesktop'], true)
+    }),
     title() {
-      return _.truncate(this.item.title, { length: this.limitTitle })
+      const limit = this.isDesktop
+        ? this.limitTitleDesktop
+        : this.limitTitleMobile
+      return _.truncate(this.item.title, { length: limit })
     },
     date() {
       return new Date(_.get(this.item, 'updatedAt', ''))
