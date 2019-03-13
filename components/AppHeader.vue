@@ -1,7 +1,7 @@
 <template>
   <header class="header">
     <nuxt-link to="/">
-      <img class="header__logo" src="~/assets/img/logo.svg" alt="">
+      <img class="header__logo" src="~/assets/img/logo04.png" alt="">
     </nuxt-link>
   </header>
 </template>
@@ -14,7 +14,8 @@
   display flex
   align-items center
   &__logo
-    width 100px
+    // width 100px
+    height 35px
 
 @media (max-width 768px)
   .header
