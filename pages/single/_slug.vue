@@ -74,6 +74,7 @@
         :fig="asideIntroFig"
         :figcaption="asideIntroFigcaption"
         :description="asideIntroDescription"
+        @clickFigure="linkToAlbum"
       />
       <AsideTrackList
         class="aside__wrapper tracks"
@@ -289,6 +290,11 @@ export default {
     setSingleDuration(e) {
       const duration = _.get(e, ['target', 'duration'], 0)
       this.singleDuration = duration
+    },
+
+    linkToAlbum() {
+      const albumName = _.get(this.album, 'name', '')
+      this.$router.push(`/album/${albumName}`)
     }
   }
 }
@@ -325,6 +331,10 @@ export default {
       color #21516f
   &__tags
     display none
+
+.album
+  & >>> .figure
+    cursor pointer
 
 .album-relateds-wrapper
   &__header

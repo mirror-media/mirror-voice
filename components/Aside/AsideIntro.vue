@@ -4,7 +4,10 @@
       {{ title }}
     </AppH1>
     <div class="intro-wrapper__intro intro">
-      <figure :class="[ 'intro__info', 'figure', `figure--${imgStyle}`]">
+      <figure
+        :class="[ 'intro__info', 'figure', `figure--${imgStyle}`]"
+        @click="$emit('clickFigure')"
+      >
         <img
           v-if="fig !== ''"
           :key="fig"
