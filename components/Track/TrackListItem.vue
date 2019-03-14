@@ -42,13 +42,8 @@
 
 <script>
 import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
-import 'dayjs/locale/zh-tw'
 
 import TrackMarker from './TrackMarker.vue'
-
-dayjs.locale('zh-tw')
-dayjs.extend(relativeTime)
 
 export default {
   components: {
@@ -90,7 +85,7 @@ export default {
       return this.showOrder ? 'order' : 'play'
     },
     relativeTime() {
-      return dayjs().from(dayjs(this.item.publishedDate))
+      return this.calcRelativeTime(this.item.publishedDate)
     }
   },
   methods: {
@@ -99,6 +94,25 @@ export default {
     },
     onMouseout() {
       this.isMouseover = false
+    },
+    calcRelativeTime(date) {
+      date = dayjs(date)
+      const current = dayjs()
+
+      const diff = current.diff(date, 'hour')
+      const hour = 1
+      const day = 24 * hour
+      const week = 7 * day
+
+      if (diff >= 0 && diff < hour) {
+        return '剛剛'
+      } else if (diff >= hour && diff < day) {
+        return `${diff} 小時前`
+      } else if (diff >= day && diff < week) {
+        return `${Math.ceil(diff / 24)} 天前`
+      } else {
+        return date.format('MM-DD')
+      }
     }
   }
 }
