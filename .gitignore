@@ -83,4 +83,8 @@ dist
 # Service worker
 sw.*
 
+# Mac index
+.DS_Store
+
 server/config.js
+
