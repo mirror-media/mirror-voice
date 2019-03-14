@@ -103,7 +103,7 @@ import AsideTrackList from '~/components/Aside/AsideTrackList.vue'
 import NoSSR from 'vue-no-ssr'
 
 const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
-  return app.$fetchSingleListing({
+  return app.$fetchSingle({
     max_results: app.$MAXRESULT_TRACKS_SINGLE,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,

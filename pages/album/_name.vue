@@ -134,7 +134,7 @@ if (process.browser) {
 }
 
 const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
-  return app.$fetchSingleListing({
+  return app.$fetchSingle({
     max_results: app.$MAXRESULT_TRACKS_ALBUM,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,

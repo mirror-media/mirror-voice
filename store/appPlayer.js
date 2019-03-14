@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import _ from 'lodash'
 
+// NOTE: we need to import utils manually because context is non-unaccessable in getters
+import getSingleSoundSrc from '~/plugins/util/getSingleSoundSrc'
+
 export const state = () => ({
   showAppPlayer: false,
   isPlaying: false,
@@ -59,7 +62,7 @@ export const actions = {
     }
     commit('SET_PLAYING_INDEX', 0)
 
-    return this.$fetchSingleListing(params).then(res => {
+    return this.$fetchSingle(params).then(res => {
       dispatch('PREPARE_SINGLES', { page, res })
     })
   },
@@ -81,7 +84,7 @@ export const getters = {
     )
     return singlesData.map(sound => ({
       title: sound.title,
-      src: `http://www.mirrormedia.mg/assets/audios/${sound.id}.wav`,
+      src: getSingleSoundSrc(sound),
       slug: sound.slug
     }))
   }
