@@ -313,7 +313,7 @@ export default {
 
 .infos-wrapper
   &__playing-banner
-      display none !important
+    display none !important
 
 .body-wrapper
   &__body-tags
@@ -359,7 +359,7 @@ export default {
     border-radius 2px
     padding 0 !important
     &__playing-banner
-      display flex
+      display flex !important
     &__info
       padding 13px 22px !important
 

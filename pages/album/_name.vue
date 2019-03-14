@@ -224,12 +224,7 @@ export default {
       },
       set(val) {
         if (val) {
-          if (this.appPlayer.albumId !== _.get(this.album, 'id', '')) {
-            this.playAlbum()
-          } else {
-            // continue
-            this.SET_IS_PLAYING(true)
-          }
+          this.playAlbum()
         } else {
           // pause
           this.SET_IS_PLAYING(false)
@@ -506,7 +501,7 @@ export default {
     &__header
       display none !important
     &__playing-banner
-      display flex
+      display flex !important
     &__tracks
       margin 0 !important
     &__pagination
