@@ -18,14 +18,15 @@
         :status="status"
         :order="order"
       />
-      <nuxt-link :to="`/single/${item.slug}`" @click.native.stop>
-        <p
-          :class="[
-            'left__title',
-            { 'left__title--hover': !showOrder && isMouseover } ]"
-        >
-          {{ item.title }}
-        </p>
+      <nuxt-link
+        :class="[
+          'left__title',
+          { 'left__title--hover': !showOrder && isMouseover }
+        ]"
+        :to="`/single/${item.slug}`"
+        @click.native.stop
+      >
+        {{ item.title }}
       </nuxt-link>
     </div>
     <div
@@ -131,10 +132,11 @@ export default {
     &--hover
       display flex
   &__title
+    color black
+    max-width 100%
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
-    color black
     &--hover
       color #dc5a4c
 
