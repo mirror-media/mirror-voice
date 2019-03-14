@@ -431,7 +431,7 @@ export default {
   min-height 555px
   position relative
   &__playing-banner
-    display none
+    display none !important
   &__tracks
     margin 18px 0 0 0 !important
   &__pagination

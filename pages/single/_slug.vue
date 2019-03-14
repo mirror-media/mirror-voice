@@ -313,7 +313,7 @@ export default {
 
 .infos-wrapper
   &__playing-banner
-      display none
+      display none !important
 
 .body-wrapper
   &__body-tags
