@@ -13,7 +13,9 @@
         alt=""
       >
     </div>
-    <div class="info-wrapper__info info">
+    <div
+      :class="`info-wrapper__info info info--${layout}`"
+    >
       <AppH1
         class="info__title"
         :size="'large'"
@@ -21,18 +23,20 @@
       >
         {{ info.title }}
       </AppH1>
-      <div class="info__content-wrapper">
-        <AppDate
-          :class="[
-            'info__date',
-            `info__date--${layout}`
-          ]"
-          :date="date"
-        />
-        <div class="info__basic">
-          <p>主播： {{ writer }}</p>
-          <p>原著： 不知道</p>
-        </div>
+      <AppDate
+        :class="[
+          'info__date',
+          `info__date--${layout}`
+        ]"
+        :date="date"
+      />
+      <div class="info__basic">
+        <p>主播： {{ writer }}</p>
+        <p
+          v-if="writerOriginal !== ''"
+        >
+          原著： {{ writerOriginal }}
+        </p>
       </div>
       <div
         v-if="layout === 'single'"
@@ -99,6 +103,9 @@ export default {
     },
     writer() {
       return _.get(this.info, ['writers', 0, 'name'], '')
+    },
+    writerOriginal() {
+      return _.get(this.info, 'extendByline', '')
     }
   }
 }
@@ -121,6 +128,13 @@ export default {
     object-fit cover
 
 .info
+  width 100%
+  position relative
+  display flex
+  flex-direction column
+  padding 0 0 54px 0
+  &--album
+    min-height 188px
   &__title
     line-height 1.25
   &__date
@@ -130,7 +144,6 @@ export default {
     margin 16px 0 0 0
     display flex
     flex-direction column
-    // flex-wrap wrap
     line-height 1.71
     p
       font-size 14px
@@ -143,7 +156,9 @@ export default {
     position relative
     left -12px
   &__toggle-play
-    margin 18px 0 0 0
+    position absolute
+    bottom 0
+    width 100%
 
 .tags
   flex-wrap wrap
@@ -175,15 +190,18 @@ export default {
       margin 0 15px 0 0
 
   .info
-    &__content-wrapper
-      display flex
-      flex-direction column-reverse
+    padding 0 0 21px 0
+    &--album
+      min-height 110px
+    &__title
+      order 0
     &__date
-      &--album
-        margin 30px 0 0 0
-      &--single
-        margin 10px 0 0 0
+      order 2
+      position absolute
+      bottom 0
+      margin 0
     &__basic
+      order 1
       margin 5px 0 0 0
       p
         font-size 13px
