@@ -4,10 +4,10 @@ workspace:
 pipeline:
   # Send build start message to slack when pull_request and push
   # -------------------------------------- Test Sequence: Github Pull Request -------------------------------
-  start-notify:
-    image: gcr.io/mirrormedia-1470651750304/drone-slack:latest
+  pull-request-start:
+    image: gcr.io/mirrormedia-1470651750304/drone-slack:v1.0.0
     pull: true
-    channel: ground_control
+    channel: jenkins
     secrets: [slack_webhook]
     username: drone
     link_names: true
@@ -139,7 +139,7 @@ pipeline:
         - master
 
   check-service-address:
-    image: gcr.io/mirrormedia-1470651750304/drone-gke-cli:latest
+    image: gcr.io/mirrormedia-1470651750304/drone-gke-cli:v1.0.0
     cluster: dev
     zone: asia-east1-a
     namespace: review
@@ -152,9 +152,9 @@ pipeline:
         - master
 
   pull-request-finish:
-    image: gcr.io/mirrormedia-1470651750304/drone-slack:latest
+    image: gcr.io/mirrormedia-1470651750304/drone-slack:v1.0.0
     pull: true
-    channel: ground_control
+    channel: jenkins
     secrets: [slack_webhook]
     username: drone
     link_names: true
@@ -182,7 +182,7 @@ pipeline:
   # -------------------------------------- Release Candidate Sequence: Github Push --------------------------
   push-start:
     image: plugins/slack
-    channel: ground_control
+    channel: jenkins
     secrets: [slack_webhook]
     username: drone
     icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
@@ -288,7 +288,7 @@ pipeline:
 
   push-finish:
     image: plugins/slack
-    channel: ground_control
+    channel: jenkins
     secrets: [slack_webhook]
     username: drone
     icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
@@ -298,7 +298,7 @@ pipeline:
       branch: [master, dev]
     template: >
       {{#success build.status}}
-        {{repo.name}}:${DRONE_COMMIT_SHA:0:7} by {{build.author}} in branch {{build.branch}} was locked and loaded.
+        *{{repo.name}}:${DRONE_COMMIT_SHA:0:7}* by *{{build.author}}* in branch *{{build.branch}}* was locked and loaded.
       {{else}}
         Houston, we have a problem. Build <${DRONE_BUILD_LINK}|#{{build.number}}> failed.
       {{/success}}
@@ -306,15 +306,15 @@ pipeline:
   # ----------------------------------- Deployment Sequence: Git tag ------------------------------------
   release-start:
     image: plugins/slack
-    channel: ground_control
+    channel: jenkins
     secrets: [slack_webhook]
     username: drone
     icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
     template: >
-      Releasing mirror-voice:${DRONE_TAG}.
+      Releasing mirror-voice:${DRONE_TAG}
     when:
       event: [tag]
-      branch: [master, dev]
+      branch: master
 
   get-configs:
     image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
@@ -323,7 +323,7 @@ pipeline:
       - gcloud source repos clone configs ../configs
     when:
       event: tag
-      branch: [master, dev]
+      branch: master
 
   configure:
     image: busybox:latest
@@ -331,7 +331,7 @@ pipeline:
       - cp ../configs/mirror-media/mirror-voice/prod/config.js ./server/config.js
     when:
       event: [tag]
-      branch: [master, dev]
+      branch: master
 
   publish:
     image: plugins/gcr
@@ -347,45 +347,22 @@ pipeline:
     target: stable
     when:
       event: [tag]
-      branch: [master, dev]
-
-  copy-dist:
-    image: gcr.io/mirrormedia-1470651750304/${DRONE_REPO_NAME}:${DRONE_COMMIT_SHA:0:7}
-    commands:
-      - cp -rf /usr/src/dist .
-      - pwd
-      - ls
-    when:
-      event: tag
-      branch: [master, dev]
-
-  upload-dist:
-    image: plugins/gcs
-    source: dist
-    target: mirrormedia-files/dist/
-    acl: allUsers:READER
-    gzip: js, json
-    cache_control: public, max-age=2592000
-    token:
-      from_secret: google_credentials
-    when:
-      event: tag
-      branch: [master, dev]
+      branch: master
 
   release-finish:
     image: plugins/slack
-    channel: ground_control
+    channel: jenkins
     secrets: [slack_webhook]
     username: drone
     icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
     when:
       status: [success, failure]
       event: tag
-      branch: [master, dev]
+      branch: master
     template: >
       {{#success build.status}}
         *${DRONE_TAG}* was uploaded for *{{repo.name}}:${DRONE_COMMIT_SHA:0:7}*.
         Lets light this candle!.
       {{else}}
-        Houston, we have a problem. Build <${DRONE_BUILD_LINK}|#{{build.number}}> failed.
+        Houston, we have a problem. <${DRONE_BUILD_LINK}| Release ${DRONE_TAG}> failed.
       {{/success}}
