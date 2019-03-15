@@ -9,11 +9,8 @@
       alt=""
       @click="toggleSlider"
     >
-    <!-- do not use v-show due to vue-slider-component exception -->
-    <!-- see: https://github.com/NightCatSama/vue-slider-component#exceptions -->
-    <!-- NOTE: this is resolved in newer version of vue-slider-component -->
     <div
-      v-if="showSlider"
+      v-show="showSlider"
       class="volume__slider slider"
     >
       <PlayerSlider

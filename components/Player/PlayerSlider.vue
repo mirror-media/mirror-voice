@@ -1,15 +1,15 @@
 <template>
   <div class="slider-wrapper">
-    <no-ssr>
+    <NoSSR>
       <vue-slider
         v-model="internalValue"
         class="slider-wrapper__slider"
         :style="{ padding: '0' }"
-        :bg-style="{ background: bgStyleBackground }"
+        :rail-style="{ background: bgStyleBackground }"
         v-bind="options"
-        @callback="v => $emit('valueChange', v)"
+        @change="v => $emit('valueChange', v)"
       />
-    </no-ssr>
+    </NoSSR>
   </div>
 </template>
 
@@ -17,7 +17,7 @@
 import NoSSR from 'vue-no-ssr'
 
 const components = {
-  'no-ssr': NoSSR
+  NoSSR
 }
 if (process.browser) {
   const VueSlider = require('vue-slider-component')
@@ -56,16 +56,13 @@ export default {
       internalValue: this.value,
       options: {
         interval: 0.001,
-        direction: this.direction,
+        direction: this.direction === 'horizontal' ? 'ltr' : 'btt',
         width: this.direction === 'vertical' ? 4 : 'auto',
         height: this.direction === 'vertical' ? 126 : 4,
         min: 0,
         max: 1,
-        tooltip: false,
+        tooltip: 'none',
         dotSize: 12,
-        sliderStyle: {
-          backgroundColor: '#eeeeee'
-        },
         processStyle: {
           backgroundColor: '#d84939'
         }
@@ -91,4 +88,7 @@ export default {
 .slider-wrapper
   &__slider
     cursor pointer
+    & >>> .vue-slider-dot
+      background-color #eeeeee
+      border-radius 100%
 </style>

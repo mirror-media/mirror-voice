@@ -47,7 +47,7 @@
     "vue-infinite-scroll": "^2.0.2",
     "vue-lazyload": "^1.2.6",
     "vue-no-ssr": "^1.1.1",
-    "vue-slider-component": "^2.8.7"
+    "vue-slider-component": "^3.0.13"
   },
   "devDependencies": {
     "@nuxtjs/eslint-config": "^0.0.1",
