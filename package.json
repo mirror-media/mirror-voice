@@ -34,6 +34,7 @@
     "cross-env": "^5.2.0",
     "dayjs": "^1.8.6",
     "express": "^4.16.4",
+    "express-redis-cache": "^1.1.3",
     "express-useragent": "^1.0.12",
     "humps": "^2.0.1",
     "lodash": "^4.17.11",
