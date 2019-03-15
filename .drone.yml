@@ -3,196 +3,8 @@ workspace:
   path: mirror-voice
 pipeline:
   # Send build start message to slack when pull_request and push
-  build_start:
-    image: plugins/slack
-    channel: ground_control
-    secrets: [slack_webhook]
-    username: drone
-    icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
-    template: >
-      Build <${DRONE_BUILD_LINK}|#{{build.number}}> *{{repo.name}}:${DRONE_COMMIT_SHA:0:7}* start.
-      {{build.author}} gave *{{build.branch}}* a little {{build.event}}.
-    when:
-      event:
-      - push
-      - pull_request
-
-  release_start:
-    image: plugins/slack
-    channel: ground_control
-    secrets: [slack_webhook]
-    username: drone
-    icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
-    template: >
-      Releasing mirror-voice:${DRONE_COMMIT_SHA:0.7}.
-    when:
-      event: [tag]
-      branch: [master]
-
-  # Only need to restore cache if building is necessary, which is pull_request and push
-  restore-cache:
-    image: drillster/drone-volume-cache
-    restore: true
-    mount:
-      - node_modules
-    volumes:
-      - /tmp/cache:/cache
-    when:
-      event:
-        include:
-        - pull_request
-        - push
-
-  get-configs:
-    image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
-    secrets: [google_credentials]
-    commands:
-      - gcloud source repos clone configs ../configs
-    when:
-      event:
-      - push
-      - pull_request
-      - tag
-
-  configure-dev:
-    image: busybox:latest
-    commands:
-      - cp ../configs/mirror-media/mirror-voice/${DRONE_BRANCH}/config.js ./server/config.js
-    when:
-      event:
-        exclude:
-        - tag
-      branch:
-        exclude:
-        - master
-
-  configure-stage:
-    image: busybox:latest
-    commands:
-      - cp ../configs/mirror-media/mirror-voice/stage/config.js ./server/config.js
-    when:
-      event:
-      - push
-      branch:
-      - master
-
-  configure-prod:
-    image: busybox:latest
-    commands:
-      - cp ../configs/mirror-media/mirror-voice/prod/config.js ./server/config.js
-    when:
-      event: [tag]
-      branch: [master]
-
-  # Build when pull_request are issued or commits pushed
-  build:
-    image: gcr.io/mirrormedia-1470651750304/mirror-voice:node-10.15.1-builder
-    commands:
-      - yarn install
-      - yarn run build
-      - yarn cache clean
-    when:
-      event: [push, pull_request]
-
-  publish:
-    image: plugins/gcr
-    repo: mirrormedia-1470651750304/${DRONE_REPO_NAME}
-    tag:
-    - ${DRONE_BRANCH}
-    - ${DRONE_COMMIT_SHA:0:7}
-    environment:
-      - DOCKER_LAUNCH_DEBUG=true
-    secrets: [google_credentials]
-    dockerfile: docker/Dockerfile
-    # build_args: STAGE_VERSION=${DRONE_COMMIT_BEFORE:0:7}
-    target: stage
-    when:
-      event:
-      - push
-      - pull_request
-
-  publish-prod:
-    image: plugins/gcr
-    repo: mirrormedia-1470651750304/${DRONE_REPO_NAME}
-    tag: stable-${DRONE_COMMIT_SHA:0:7}
-    environment:
-      - DOCKER_LAUNCH_DEBUG=true
-    secrets: [google_credentials]
-    dockerfile: docker/Dockerfile
-    build_args: STAGE_VERSION=${DRONE_COMMIT_SHA:0:7}
-    target: stable
-    when:
-      event: [tag]
-      branch: [master]
-
-  rebuild-cache:
-    image: drillster/drone-volume-cache
-    rebuild: true
-    mount:
-      - node_modules
-    volumes:
-      - /tmp/cache:/cache
-    when:
-      event:
-        exclude:
-        - tag
-
-  download-charts:
-    image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
-    secrets: [google_credentials]
-    commands:
-      - gcloud source repos clone helm ../helm
-      - mkdir ./helm
-      - cp -rf ../helm/mirror-voice ./helm/
-    when:
-      branch:
-        exclude:
-        - master
-      event:
-        include:
-        - push
-        - pull_request
-
-  helm_deploy_review:
-    image: quay.io/ipedrazas/drone-helm
-    skip_tls_verify: true
-    chart: ./helm/mirror-voice
-    release: ${DRONE_REPO_NAME}-${DRONE_BRANCH}
-    wait: true
-    debug: true
-    upgrade: true
-    reuse_values: true
-    recreate_pods: false
-    client_only: true
-    service_account: tiller
-    secrets: [api_server, kubernetes_token]
-    values: image.tag=${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_REPO_NAME}-${DRONE_BRANCH},service.type=LoadBalancer
-    # values_files: ["helm/staging.yml"]
-    namespace: review
-    when:
-      event:
-      - push
-      - pull_request
-      branch:
-        exclude:
-        - master
-
-  check-service-address:
-    image: gcr.io/mirrormedia-1470651750304/drone-gke-cli:latest
-    cluster: dev
-    zone: asia-east1-a
-    namespace: review
-    secrets: [google_credentials]
-    pull: true
-    when:
-      event:
-      - push
-      - pull_request
-      branch:
-        exclude:
-        - master
-
-  not-release-finish:
+  # -------------------------------------- Test Sequence: Github Pull Request -------------------------------
+  start-notify:
     image: gcr.io/mirrormedia-1470651750304/drone-slack:latest
     pull: true
     channel: ground_control
@@ -209,20 +21,272 @@ pipeline:
       kwhsiung: kwhsiung
       ichiaohsu: mmich
     when:
-      event:
-      - push
-      - pull_request
+      event: pull_request
+      branch:
+        exclude:
+        - master
+    template: >
+      You issued a pull requsest:*${DRONE_COMMIT_SHA:0:7}* to {{repo.name}}:*{{build.branch}}*. Test build start.
+
+  restore-cache:
+    image: drillster/drone-volume-cache
+    restore: true
+    mount:
+      - node_modules
+    volumes:
+      - /tmp/cache:/cache
+    when:
+      event: pull_request
+      branch:
+        exclude:
+        - master
+
+  get-configs:
+    image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
+    secrets: [google_credentials]
+    commands:
+      - gcloud source repos clone configs ../configs
+    when:
+      event: pull_request
+      branch:
+        exclude:
+        - master
+
+  configure:
+    image: busybox:latest
+    commands:
+      - cp ../configs/mirror-media/mirror-voice/${DRONE_BRANCH}/config.js ./server/config.js
+    when:
+      event: pull_request
+      branch:
+        exclude:
+        - master
+
+  build:
+    image: gcr.io/mirrormedia-1470651750304/mirror-voice:node-10.15.1-builder
+    commands:
+      - yarn install
+      - yarn run build
+      - yarn cache clean
+    when:
+      event: pull_request
+      branch:
+        exclude:
+        - master
+
+  publish:
+    image: plugins/gcr
+    repo: mirrormedia-1470651750304/${DRONE_REPO_NAME}
+    tag:
+    - ${DRONE_BRANCH}
+    - ${DRONE_COMMIT_SHA:0:7}
+    environment:
+      - DOCKER_LAUNCH_DEBUG=true
+    secrets: [google_credentials]
+    dockerfile: docker/Dockerfile
+    # target: stage
+    when:
+      event: pull_request
+      branch:
+        exclude:
+        - master
+
+  rebuild-cache:
+    image: drillster/drone-volume-cache
+    rebuild: true
+    mount:
+      - node_modules
+    volumes:
+      - /tmp/cache:/cache
+    when:
+      event: pull_request
+      branch:
+        exclude:
+        - master
+
+  download-charts:
+    image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
+    secrets: [google_credentials]
+    commands:
+      - gcloud source repos clone helm ../helm
+      - mkdir ./helm
+      - cp -rf ../helm/mirror-voice ./helm/
+    when:
+      event: pull_request
+      branch:
+        exclude:
+        - master
+
+  helm-deploy-review:
+    image: quay.io/ipedrazas/drone-helm
+    skip_tls_verify: true
+    chart: ./helm/mirror-voice
+    release: ${DRONE_REPO_NAME}-${DRONE_BRANCH}
+    wait: true
+    # debug: true
+    upgrade: true
+    reuse_values: true
+    recreate_pods: false
+    client_only: true
+    service_account: tiller
+    secrets: [api_server, kubernetes_token]
+    values: image.tag=${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_REPO_NAME}-${DRONE_BRANCH},service.type=LoadBalancer
+    namespace: review
+    when:
+      event: pull_request
+      branch:
+        exclude:
+        - master
+
+  check-service-address:
+    image: gcr.io/mirrormedia-1470651750304/drone-gke-cli:latest
+    cluster: dev
+    zone: asia-east1-a
+    namespace: review
+    secrets: [google_credentials]
+    pull: true
+    when:
+      event: pull_request
+      branch:
+        exclude:
+        - master
+
+  pull-request-finish:
+    image: gcr.io/mirrormedia-1470651750304/drone-slack:latest
+    pull: true
+    channel: ground_control
+    secrets: [slack_webhook]
+    username: drone
+    link_names: true
+    icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
+    recipient: ${DRONE_COMMIT_AUTHOR}
+    usermaps:
+      chiangkeith: chiangkeith
+      FalseChord: Yen
+      hcchien: hcchien
+      hsuehyungtan: noah.tan
+      kwhsiung: kwhsiung
+      ichiaohsu: mmich
+    when:
+      event: pull_request
       branch:
         exclude:
         - master
     template: >
       {{#success build.status}}
-        {{repo.name}}:${DRONE_COMMIT_SHA:0:7} by {{build.author}} in branch {{build.branch}} was locked and loaded <{{build.serviceAddr}}|here>.
+        Your server {{build.serviceAddr}} from commit *${DRONE_COMMIT_SHA:0:7}* in {{repo.name}}:{{build.branch}} was locked and loaded.
       {{else}}
-        Houston, we have a problem. Build <${DRONE_BUILD_LINK}|#{{build.number}}> failed.
+        Houston, we have a problem. Build <${DRONE_BUILD_LINK}|#{{build.number}}> failed. Fix me please.
       {{/success}}
 
-  finish_notify:
+  # -------------------------------------- Release Candidate Sequence: Github Push --------------------------
+  push-start:
+    image: plugins/slack
+    channel: ground_control
+    secrets: [slack_webhook]
+    username: drone
+    icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
+    template: >
+      {{build.author}} {{build.event}} ${DRONE_COMMIT_SHA:0:7} to *{{repo.name}}:{{build.branch}}*.
+      Build <${DRONE_BUILD_LINK}|#{{build.number}}> start.
+    when:
+      event: push
+      branch: [master, dev]
+
+  restore-cache:
+    image: drillster/drone-volume-cache
+    restore: true
+    mount:
+      - node_modules
+    volumes:
+      - /tmp/cache:/cache
+    when:
+      event: push
+      branch: [master, dev]
+
+  get-configs:
+    image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
+    secrets: [google_credentials]
+    commands:
+      - gcloud source repos clone configs ../configs
+    when:
+      event: push
+      branch: [master, dev]
+
+  configure:
+    image: busybox:latest
+    commands:
+      - cp ../configs/mirror-media/mirror-voice/stage/config.js ./server/config.js
+    when:
+      event: push
+      branch: [master, dev]
+
+  build:
+    image: gcr.io/mirrormedia-1470651750304/mirror-voice:node-10.15.1-builder
+    commands:
+      - yarn install
+      - yarn run build
+      - yarn cache clean
+    when:
+      event: push
+      branch: [master, dev]
+
+  publish:
+    image: plugins/gcr
+    repo: mirrormedia-1470651750304/${DRONE_REPO_NAME}
+    tag:
+    - ${DRONE_BRANCH}
+    - ${DRONE_COMMIT_SHA:0:7}
+    environment:
+      - DOCKER_LAUNCH_DEBUG=true
+    secrets: [google_credentials]
+    dockerfile: docker/Dockerfile
+    when:
+      event: push
+      branch: [master, dev]
+
+  rebuild-cache:
+    image: drillster/drone-volume-cache
+    rebuild: true
+    mount:
+      - node_modules
+    volumes:
+      - /tmp/cache:/cache
+    when:
+      event: push
+      branch: [master, dev]
+
+  download-charts:
+    image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
+    secrets: [google_credentials]
+    commands:
+      - gcloud source repos clone helm ../helm
+      - mkdir ./helm
+      - cp -rf ../helm/mirror-voice ./helm/
+    when:
+      event: push
+      branch: [master, dev]
+
+  helm-deploy-dev:
+    image: quay.io/ipedrazas/drone-helm
+    skip_tls_verify: true
+    chart: ./helm/mirror-voice
+    release: "mirror-voice"
+    wait: true
+    # debug: true
+    upgrade: true
+    reuse_values: true
+    recreate_pods: false
+    client_only: true
+    service_account: tiller
+    secrets: [api_server, kubernetes_token]
+    values: image.tag=${DRONE_COMMIT_SHA:0:7}
+    namespace: review
+    when:
+      event: push
+      branch: [master, dev]
+
+  push-finish:
     image: plugins/slack
     channel: ground_control
     secrets: [slack_webhook]
@@ -230,11 +294,98 @@ pipeline:
     icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
     when:
       status: [success, failure]
-      event: [push, pull_request, tag]
-      branch: master
+      event: push
+      branch: [master, dev]
     template: >
       {{#success build.status}}
         {{repo.name}}:${DRONE_COMMIT_SHA:0:7} by {{build.author}} in branch {{build.branch}} was locked and loaded.
+      {{else}}
+        Houston, we have a problem. Build <${DRONE_BUILD_LINK}|#{{build.number}}> failed.
+      {{/success}}
+
+  # ----------------------------------- Deployment Sequence: Git tag ------------------------------------
+  release-start:
+    image: plugins/slack
+    channel: ground_control
+    secrets: [slack_webhook]
+    username: drone
+    icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
+    template: >
+      Releasing mirror-voice:${DRONE_TAG}.
+    when:
+      event: [tag]
+      branch: [master, dev]
+
+  get-configs:
+    image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
+    secrets: [google_credentials]
+    commands:
+      - gcloud source repos clone configs ../configs
+    when:
+      event: tag
+      branch: [master, dev]
+
+  configure:
+    image: busybox:latest
+    commands:
+      - cp ../configs/mirror-media/mirror-voice/prod/config.js ./server/config.js
+    when:
+      event: [tag]
+      branch: [master, dev]
+
+  publish:
+    image: plugins/gcr
+    repo: mirrormedia-1470651750304/${DRONE_REPO_NAME}
+    tag:
+      - ${DRONE_TAG}
+      - stable
+    environment:
+      - DOCKER_LAUNCH_DEBUG=true
+    secrets: [google_credentials]
+    dockerfile: docker/Dockerfile.production
+    build_args: STAGE_VERSION=${DRONE_COMMIT_SHA:0:7}
+    target: stable
+    when:
+      event: [tag]
+      branch: [master, dev]
+
+  copy-dist:
+    image: gcr.io/mirrormedia-1470651750304/${DRONE_REPO_NAME}:${DRONE_COMMIT_SHA:0:7}
+    commands:
+      - cp -rf /usr/src/dist .
+      - pwd
+      - ls
+    when:
+      event: tag
+      branch: [master, dev]
+
+  upload-dist:
+    image: plugins/gcs
+    source: dist
+    target: mirrormedia-files/dist/
+    acl: allUsers:READER
+    gzip: js, json
+    cache_control: public, max-age=2592000
+    token:
+      from_secret: google_credentials
+    when:
+      event: tag
+      branch: [master, dev]
+
+  release-finish:
+    image: plugins/slack
+    channel: ground_control
+    secrets: [slack_webhook]
+    username: drone
+    icon_url: https://avatars2.githubusercontent.com/u/2181346?s=200&v=4
+    when:
+      status: [success, failure]
+      event: tag
+      branch: [master, dev]
+    template: >
+      {{#success build.status}}
+        *${DRONE_TAG}* was uploaded for *{{repo.name}}:${DRONE_COMMIT_SHA:0:7}*.
+        Lets light this candle!.
       {{else}}
         Houston, we have a problem. Build <${DRONE_BUILD_LINK}|#{{build.number}}> failed.
       {{/success}}
