@@ -312,8 +312,11 @@ export default {
       margin 20px 0 0 0
 
 .infos-wrapper
+  padding 0 !important
+  &__info
+    padding 25px 25px 0 25px
   &__playing-banner
-    display none !important
+    margin 20px 0 0 0
 
 .body-wrapper
   &__body-tags
@@ -358,10 +361,11 @@ export default {
   .infos-wrapper
     border-radius 2px
     padding 0 !important
-    &__playing-banner
-      display flex !important
     &__info
       padding 13px 22px !important
+    &__playing-banner
+      display flex !important
+      margin 0
 
   .body-wrapper
     padding 13px 13px 19px 13px !important

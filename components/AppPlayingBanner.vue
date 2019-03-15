@@ -36,6 +36,7 @@ export default {
 
 <style lang="stylus" scoped>
 .banner
+  cursor pointer
   width 100%
   height 50px
   border-radius 2px
@@ -43,7 +44,7 @@ export default {
   background-color #df4c3c
   display flex
   align-items center
-  padding 0 0 0 24px
+  padding 0 0 0 25px
   transition background-color .25s ease-out
   &--playing
     background-color #273947

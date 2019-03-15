@@ -50,13 +50,12 @@
         />
       </div>
       <div
+        v-if="layout === 'album'"
         class="info__toggle-play toggle-play"
         @click="$emit('clickPlay')"
       >
         <img class="toggle-play__icon" src="~/assets/img/btn_play.png" alt="">
-        <span class="toggle-play__text">
-          {{ layout === 'album' ? '全部播放' : '播放' }}
-        </span>
+        <span class="toggle-play__text">全部播放</span>
       </div>
     </div>
   </div>
@@ -132,9 +131,9 @@ export default {
   position relative
   display flex
   flex-direction column
-  padding 0 0 54px 0
   &--album
     min-height 188px
+    padding 0 0 54px 0
   &__title
     line-height 1.25
   &__date
