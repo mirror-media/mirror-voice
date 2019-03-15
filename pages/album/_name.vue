@@ -505,5 +505,5 @@ export default {
     &__tracks
       margin 0 !important
     &__pagination
-      display none
+      display none !important
 </style>
