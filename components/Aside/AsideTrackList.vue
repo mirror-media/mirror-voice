@@ -79,9 +79,9 @@ export default {
 .album-relateds-wrapper
   padding 25px 8px 7px 8px !important
   &__header
-    margin 0 17px
+    margin 0 17px !important
   &__track-list
-    margin 20px 0 0 0
+    margin 20px 0 0 0 !important
 
 .album
   font-size 14px
@@ -92,9 +92,9 @@ export default {
   .album-relateds-wrapper
     padding 17px 5px 0px 5px !important
     &__header
-      margin 0 8px
+      margin 0 8px !important
     &__track-list
-      margin 17px 0 0 0
+      margin 17px 0 0 0 !important
 
   .album
     font-size 11px

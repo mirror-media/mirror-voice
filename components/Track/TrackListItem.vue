@@ -140,11 +140,11 @@ export default {
     margin 0 9px 0 0
     position relative
     bottom 1px
-    display none
+    display none !important
     &--show-order
-      display flex
+      display flex !important
     &--hover
-      display flex
+      display flex !important
   &__title
     color black
     max-width 100%
