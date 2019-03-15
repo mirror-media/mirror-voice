@@ -26,7 +26,7 @@ pipeline:
         exclude:
         - master
     template: >
-      You issued a pull requsest:*${DRONE_COMMIT_SHA:0:7}* to {{repo.name}}:{{build.branch}}. Test build start.
+      You issued a pull requsest:*${DRONE_COMMIT_SHA:0:7}* to {{repo.name}}:*{{build.branch}}*. Test build start.
 
   restore-cache:
     image: drillster/drone-volume-cache
@@ -355,6 +355,9 @@ pipeline:
       - cp -rf /usr/src/dist .
       - pwd
       - ls
+    when:
+      event: tag
+      branch: [master, dev]
 
   upload-dist:
     image: plugins/gcs
@@ -365,6 +368,9 @@ pipeline:
     cache_control: public, max-age=2592000
     token:
       from_secret: google_credentials
+    when:
+      event: tag
+      branch: [master, dev]
 
   release-finish:
     image: plugins/slack
