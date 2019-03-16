@@ -78,8 +78,7 @@ pipeline:
     image: plugins/gcr
     repo: mirrormedia-1470651750304/${DRONE_REPO_NAME}
     tag:
-    - ${DRONE_BRANCH}
-    - ${DRONE_COMMIT_SHA:0:7}
+    - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
     environment:
       - DOCKER_LAUNCH_DEBUG=true
     secrets: [google_credentials]
@@ -130,7 +129,7 @@ pipeline:
     client_only: true
     service_account: tiller
     secrets: [api_server, kubernetes_token]
-    values: image.tag=${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_REPO_NAME}-${DRONE_BRANCH},service.type=LoadBalancer
+    values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_REPO_NAME}-${DRONE_BRANCH},service.type=LoadBalancer
     namespace: review
     when:
       event: pull_request
@@ -235,8 +234,7 @@ pipeline:
     image: plugins/gcr
     repo: mirrormedia-1470651750304/${DRONE_REPO_NAME}
     tag:
-    - ${DRONE_BRANCH}
-    - ${DRONE_COMMIT_SHA:0:7}
+    - ${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
     environment:
       - DOCKER_LAUNCH_DEBUG=true
     secrets: [google_credentials]
@@ -280,7 +278,7 @@ pipeline:
     client_only: true
     service_account: tiller
     secrets: [api_server, kubernetes_token]
-    values: image.tag=${DRONE_COMMIT_SHA:0:7}
+    values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
     namespace: review
     when:
       event: push
@@ -298,7 +296,7 @@ pipeline:
       branch: [master, dev]
     template: >
       {{#success build.status}}
-        *{{repo.name}}:${DRONE_COMMIT_SHA:0:7}* by *{{build.author}}* in branch *{{build.branch}}* was locked and loaded.
+        *{{repo.name}}:${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}* by *{{build.author}}* in branch *{{build.branch}}* was locked and loaded.
       {{else}}
         Houston, we have a problem. Build <${DRONE_BUILD_LINK}|#{{build.number}}> failed.
       {{/success}}
@@ -343,7 +341,7 @@ pipeline:
       - DOCKER_LAUNCH_DEBUG=true
     secrets: [google_credentials]
     dockerfile: docker/Dockerfile.production
-    build_args: STAGE_VERSION=${DRONE_COMMIT_SHA:0:7}
+    build_args: STAGE_VERSION=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
     target: stable
     when:
       event: [tag]
