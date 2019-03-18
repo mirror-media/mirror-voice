@@ -190,7 +190,7 @@ pipeline:
       Build <${DRONE_BUILD_LINK}|#{{build.number}}> start.
     when:
       event: push
-      branch: [master, dev]
+      branch: master
 
   restore-cache:
     image: drillster/drone-volume-cache
@@ -201,7 +201,7 @@ pipeline:
       - /tmp/cache:/cache
     when:
       event: push
-      branch: [master, dev]
+      branch: master
 
   get-configs:
     image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
@@ -210,15 +210,15 @@ pipeline:
       - gcloud source repos clone configs ../configs
     when:
       event: push
-      branch: [master, dev]
+      branch: master
 
   configure:
     image: busybox:latest
     commands:
-      - cp ../configs/mirror-media/mirror-voice/dev/config.js ./server/config.js
+      - cp ../configs/mirror-media/mirror-voice/master/config-dev.js ./server/config.js
     when:
       event: push
-      branch: [master, dev]
+      branch: master
 
   build:
     image: gcr.io/mirrormedia-1470651750304/mirror-voice:node-10.15.1-builder
@@ -228,7 +228,7 @@ pipeline:
       - yarn cache clean
     when:
       event: push
-      branch: [master, dev]
+      branch: master
 
   publish:
     image: plugins/gcr
@@ -241,7 +241,7 @@ pipeline:
     dockerfile: docker/Dockerfile
     when:
       event: push
-      branch: [master, dev]
+      branch: master
 
   rebuild-cache:
     image: drillster/drone-volume-cache
@@ -252,7 +252,7 @@ pipeline:
       - /tmp/cache:/cache
     when:
       event: push
-      branch: [master, dev]
+      branch: master
 
   download-charts:
     image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
@@ -263,7 +263,7 @@ pipeline:
       - cp -rf ../helm/mirror-voice ./helm/
     when:
       event: push
-      branch: [master, dev]
+      branch: master
 
   helm-deploy-dev:
     image: quay.io/ipedrazas/drone-helm
@@ -282,7 +282,7 @@ pipeline:
     namespace: review
     when:
       event: push
-      branch: [master, dev]
+      branch: master
 
   push-finish:
     image: plugins/slack
@@ -293,7 +293,7 @@ pipeline:
     when:
       status: [success, failure]
       event: push
-      branch: [master, dev]
+      branch: master
     template: >
       {{#success build.status}}
         *{{repo.name}}:${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}* by *{{build.author}}* in branch *{{build.branch}}* was locked and loaded.
@@ -326,7 +326,7 @@ pipeline:
   configure:
     image: busybox:latest
     commands:
-      - cp ../configs/mirror-media/mirror-voice/prod/config.js ./server/config.js
+      - cp ../configs/mirror-media/mirror-voice/master/config-prod.js ./server/config.js
     when:
       event: [tag]
       branch: master
@@ -359,7 +359,7 @@ pipeline:
       branch: master
     template: >
       {{#success build.status}}
-        *${DRONE_TAG}* was uploaded for *{{repo.name}}:${DRONE_COMMIT_SHA:0:7}*.
+        *${DRONE_TAG}* was uploaded for *{{repo.name}} ${DRONE_COMMIT_SHA:0:7}*.
         Lets light this candle!.
       {{else}}
         Houston, we have a problem. <${DRONE_BUILD_LINK}| Release ${DRONE_TAG}> failed.
