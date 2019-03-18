@@ -106,6 +106,13 @@ export default {
     ShowcaseList,
     AppPagination
   },
+  head() {
+    return this.$constructMeta({
+      title: this.showcaseTitle,
+      description: this.routeData.ogDescription,
+      'og:url': this.$route.path
+    })
+  },
   data() {
     return {
       loadingLoadmore: false
@@ -133,14 +140,18 @@ export default {
     routeParam() {
       return this.$route.params.name
     },
-    showcaseTitle() {
+    routeData() {
       let data
       if (this.routeName.includes('section')) {
         data = this.sections
       } else if (this.routeName.includes('category')) {
         data = this.categories
       }
-      return _.get(_.find(data, o => o.name === this.routeParam), 'title', '')
+
+      return _.find(data, o => o.name === this.routeParam)
+    },
+    showcaseTitle() {
+      return _.get(this.routeData, 'title', '')
     }
   },
   async asyncData({ app, store, route, error }) {
