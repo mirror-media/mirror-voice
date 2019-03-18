@@ -1,7 +1,7 @@
 {
-  "name": "mmaudio",
+  "name": "mirror-voice",
   "version": "1.0.0",
-  "description": "mmaudio&#39;s description",
+  "description": "mirror-voice frontend",
   "author": "Kai-Wen, Hsiung",
   "private": true,
   "scripts": {

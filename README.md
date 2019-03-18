@@ -1,6 +1,6 @@
-# mmaudio
+# mirror-voice
 
-> mmaudio&#39;s description
+> mirror-voice frontend
 
 ## Build Setup
 
