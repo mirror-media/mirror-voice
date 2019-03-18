@@ -25,7 +25,9 @@ router.get('*', cache.route(), (req, res, next) => {
       res.send(data)
     })
     .catch(error => {
-      console.log('Error occurred during fetching data from API')
+      console.log(
+        `Error occurred during fetching data from API url: ${apiURL}/${req.url}`
+      )
 
       const { status = 500 } = error
       res.header('Cache-Control', 'no-cache')
