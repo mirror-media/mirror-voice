@@ -17,6 +17,12 @@ export default {
   components: {
     AppDiv,
     AppH1
+  },
+  head() {
+    return this.$constructMeta({
+      title: '服務條款',
+      'og:url': this.$route.path
+    })
   }
 }
 </script>

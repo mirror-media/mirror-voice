@@ -128,6 +128,14 @@ export default {
     AsideTrackList,
     NoSSR
   },
+  head() {
+    return this.$constructMeta({
+      title: this.single.title,
+      description: this.single.ogDescription,
+      'og:url': this.$route.path,
+      'og:image': _.get(this.$getImgs(this.single), ['desktop', 'url'])
+    })
+  },
   data() {
     return {
       isBodyWrapperFold: true,

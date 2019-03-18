@@ -172,6 +172,14 @@ export default {
     TrackList,
     AppPagination
   },
+  head() {
+    return this.$constructMeta({
+      title: this.album.title,
+      description: this.album.ogDescription,
+      'og:url': this.$route.path,
+      'og:image': _.get(this.$getImgs(this.album), ['desktop', 'url'])
+    })
+  },
   data() {
     return {
       isBodyWrapperFold: true,
