@@ -1,4 +1,6 @@
 /* eslint-disable import/order */
+const logger = require('../../logger')
+
 const {
   REDIS_READ_HOST,
   REDIS_READ_PORT,
@@ -18,19 +20,19 @@ const cache = require('express-redis-cache')({
 })
 
 cache.on('connected', () => {
-  console.log('Redis connected')
+  logger.info('Redis connected')
 })
 
 cache.on('disconnected', () => {
-  console.log('Redis disconnected')
+  logger.info('Redis disconnected')
 })
 
 cache.on('message', message => {
-  console.log('Redis message:', message)
+  logger.info(`Redis message: ${message}`)
 })
 
 cache.on('error', error => {
-  console.error('Redis error:', error)
+  logger.error(`Redis error: ${error}`)
 })
 
 module.exports = cache
