@@ -13,6 +13,7 @@
       :class="[ 'app__player', { 'app__player--hide': !showPlayer } ]"
     />
     <AppNativeNotification
+      v-if="enableNativeNotification"
       v-show="shouldShowNativeNotification"
       :class="[
         'app__native-notification',
@@ -42,7 +43,8 @@ export default {
   },
   data() {
     return {
-      showNativeNotification: true
+      showNativeNotification: true,
+      enableNativeNotification: false
     }
   },
   computed: {
