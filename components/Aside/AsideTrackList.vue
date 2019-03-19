@@ -6,6 +6,7 @@
       <nuxt-link
         slot="left"
         :to="`/album/${albumName}`"
+        @click.native="$emit('clickAlbum')"
       >
         同專輯的其他音檔
       </nuxt-link>
@@ -13,6 +14,7 @@
         slot="right"
         class="album"
         :to="`/album/${albumName}`"
+        @click.native="$emit('clickAlbumMore')"
       >
         更多
       </nuxt-link>

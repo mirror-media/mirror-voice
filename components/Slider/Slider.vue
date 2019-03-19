@@ -8,6 +8,7 @@
         v-for="(item, i) in items"
         :key="i"
         class="swiper-slide"
+        @click="$emit('clickSlide')"
       >
         <nuxt-link :to="item.href">
           <div class="swper-slide__slide">

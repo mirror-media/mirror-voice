@@ -8,6 +8,7 @@
         v-for="(item, i) in listItems"
         :key="i"
         class="album-list__list-item"
+        @click="$emit('clickItem')"
       >
         <nuxt-link :to="`/album/${item.name}`">
           <figure class="album-list-figure">
