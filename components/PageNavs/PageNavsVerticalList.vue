@@ -4,6 +4,7 @@
       v-for="(item, i) in items"
       :key="i"
       class="list__list-item"
+      @click="$emit('clickItem')"
     >
       <nuxt-link :to="`/category/${item.name}`">
         {{ item.title }}

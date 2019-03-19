@@ -93,7 +93,8 @@ module.exports = {
     '~/plugins/util/index.js',
     '~/plugins/constants/index.js',
     '~/plugins/requests/index.js',
-    '~/plugins/meta/index.js'
+    '~/plugins/meta/index.js',
+    '~/plugins/ga/index.js'
   ],
 
   /*
@@ -102,6 +103,7 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
+    '@nuxtjs/google-analytics',
     // '@nuxtjs/pwa',
     [
       'nuxt-i18n',
@@ -122,6 +124,20 @@ module.exports = {
       }
     ]
   ],
+
+  /*
+  ** googleAnalytics module configuration
+  ** https://github.com/nuxt-community/analytics-module
+  */
+  googleAnalytics: {
+    id: 'UA-83609754-3',
+    debug: {
+      enabled: !isProd,
+      trace: !isProd,
+      sendHitTask: isProd
+    }
+  },
+
   /*
   ** Axios module configuration
   */

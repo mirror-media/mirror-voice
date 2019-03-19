@@ -3,11 +3,13 @@
     <div slot="main" class="main">
       <Slider
         :items="audioPromotions.items"
+        @clickSlide="clickSlide"
       />
       <PageNavsHorizontalList
         class="main__navs"
         :items="categories"
         :should-wrap="false"
+        @clickItem="clickCategory"
       />
       <template
         v-for="(section, i) in sections"
@@ -27,6 +29,7 @@
               slot="left"
               class="header__left"
               :to="`/section/${section.name}`"
+              @click.native="clickSection"
             >
               {{ section.title }}
             </nuxt-link>
@@ -34,6 +37,7 @@
               slot="right"
               class="header__right"
               :to="`/section/${section.name}`"
+              @click.native="clickSection"
             >
               更多
             </nuxt-link>
@@ -50,6 +54,7 @@
       slot="aside"
       class="aside"
       :items="sections"
+      @clickItem="clickCategory"
     />
   </AppMainAsideWrapper>
 </template>
@@ -149,6 +154,16 @@ export default {
     },
     playAlbum(albumId) {
       fetchPlayerTracks(this.$store, albumId)
+      this.$sendGAHome({ action: 'click', label: 'album' })
+    },
+    clickSlide() {
+      this.$sendGAHome({ action: 'click', label: 'slideshow' })
+    },
+    clickCategory() {
+      this.$sendGAHome({ action: 'click', label: 'category' })
+    },
+    clickSection() {
+      this.$sendGAHome({ action: 'click', label: 'section' })
     }
   }
 }

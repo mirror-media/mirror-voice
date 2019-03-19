@@ -83,6 +83,8 @@
         :current-sound="currentSound"
         :is-playing="appPlayer.isPlaying"
         @playTrack="playTrack"
+        @clickAlbum="clickAlbum"
+        @clickAlbumMore="clickAlbumMore"
       />
     </div>
   </AppMainAsideWrapper>
@@ -288,6 +290,8 @@ export default {
         const playingIndex = _.findIndex(this.list, o => o.slug === slug)
         this.SET_PLAYING_INDEX(playingIndex)
       })
+
+      this.$sendGASingle({ action: 'click', label: 'other audio of album' })
     },
     playSingle() {
       this.SET_ALBUM_ID(this.album.id)
@@ -304,8 +308,23 @@ export default {
     },
 
     linkToAlbum() {
+      this.$sendGASingle({ action: 'click', label: 'album top' })
+
       const albumName = _.get(this.album, 'name', '')
       this.$router.push(`/album/${albumName}`)
+    },
+
+    clickAlbum() {
+      this.$sendGASingle({
+        action: 'click',
+        label: 'album bottom'
+      })
+    },
+    clickAlbumMore() {
+      this.$sendGASingle({
+        action: 'click',
+        label: 'album bottom more'
+      })
     }
   }
 }

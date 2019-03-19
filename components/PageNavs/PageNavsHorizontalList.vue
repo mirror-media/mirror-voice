@@ -3,6 +3,7 @@
     <li
       v-show="sectionName !== ''"
       :class="`list__list-item list__list-item--${shouldWrap ? 'wrap' : 'no-wrap'}`"
+      @click="$emit('clickItemFirst')"
     >
       <nuxt-link :to="`/section/${sectionName}`">
         全部
@@ -12,6 +13,7 @@
       v-for="(category, i) in items"
       :key="i"
       :class="`list__list-item list__list-item--${shouldWrap ? 'wrap' : 'no-wrap'}`"
+      @click="$emit('clickItem')"
     >
       <nuxt-link :to="`/category/${category.name}`">
         {{ category.title }}
