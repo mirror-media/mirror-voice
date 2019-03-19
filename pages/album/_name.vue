@@ -172,6 +172,14 @@ export default {
     TrackList,
     AppPagination
   },
+  head() {
+    return this.$constructMeta({
+      title: this.album.title,
+      description: this.briefText,
+      'og:url': this.$route.path,
+      'og:image': _.get(this.$getImgs(this.album), ['desktop', 'url'])
+    })
+  },
   data() {
     return {
       isBodyWrapperFold: true,
@@ -192,6 +200,9 @@ export default {
         _.get(this.album, ['brief', 'html'], ''),
         this.$SANITIZE_HTML_DEFAULT_OPTIONS
       )
+    },
+    briefText() {
+      return this.$getHtmlText(this.brief)
     },
 
     // For aside intro

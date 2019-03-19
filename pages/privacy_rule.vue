@@ -17,6 +17,14 @@ export default {
   components: {
     AppDiv,
     AppH1
+  },
+  head() {
+    return this.$constructMeta({
+      title: '服務條款',
+      description:
+        '鏡語音為精鏡傳媒股份有限公司所經營。本公司十分重視您的隱私權保護，將依個人資料保護法及本隱私權政策蒐集、處理及利用您的個人資料，並提供您對個人資料權利之行使與保護。',
+      'og:url': this.$route.path
+    })
   }
 }
 </script>

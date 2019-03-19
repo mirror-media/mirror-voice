@@ -128,6 +128,14 @@ export default {
     AsideTrackList,
     NoSSR
   },
+  head() {
+    return this.$constructMeta({
+      title: this.single.title,
+      description: this.contentText,
+      'og:url': this.$route.path,
+      'og:image': _.get(this.$getImgs(this.single), ['desktop', 'url'])
+    })
+  },
   data() {
     return {
       isBodyWrapperFold: true,
@@ -144,6 +152,9 @@ export default {
         _.get(this.single, ['content', 'html'], ''),
         this.$SANITIZE_HTML_DEFAULT_OPTIONS
       )
+    },
+    contentText() {
+      return this.$getHtmlText(this.content)
     },
 
     // For aside intro

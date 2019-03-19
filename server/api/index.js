@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const axios = require('axios')
 // const _ = require('lodash')
+const logger = require('../logger')
 
 const { API_PROTOCOL, API_HOST, API_PORT, API_TIMEOUT } = require('../config')
 const apiURL = `${API_PROTOCOL}://${API_HOST}:${API_PORT}`
@@ -18,18 +19,19 @@ router.get('*', cache.route(), (req, res, next) => {
   _axios
     .get(req.url)
     .then(response => {
-      console.log('Fetch data from API')
+      const { data, config } = response
 
-      const { data } = response
+      logger.info(`Fetch data from API url: ${config.url}`)
       res.header('Cache-Control', 'public, max-age=300')
       res.send(data)
     })
     .catch(error => {
-      console.log('Error occurred during fetching data from API')
+      const { config } = error
 
-      const { status = 500 } = error
-      res.header('Cache-Control', 'no-cache')
-      res.status(status).send(error)
+      logger.error(
+        `Error occurred during fetching data from API url: ${config.url}`
+      )
+      next(new Error(error))
     })
 })
 

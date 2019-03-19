@@ -10,8 +10,7 @@ const useragent = require('express-useragent')
 const config = require('../nuxt.config.js')
 config.dev = !(process.env.NODE_ENV === 'production')
 
-// const { messageLogger, fullLogger, errorLogger } = require('./logger')
-const { messageLogger, errorLogger } = require('./logger')
+const { messageLogger, errorLogger } = require('./logger/middle')
 
 async function start() {
   // Init Nuxt.js
