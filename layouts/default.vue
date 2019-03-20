@@ -13,6 +13,7 @@
       :class="[ 'app__player', { 'app__player--hide': !showPlayer } ]"
     />
     <AppNativeNotification
+      v-if="enableNativeNotification"
       v-show="shouldShowNativeNotification"
       :class="[
         'app__native-notification',
@@ -42,7 +43,9 @@ export default {
   },
   data() {
     return {
-      showNativeNotification: true
+      showNativeNotification: true,
+      enableNativeNotification: false,
+      scrolledToBottom: false
     }
   },
   computed: {
@@ -58,9 +61,56 @@ export default {
       return this.$route.name
     }
   },
+  watch: {
+    '$route.name'() {
+      this.scrolledToBottom = false
+    },
+    scrolledToBottom() {
+      if (this.scrolledToBottom) {
+        this.sendScrollEvent()
+      }
+    }
+  },
+  mounted() {
+    this.initScrollHandler()
+  },
   methods: {
     closeNativeNotification() {
       this.showNativeNotification = false
+    },
+    sendScrollEvent() {
+      const { name } = this.$route
+
+      let sendGA
+      if (name.includes('index')) {
+        sendGA = this.$sendGAHome
+      } else if (name.includes('section')) {
+        sendGA = this.$sendGAListing
+      } else if (name.includes('category')) {
+        sendGA = this.$sendGAListing
+      } else if (name.includes('album')) {
+        sendGA = this.$sendGAAlbum
+      } else if (name.includes('single')) {
+        sendGA = this.$sendGASingle
+      }
+
+      sendGA({ action: 'scroll', label: 'end' })
+    },
+    initScrollHandler() {
+      window.onscroll = () => {
+        const bottomOfWindow =
+          Math.max(
+            window.pageYOffset,
+            document.documentElement.scrollTop,
+            document.body.scrollTop
+          ) +
+            window.innerHeight ===
+          document.documentElement.offsetHeight
+
+        if (bottomOfWindow) {
+          this.scrolledToBottom = true
+        }
+      }
     }
   }
 }

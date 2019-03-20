@@ -8,4 +8,5 @@ export default (context, inject) => {
     const value = pair[1]
     inject(key, value)
   })
+  inject('MAIL', 'voiceservice@mirrormedia.mg')
 }
