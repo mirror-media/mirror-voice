@@ -338,7 +338,7 @@ pipeline:
       - DOCKER_LAUNCH_DEBUG=true
     secrets: [google_credentials]
     dockerfile: docker/Dockerfile.production
-    build_args: STAGE_VERSION=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
+    build_args: STAGE_VERSION=master-${DRONE_COMMIT_SHA:0:7}
     target: stable
     when:
       event: tag
