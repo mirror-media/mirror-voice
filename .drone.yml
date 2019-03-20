@@ -311,8 +311,7 @@ pipeline:
     template: >
       Releasing mirror-voice:${DRONE_TAG}
     when:
-      event: [tag]
-      branch: master
+      event: tag
 
   get-configs:
     image: gcr.io/mirrormedia-1470651750304/drone-cloud-sdk:latest
@@ -321,15 +320,13 @@ pipeline:
       - gcloud source repos clone configs ../configs
     when:
       event: tag
-      branch: master
 
   configure:
     image: busybox:latest
     commands:
       - cp ../configs/mirror-media/mirror-voice/master/config-prod.js ./server/config.js
     when:
-      event: [tag]
-      branch: master
+      event: tag
 
   publish:
     image: plugins/gcr
@@ -344,8 +341,7 @@ pipeline:
     build_args: STAGE_VERSION=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
     target: stable
     when:
-      event: [tag]
-      branch: master
+      event: tag
 
   release-finish:
     image: plugins/slack
@@ -356,7 +352,6 @@ pipeline:
     when:
       status: [success, failure]
       event: tag
-      branch: master
     template: >
       {{#success build.status}}
         *${DRONE_TAG}* was uploaded for *{{repo.name}} ${DRONE_COMMIT_SHA:0:7}*.
