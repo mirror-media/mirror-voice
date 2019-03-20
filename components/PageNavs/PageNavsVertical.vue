@@ -5,6 +5,7 @@
       :key="i"
       class="navs__list"
       :list="item"
+      @clickItem="$emit('clickItem')"
     />
   </nav>
 </template>

@@ -96,7 +96,7 @@
     </div>
     <div slot="aside" class="aside">
       <AsideIntro
-        class="aside__wrapper anchor"
+        class="aside__wrapper author"
         :title="'主播'"
         :img-style="'round'"
         :fig="asideIntroFig"
@@ -104,8 +104,9 @@
         :description="asideIntroDescription"
       />
       <AsideAlbumList
-        class="aside__wrapper anchor-relateds"
+        class="aside__wrapper author-relateds"
         :data="writerAlbums"
+        @clickItem="clickAuthorRelateds"
       />
     </div>
   </AppMainAsideWrapper>
@@ -175,7 +176,7 @@ export default {
   head() {
     return this.$constructMeta({
       title: this.album.title,
-      description: this.album.ogDescription,
+      description: this.briefText,
       'og:url': this.$route.path,
       'og:image': _.get(this.$getImgs(this.album), ['desktop', 'url'])
     })
@@ -200,6 +201,9 @@ export default {
         _.get(this.album, ['brief', 'html'], ''),
         this.$SANITIZE_HTML_DEFAULT_OPTIONS
       )
+    },
+    briefText() {
+      return this.$getHtmlText(this.brief)
     },
 
     // For aside intro
@@ -369,6 +373,8 @@ export default {
         const playingIndex = _.findIndex(this.list, o => o.slug === slug)
         this.SET_PLAYING_INDEX(playingIndex)
       })
+
+      this.$sendGAAlbum({ action: 'click', label: 'other audio of album' })
     },
 
     loadmore() {
@@ -379,6 +385,10 @@ export default {
           this.isTracksLoading = false
         })
       }
+    },
+
+    clickAuthorRelateds() {
+      this.$sendGAAlbum({ action: 'click', label: 'other audio of author' })
     }
   }
 }

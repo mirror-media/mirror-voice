@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 const titleSuffix = '鏡語音 Mirror Voice'
 const baseUrl = 'https://voice.mirrormedia.mg'
 
@@ -22,12 +24,12 @@ export default (content, inject) => {
       result.meta.push({
         hid: 'description',
         name: 'description',
-        content: object.description
+        content: _.truncate(object.description, { length: 197 })
       })
       result.meta.push({
         hid: 'og:description',
         property: 'og:description',
-        content: object.description
+        content: _.truncate(object.description, { length: 197 })
       })
     }
     if (object['og:image']) {

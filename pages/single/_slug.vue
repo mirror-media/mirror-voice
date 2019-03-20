@@ -83,6 +83,8 @@
         :current-sound="currentSound"
         :is-playing="appPlayer.isPlaying"
         @playTrack="playTrack"
+        @clickAlbum="clickAlbum"
+        @clickAlbumMore="clickAlbumMore"
       />
     </div>
   </AppMainAsideWrapper>
@@ -131,7 +133,7 @@ export default {
   head() {
     return this.$constructMeta({
       title: this.single.title,
-      description: this.single.ogDescription,
+      description: this.contentText,
       'og:url': this.$route.path,
       'og:image': _.get(this.$getImgs(this.single), ['desktop', 'url'])
     })
@@ -152,6 +154,9 @@ export default {
         _.get(this.single, ['content', 'html'], ''),
         this.$SANITIZE_HTML_DEFAULT_OPTIONS
       )
+    },
+    contentText() {
+      return this.$getHtmlText(this.content)
     },
 
     // For aside intro
@@ -285,6 +290,8 @@ export default {
         const playingIndex = _.findIndex(this.list, o => o.slug === slug)
         this.SET_PLAYING_INDEX(playingIndex)
       })
+
+      this.$sendGASingle({ action: 'click', label: 'other audio of album' })
     },
     playSingle() {
       this.SET_ALBUM_ID(this.album.id)
@@ -301,8 +308,23 @@ export default {
     },
 
     linkToAlbum() {
+      this.$sendGASingle({ action: 'click', label: 'album top' })
+
       const albumName = _.get(this.album, 'name', '')
       this.$router.push(`/album/${albumName}`)
+    },
+
+    clickAlbum() {
+      this.$sendGASingle({
+        action: 'click',
+        label: 'album bottom'
+      })
+    },
+    clickAlbumMore() {
+      this.$sendGASingle({
+        action: 'click',
+        label: 'album bottom more'
+      })
     }
   }
 }

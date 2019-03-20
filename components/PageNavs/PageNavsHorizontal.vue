@@ -5,6 +5,7 @@
         v-for="(section, i) in sections"
         :key="i"
         class="section-list__list-item"
+        @click="$emit('clickSection')"
       >
         <nuxt-link
           :class="{ 'active': section.name === sectionName }"
@@ -27,6 +28,8 @@
         class="navs__list category-list"
         :section-name="sectionName"
         :items="categoryListItems"
+        @clickItemFirst="$emit('clickSection')"
+        @clickItem="$emit('clickCategory')"
       />
     </div>
     <div

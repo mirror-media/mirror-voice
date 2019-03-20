@@ -2,7 +2,7 @@
   "name": "mirror-voice",
   "version": "1.0.0",
   "description": "mirror-voice frontend",
-  "author": "Kai-Wen, Hsiung",
+  "author": "mirror-media",
   "private": true,
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon server/index.js --watch server",
@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/google-analytics": "^2.2.0",
     "@nuxtjs/pwa": "^2.6.0",
     "axios": "^0.18.0",
     "cross-env": "^5.2.0",

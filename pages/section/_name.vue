@@ -4,6 +4,8 @@
       <PageNavsHorizontal
         :sections="sections"
         :categories="categories"
+        @clickSection="clickSection"
+        @clickCategory="clickCategory"
       />
     </AppDiv>
     <AppDiv
@@ -240,6 +242,7 @@ export default {
     },
     playAlbum(albumId) {
       fetchPlayerTracks(this.$store, albumId)
+      this.$sendGAListing({ action: 'click', label: 'album' })
     },
 
     loadmore() {
@@ -250,6 +253,13 @@ export default {
           this.loadingLoadmore = false
         })
       }
+    },
+
+    clickCategory() {
+      this.$sendGAListing({ action: 'click', label: 'category' })
+    },
+    clickSection() {
+      this.$sendGAListing({ action: 'click', label: 'section' })
     }
   }
 }
