@@ -10,7 +10,7 @@
         class="swiper-slide"
         @click="$emit('clickSlide')"
       >
-        <nuxt-link :to="item.href">
+        <nuxt-link :to="item.href || '/'">
           <div class="swper-slide__slide">
             <img
               class="swper-slide__image"
