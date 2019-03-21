@@ -123,7 +123,10 @@ export default {
         return result.map(d => d.items)
       }
       const { items } = await app.$fetchSections({ max_results: 20 })
-      const audioSections = app.$filterAudioSections(items)
+
+      // NOTE: workaround for audio sections
+      // const audioSections = app.$filterAudioSections(items)
+      const audioSections = items
       let albums = await getSectionAlbums(
         audioSections.map(section => section.id)
       )

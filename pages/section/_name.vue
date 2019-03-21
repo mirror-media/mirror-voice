@@ -161,7 +161,10 @@ export default {
     const routeParam = route.params.name
 
     const { items } = await app.$fetchSections({ max_results: 20 })
-    const audioSections = app.$filterAudioSections(items)
+
+    // NOTE: workaround for audio sections
+    // const audioSections = app.$filterAudioSections(items)
+    const audioSections = items
     const audioCategories = _.flatten(
       audioSections.map(section => {
         return section.categories.map(category =>
