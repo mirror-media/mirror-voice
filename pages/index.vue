@@ -115,6 +115,13 @@ export default {
               where: {
                 sections: {
                   $in: [id]
+                },
+                // Filter out albums of empty vocals, which imply empty posts
+                vocals: {
+                  $exists: true,
+                  $not: {
+                    $size: 0
+                  }
                 }
               }
             })

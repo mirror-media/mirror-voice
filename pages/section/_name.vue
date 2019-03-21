@@ -82,6 +82,13 @@ const fetchShowcase = (app, where, ids, page = 1) => {
     where: {
       [where]: {
         $in: ids
+      },
+      // Filter out albums of empty vocals, which imply empty posts
+      vocals: {
+        $exists: true,
+        $not: {
+          $size: 0
+        }
       }
     }
   })

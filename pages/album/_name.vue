@@ -306,7 +306,14 @@ export default {
         page: 1,
         sort: '-publishedDate',
         where: {
-          $or: [{ writers: writerId }]
+          $or: [{ writers: writerId }],
+          // Filter out albums of empty vocals, which imply empty posts
+          vocals: {
+            $exists: true,
+            $not: {
+              $size: 0
+            }
+          }
         }
       })
     ])
