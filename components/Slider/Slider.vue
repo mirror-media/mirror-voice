@@ -10,7 +10,7 @@
         class="swiper-slide"
         @click="$emit('clickSlide')"
       >
-        <nuxt-link :to="item.href || '/'">
+        <nuxt-link :to="getHref(item)">
           <div class="swper-slide__slide">
             <img
               class="swper-slide__image"
@@ -63,9 +63,17 @@ export default {
       }
     }
   },
+  computed: {
+    href() {
+      return _.get()
+    }
+  },
   methods: {
     getImgUrl(item) {
       return _.get(this.$getImgs(item), ['tablet', 'url'], '')
+    },
+    getHref(item) {
+      return _.get(item, 'href', '/')
     }
   }
 }
