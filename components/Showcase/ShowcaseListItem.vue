@@ -95,7 +95,7 @@ export default {
   },
   data() {
     return {
-      limitTitleDesktop: 14,
+      limitTitleDesktop: 22,
       limitTitleMobile: 24,
       limitWriter: 16,
       isMouseover: false
