@@ -5,7 +5,7 @@ const logger = require('../logger')
 
 const { API_PROTOCOL, API_HOST, API_PORT, API_TIMEOUT } = require('../config')
 const apiURL = `${API_PROTOCOL}://${API_HOST}:${API_PORT}`
-const { readMiddle, writeMiddle } = require('./middle/redis')
+// const { readMiddle, writeMiddle } = require('./middle/redis')
 
 // const debug = require('debug')('express:api/index')
 
@@ -16,7 +16,7 @@ const _axios = axios.create({
 
 router.get(
   '*',
-  readMiddle,
+  // readMiddle,
   (req, res, next) => {
     _axios
       .get(req.url)
@@ -25,8 +25,9 @@ router.get(
 
         logger.info(`Fetch data from API url: ${config.url}`)
         res.header('Cache-Control', 'public, max-age=300')
-        res.data = data
-        next()
+        res.send(data)
+        // res.data = data
+        // next()
       })
       .catch(error => {
         const { config } = error
@@ -36,8 +37,8 @@ router.get(
         )
         next(new Error(error))
       })
-  },
-  writeMiddle
+  }
+  // writeMiddle
 )
 
 module.exports = router
