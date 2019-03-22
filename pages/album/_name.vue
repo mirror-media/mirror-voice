@@ -105,7 +105,7 @@
       />
       <AsideAlbumList
         class="aside__wrapper author-relateds"
-        :data="writerAlbums"
+        :data="vocalAlbums"
         @clickItem="clickAuthorRelateds"
       />
     </div>
@@ -207,18 +207,18 @@ export default {
     },
 
     // For aside intro
-    writer() {
-      return _.get(this.album, ['writers', 0], {})
+    vocal() {
+      return _.get(this.album, ['vocals', 0], {})
     },
     asideIntroFig() {
-      return _.get(this.$getImgs(this.writer), ['mobile', 'url'], '')
+      return _.get(this.$getImgs(this.vocal), ['mobile', 'url'], '')
     },
     asideIntroFigcaption() {
-      return _.get(this.writer, 'name', '')
+      return _.get(this.vocal, 'name', '')
     },
     asideIntroDescription() {
       return sanitizeHtml(
-        _.get(this.writer, ['bio', 'html'], ''),
+        _.get(this.vocal, ['bio', 'html'], ''),
         this.$SANITIZE_HTML_DEFAULT_OPTIONS
       )
     },
@@ -298,15 +298,15 @@ export default {
     const crumbs = [crumbSection, crumbCategory, crumbAlbum]
     store.commit('appBreadcrumb/PUSH', crumbs)
 
-    const writerId = _.get(album, ['writers', 0, 'id'], '')
-    const [tracks, writerAlbums] = await Promise.all([
+    const vocalId = _.get(album, ['vocals', 0, 'id'], '')
+    const [tracks, vocalAlbums] = await Promise.all([
       fetchTracks(app, albumId),
       app.$fetchAlbums({
         max_results: app.$MAXRESULT_ASIDEALBUMLIST_ALBUM,
         page: 1,
         sort: '-publishedDate',
         where: {
-          $or: [{ writers: writerId }],
+          $or: [{ vocals: vocalId }],
           // Filter out albums of empty vocals, which imply empty posts
           vocals: {
             $exists: true,
@@ -321,7 +321,7 @@ export default {
     return {
       album,
       tracks,
-      writerAlbums
+      vocalAlbums
     }
   },
   methods: {

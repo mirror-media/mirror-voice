@@ -2,7 +2,6 @@
   <div class="info-wrapper">
     <div
       v-if="layout !== 'single'"
-      ref="cover"
       class="info-wrapper__cover cover"
     >
       <img
@@ -30,13 +29,51 @@
         ]"
         :date="date"
       />
-      <div class="info__basic">
-        <p>主播： {{ writer }}</p>
-        <p
-          v-if="writerOriginal !== ''"
+      <div class="info__basic basic">
+        <div
+          v-if="vocals.length > 0"
+          class="basic__row vocals"
         >
-          原著： {{ writerOriginal }}
-        </p>
+          <p>主播：</p>
+          <template
+            v-for="(vocal, i) in vocals"
+          >
+            <p
+              :key="`${i}-vocal`"
+              class="vocals__vocal"
+              v-text="getName(vocal)"
+            />
+            <p
+              v-if="i < vocals.length - 1"
+              :key="`${i}-delimiter`"
+              class="vocals__delimiter"
+            >
+              、
+            </p>
+          </template>
+        </div>
+        <div
+          v-if="writers.length > 0"
+          class="basic__row writers"
+        >
+          <p>原著：</p>
+          <template
+            v-for="(writer, i) in writers"
+          >
+            <p
+              :key="`${i}-writer`"
+              class="writers__writer"
+              v-text="getName(writer)"
+            />
+            <p
+              v-if="i < writers.length - 1"
+              :key="`${i}-delimiter`"
+              class="writer__delimiter"
+            >
+              、
+            </p>
+          </template>
+        </div>
       </div>
       <div
         v-if="layout === 'single'"
@@ -88,9 +125,6 @@ export default {
     }
   },
   computed: {
-    cover() {
-      return this.$refs.cover
-    },
     date() {
       return new Date(_.get(this.info, 'updatedAt', ''))
     },
@@ -100,11 +134,16 @@ export default {
     imgUrl() {
       return _.get(this.$getImgs(this.info), ['mobile', 'url'], '')
     },
-    writer() {
-      return _.get(this.info, ['writers', 0, 'name'], '')
+    vocals() {
+      return _.get(this.info, 'vocals', [])
     },
-    writerOriginal() {
-      return _.get(this.info, 'extendByline', '')
+    writers() {
+      return _.get(this.info, 'writers', [])
+    }
+  },
+  methods: {
+    getName(person) {
+      return _.get(person, 'name', '')
     }
   }
 }
@@ -141,14 +180,6 @@ export default {
     line-height 1
   &__basic
     margin 16px 0 0 0
-    display flex
-    flex-direction column
-    line-height 1.71
-    p
-      font-size 14px
-      color #7d7d7d
-    p + p
-      margin 10px 0 0 0
   &__tags
     display flex
     margin 7px 0 0 0
@@ -158,6 +189,18 @@ export default {
     position absolute
     bottom 0
     width 100%
+
+.basic
+  display flex
+  flex-direction column
+  line-height 1.71
+  font-size 14px
+  color #7d7d7d
+  &__row
+    display flex
+    flex-wrap wrap
+    & + &
+      margin 10px 0 0 0
 
 .tags
   flex-wrap wrap
@@ -202,10 +245,11 @@ export default {
     &__basic
       order 1
       margin 5px 0 0 0
-      p
-        font-size 13px
-        color #7d7d7d
-      p + p
+
+  .basic
+    font-size 13px
+    &__row
+      & + &
         margin 0
 
   .tags

@@ -48,11 +48,11 @@
       </nuxt-link>
       <p
         :class="[
-          'info__writer',
-          `info__writer--${layout}`
+          'info__vocal',
+          `info__vocal--${layout}`
         ]"
       >
-        {{ writer }}
+        {{ vocal }}
       </p>
       <AppDate
         v-if="layout === 'horizontal'"
@@ -97,7 +97,7 @@ export default {
     return {
       limitTitleDesktop: 22,
       limitTitleMobile: 24,
-      limitWriter: 16,
+      limitVocal: 16,
       isMouseover: false
     }
   },
@@ -120,9 +120,9 @@ export default {
     imgResizedTargets() {
       return _.get(this.item, ['heroImage', 'image', 'resizedTargets'], {})
     },
-    writer() {
-      const writerName = _.get(this.item, ['writers', 0, 'name'], '')
-      return _.truncate(writerName, { length: this.limitWriter })
+    vocal() {
+      const vocalName = _.get(this.item, ['vocals', 0, 'name'], '')
+      return _.truncate(vocalName, { length: this.limitVocal })
     }
   },
   methods: {
@@ -197,7 +197,7 @@ export default {
     color black
     &:hover
       color #d84939
-  &__writer
+  &__vocal
     font-size 14px
     line-height 1.29
     color #7d7d7d
@@ -249,7 +249,7 @@ export default {
       font-size 13px
       font-weight 400
       line-height 1.31
-    &__writer
+    &__vocal
       font-size 11px
       line-height 1.64
       margin 5px 0 0 0
