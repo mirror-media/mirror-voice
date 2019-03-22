@@ -92,6 +92,8 @@ export default {
         sendGA = this.$sendGAAlbum
       } else if (name.includes('single')) {
         sendGA = this.$sendGASingle
+      } else {
+        return
       }
 
       sendGA({ action: 'scroll', label: 'end' })
