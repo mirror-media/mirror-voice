@@ -1,10 +1,12 @@
 <template>
   <div class="tag">
-    {{ tag.name }}
+    {{ name }}
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   props: {
     tag: {
@@ -15,6 +17,11 @@ export default {
       validator(value) {
         return !!value.name
       }
+    }
+  },
+  computed: {
+    name() {
+      return _.get(this.tag, 'name', '')
     }
   }
 }
