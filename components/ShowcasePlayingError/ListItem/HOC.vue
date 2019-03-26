@@ -1,14 +1,3 @@
-<template>
-  <li class="hoc">
-    <slot
-      :coverImgUrl="coverImgUrl"
-      :to="to"
-      :title="title"
-      :vocal="vocal"
-    />
-  </li>
-</template>
-
 <script>
 import _ from 'lodash'
 
@@ -41,9 +30,14 @@ export default {
     vocal() {
       return _.get(_.take(_.get(this.data, 'vocals', [])), 'name', '')
     }
+  },
+  render() {
+    return this.$scopedSlots.default({
+      coverImgUrl: this.coverImgUrl,
+      to: this.to,
+      title: this.title,
+      vocal: this.vocal
+    })
   }
 }
 </script>
-
-<style lang="stylus" scoped>
-</style>
