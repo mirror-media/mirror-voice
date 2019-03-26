@@ -270,7 +270,7 @@ export default {
   },
   mounted() {
     const id = _.get(this.single, 'id', '')
-    this.audio.src = `http://www.mirrormedia.mg/assets/audios/${id}.wav`
+    this.audio.src = `${this.$TTS_BASEURL}/${id}.${this.$TTS_DEFAULT_EXT}`
   },
   methods: {
     ...mapActions({
@@ -279,11 +279,15 @@ export default {
     ...mapMutations({
       SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
       SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
+      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
       CLEAR_PAGES: 'appPlayer/CLEAR_PAGES',
       SET_IS_PLAYING: 'appPlayer/SET_IS_PLAYING'
     }),
     playTrack(slug) {
       this.SET_ALBUM_ID(this.album.id)
+      this.SET_ALBUM_COVER(
+        _.get(this.$getImgs(this.album), ['mobile', 'url'], '')
+      )
       this.CLEAR_PAGES()
 
       this.PREPARE_SINGLES({ page: 1, res: this.tracks }).then(() => {
@@ -295,6 +299,9 @@ export default {
     },
     playSingle() {
       this.SET_ALBUM_ID(this.album.id)
+      this.SET_ALBUM_COVER(
+        _.get(this.$getImgs(this.album), ['mobile', 'url'], '')
+      )
       this.CLEAR_PAGES()
       this.PREPARE_SINGLES({ page: 1, res: { items: [this.single] } }).then(
         () => {

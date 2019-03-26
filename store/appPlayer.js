@@ -3,6 +3,7 @@ import _ from 'lodash'
 
 // NOTE: we need to import utils manually because context is non-unaccessable in getters
 import getSingleSoundSrc from '~/plugins/util/getSingleSoundSrc'
+import getImgs from '~/plugins/util/getImgs'
 
 export const state = () => ({
   showAppPlayer: false,
@@ -11,7 +12,8 @@ export const state = () => ({
   playingIndex: 0,
   duration: 0,
   playedTime: 0,
-  albumId: ''
+  albumId: '',
+  albumCover: ''
 })
 
 export const mutations = {
@@ -30,6 +32,9 @@ export const mutations = {
   },
   SET_ALBUM_ID(state, id) {
     Vue.set(state, 'albumId', id)
+  },
+  SET_ALBUM_COVER(state, url) {
+    Vue.set(state, 'albumCover', url)
   },
 
   CLEAR_PAGES(state) {
@@ -83,9 +88,11 @@ export const getters = {
       Object.values(sortedObject).map(page => page.items)
     )
     return singlesData.map(sound => ({
-      title: sound.title,
+      cover: _.get(getImgs(sound), ['mobile', 'url'], state.albumCover),
+      title: _.get(sound, 'title', ''),
       src: getSingleSoundSrc(sound),
-      slug: sound.slug
+      slug: _.get(sound, 'slug', ''),
+      vocals: _.get(sound, 'vocals')
     }))
   }
 }

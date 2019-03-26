@@ -15,6 +15,7 @@
       @seeking="syncPlayedTime"
       @seeked="syncPlayedTime"
       @timeupdate="syncPlayedTime"
+      @error="onError"
     />
   </div>
 </template>
@@ -107,11 +108,9 @@ export default {
       }
     },
     isListHavePrev() {
-      // return 'prev' in this.links
       return 'prev' in this.currentPageLinks
     },
     isListHaveNext() {
-      // return 'next' in this.links
       return 'next' in this.currentPageLinks
     }
   },
@@ -120,7 +119,8 @@ export default {
       SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
       SET_IS_PLAYING: 'appPlayer/SET_IS_PLAYING',
       SET_DUARTION: 'appPlayer/SET_DUARTION',
-      SET_PLAYED_TIME: 'appPlayer/SET_PLAYED_TIME'
+      SET_PLAYED_TIME: 'appPlayer/SET_PLAYED_TIME',
+      SET_SHOW_LIGHTBOX: 'lightboxPlayingError/SET_SHOW_LIGHTBOX'
     }),
     syncPlay() {
       this.SET_IS_PLAYING(true)
@@ -135,6 +135,12 @@ export default {
     syncPlayedTime(e) {
       const playedTime = _.get(e, ['target', 'currentTime'], 0)
       this.SET_PLAYED_TIME(playedTime)
+    },
+
+    onError(e) {
+      if (e.target.getAttribute('src') !== '') {
+        this.SET_SHOW_LIGHTBOX(true)
+      }
     }
   }
 }

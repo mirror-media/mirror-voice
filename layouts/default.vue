@@ -12,6 +12,13 @@
     <AppPlayer
       :class="[ 'app__player', { 'app__player--hide': !showPlayer } ]"
     />
+    <transition name="fade" mode="out-in">
+      <AppLightboxWrapper
+        v-show="showLightbox"
+      >
+        <AppPlayingError />
+      </AppLightboxWrapper>
+    </transition>
     <AppNativeNotification
       v-if="enableNativeNotification"
       v-show="shouldShowNativeNotification"
@@ -31,6 +38,8 @@ import AppHeader from '~/components/AppHeader.vue'
 import AppBreadcrumb from '~/components/AppBreadcrumb.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import AppPlayer from '~/components/AppPlayer.vue'
+import AppLightboxWrapper from '~/components/AppLightboxWrapper.vue'
+import AppPlayingError from '~/components/AppPlayingError.vue'
 import AppNativeNotification from '~/components/AppNativeNotification.vue'
 
 export default {
@@ -39,6 +48,8 @@ export default {
     AppFooter,
     AppBreadcrumb,
     AppPlayer,
+    AppLightboxWrapper,
+    AppPlayingError,
     AppNativeNotification
   },
   data() {
@@ -50,7 +61,8 @@ export default {
   },
   computed: {
     ...mapState({
-      showPlayer: state => state.appPlayer.showAppPlayer
+      showPlayer: state => state.appPlayer.showAppPlayer,
+      showLightbox: state => state.lightboxPlayingError.showLightbox
     }),
     hideBreadcrumb() {
       const paths = ['/', '/tos', '/privacy_rule']

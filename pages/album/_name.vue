@@ -357,11 +357,15 @@ export default {
     ...mapMutations({
       SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
       SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
+      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
       CLEAR_PAGES: 'appPlayer/CLEAR_PAGES',
       SET_IS_PLAYING: 'appPlayer/SET_IS_PLAYING'
     }),
     playTrack(slug) {
       this.SET_ALBUM_ID(this.album.id)
+      this.SET_ALBUM_COVER(
+        _.get(this.$getImgs(this.album), ['mobile', 'url'], '')
+      )
       this.CLEAR_PAGES()
 
       /*

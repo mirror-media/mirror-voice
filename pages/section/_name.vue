@@ -43,7 +43,7 @@
 
 <script>
 import _ from 'lodash'
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 import AppDiv from '~/components/AppDiv.vue'
 import PageNavsHorizontal from '~/components/PageNavs/PageNavsHorizontal.vue'
@@ -250,7 +250,15 @@ export default {
         this.$set(this, 'showcase', showcase)
       }
     },
-    playAlbum(albumId) {
+
+    ...mapMutations({
+      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER'
+    }),
+    playAlbum(album) {
+      // TODO: rewrite this workaround for albumCover
+      const albumId = _.get(album, 'id', '')
+      const albumCover = _.get(this.$getImgs(album), ['mobile', 'url'], '')
+      this.SET_ALBUM_COVER(albumCover)
       fetchPlayerTracks(this.$store, albumId)
       this.$sendGAListing({ action: 'click', label: 'album' })
     },

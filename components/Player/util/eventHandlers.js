@@ -14,6 +14,7 @@ export default function(player) {
   audio.addEventListener('volumechange', onAudioVolumeChange.bind(player))
   audio.addEventListener('ended', onAudioEnded.bind(player))
   audio.addEventListener('loadedmetadata', onAudioLoadedMetadata.bind(player))
+  audio.addEventListener('error', onAudioError.bind(player))
 }
 
 function onAudioPlay() {
@@ -73,4 +74,11 @@ function onAudioLoadedMetadata() {
   } else {
     this.playStatLoadedTime = 0
   }
+}
+function onAudioError() {
+  this.isPlaying = false
+  this.isLoading = false
+  this.playStatDuration = 0
+  this.playStatLoadedTime = 0
+  this.playStatPlayedTime = 0
 }

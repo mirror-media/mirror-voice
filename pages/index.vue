@@ -60,6 +60,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import _ from 'lodash'
 
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
@@ -162,7 +163,15 @@ export default {
         return _.findIndex(sections, o => o.name === sectionName) !== -1
       })
     },
-    playAlbum(albumId) {
+
+    ...mapMutations({
+      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER'
+    }),
+    playAlbum(album) {
+      // TODO: rewrite this workaround for albumCover
+      const albumId = _.get(album, 'id', '')
+      const albumCover = _.get(this.$getImgs(album), ['mobile', 'url'], '')
+      this.SET_ALBUM_COVER(albumCover)
       fetchPlayerTracks(this.$store, albumId)
       this.$sendGAHome({ action: 'click', label: 'album' })
     },

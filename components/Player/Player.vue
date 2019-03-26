@@ -2,8 +2,8 @@
   <div class="player">
     <audio ref="audio" />
     <div class="player__cover cover">
-      <nuxt-link to="/single/fakeslug">
-        <!-- <img class="cover__img" :src="currentSound.cover" alt> -->
+      <nuxt-link :to="`/single/${currentSound.slug}`">
+        <img class="cover__img" :src="currentSound.cover" alt>
       </nuxt-link>
     </div>
     <PlayerNavs
@@ -183,7 +183,10 @@ export default {
     // observe mutable properties
     currentSound() {
       this.audio.src = this.currentSound.src
-      this.play()
+      if (this.currentSound.src && this.currentSound.src !== '') {
+        // this.play()
+        this.thenPlay()
+      }
     },
     currentVolume() {
       this.audio.volume = this.currentVolume
@@ -240,11 +243,28 @@ export default {
         this.audio.src = this.currentSound.src
       }
     },
+    thenPlay() {
+      this.$nextTick(() => {
+        this.play()
+      })
+    },
     play() {
-      this.audio.play()
+      const promise = this.audio.play()
+
+      if (promise) {
+        promise.catch(() => {
+          this.$emit('playingError')
+        })
+      }
     },
     pause() {
-      this.audio.pause()
+      const promise = this.audio.pause()
+
+      if (promise) {
+        promise.catch(() => {
+          this.$emit('pausingError')
+        })
+      }
     },
     seek(percentage) {
       this.audio.currentTime = this.audio.duration * percentage

@@ -1,12 +1,18 @@
 import SANITIZE_HTML_DEFAULT_OPTIONS from './sanitizeHtml'
-import * as MAX_RESULTS from './maxResults'
+import MAX_RESULTS from './maxResults'
+import TTS_CONFIG from './ttsConfig'
 
-export default (context, inject) => {
-  inject('SANITIZE_HTML_DEFAULT_OPTIONS', SANITIZE_HTML_DEFAULT_OPTIONS)
-  Object.entries(MAX_RESULTS).forEach(pair => {
+const injectConstants = (constants, inject) => {
+  Object.entries(constants).forEach(pair => {
     const key = pair[0]
     const value = pair[1]
     inject(key, value)
   })
+}
+
+export default (context, inject) => {
+  inject('SANITIZE_HTML_DEFAULT_OPTIONS', SANITIZE_HTML_DEFAULT_OPTIONS)
   inject('MAIL', 'voiceservice@mirrormedia.mg')
+  injectConstants(MAX_RESULTS, inject)
+  injectConstants(TTS_CONFIG, inject)
 }

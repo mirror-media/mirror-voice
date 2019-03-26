@@ -15,14 +15,16 @@
       :class="`list__list-item list__list-item--${shouldWrap ? 'wrap' : 'no-wrap'}`"
       @click="$emit('clickItem')"
     >
-      <nuxt-link :to="`/category/${category.name}`">
-        {{ category.title }}
+      <nuxt-link :to="`/category/${getName(category)}`">
+        {{ getTitle(category) }}
       </nuxt-link>
     </li>
   </ul>
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   props: {
     sectionName: {
@@ -36,6 +38,14 @@ export default {
     shouldWrap: {
       type: Boolean,
       default: true
+    }
+  },
+  methods: {
+    getName(item) {
+      return _.get(item, 'name', '')
+    },
+    getTitle(item) {
+      return _.get(item, 'title', '')
     }
   }
 }
