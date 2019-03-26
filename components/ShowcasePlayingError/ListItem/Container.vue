@@ -1,14 +1,14 @@
 <template>
   <HOC
-    v-slot="{
-      coverImgUrl,
-      to,
-      title,
-      vocal
-    }"
     :data="data"
   >
     <Presentational
+      slot-scope="{
+        coverImgUrl,
+        to,
+        title,
+        vocal
+      }"
       :cover-img-url="coverImgUrl"
       :to="to"
       :title="title"
