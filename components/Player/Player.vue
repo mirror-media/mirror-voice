@@ -252,8 +252,8 @@ export default {
       const promise = this.audio.play()
 
       if (promise) {
-        promise.catch(() => {
-          this.$emit('playingError')
+        promise.catch(error => {
+          this.$emit('playingError', error)
         })
       }
     },
@@ -261,8 +261,8 @@ export default {
       const promise = this.audio.pause()
 
       if (promise) {
-        promise.catch(() => {
-          this.$emit('pausingError')
+        promise.catch(error => {
+          this.$emit('pausingError', error)
         })
       }
     },

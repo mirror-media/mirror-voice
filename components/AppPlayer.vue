@@ -16,6 +16,7 @@
       @seeked="syncPlayedTime"
       @timeupdate="syncPlayedTime"
       @error="onError"
+      @playingError="onPlayingError"
     />
   </div>
 </template>
@@ -139,6 +140,11 @@ export default {
 
     onError(e) {
       if (e.target.getAttribute('src') !== '') {
+        this.SET_SHOW_LIGHTBOX(true)
+      }
+    },
+    onPlayingError(error) {
+      if (error.name === 'NotSupportedError') {
         this.SET_SHOW_LIGHTBOX(true)
       }
     }
