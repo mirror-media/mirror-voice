@@ -50,8 +50,8 @@ export default {
   display flex
   justify-content center
   align-items center
-  min-width 20px
-  max-width 20px
+  min-width 24px
+  max-width 24px
   &__order
     font-size 14px
     color #7d7d7d
