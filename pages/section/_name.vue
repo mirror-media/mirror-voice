@@ -94,9 +94,9 @@ const fetchShowcase = (app, where, ids, page = 1) => {
   })
 }
 
-const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
-  return store.dispatch('appPlayer/FETCH', {
-    max_results: 50,
+const fetchPlayerTracks = (app, albumId, isLatestFirst = true, page = 1) => {
+  return app.$store.dispatch('appPlayer/FETCH', {
+    max_results: app.$MAXRESULT_TRACKS_HOME,
     page,
     sort: `${isLatestFirst ? '-' : ''}publishedDate`,
     where: {
@@ -259,7 +259,7 @@ export default {
       const albumId = _.get(album, 'id', '')
       const albumCover = _.get(this.$getImgs(album), ['mobile', 'url'], '')
       this.SET_ALBUM_COVER(albumCover)
-      fetchPlayerTracks(this.$store, albumId)
+      fetchPlayerTracks(this, albumId)
       this.$sendGAListing({ action: 'click', label: 'album' })
     },
 
