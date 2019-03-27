@@ -24,7 +24,7 @@
           class="body-wrapper__read-more read-more"
           @click="isBodyWrapperFold = !isBodyWrapperFold"
         >
-          <div
+          <IconReadmore
             :class="[
               'read-more__icon',
               { 'read-more__icon--reverse': !isBodyWrapperFold }
@@ -121,6 +121,7 @@ import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
 import Info from '~/components/Info/Info.vue'
+import IconReadmore from '~/components/Icon/IconReadmore.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AsideIntro from '~/components/Aside/AsideIntro.vue'
@@ -166,6 +167,7 @@ export default {
     AppDiv,
     AppH1,
     Info,
+    IconReadmore,
     DivHeader,
     AppPlayingBanner,
     AsideIntro,
@@ -513,12 +515,6 @@ export default {
     justify-content center
     align-items center
     &__icon
-      width 0
-      height 0
-      border-style solid
-      border-width 5px 5px 0 5px
-      border-color #4a4a4a transparent transparent transparent
-      transform rotate(0deg)
       &--reverse
         transform rotate(180deg)
 

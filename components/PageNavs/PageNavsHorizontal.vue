@@ -37,7 +37,7 @@
       class="navs__read-more read-more"
       @click="isCategoriesFold = !isCategoriesFold"
     >
-      <div
+      <IconReadmore
         :class="[
           'read-more__icon',
           { 'read-more__icon--reverse': !isCategoriesFold }
@@ -51,10 +51,12 @@
 import _ from 'lodash'
 
 import PageNavsHorizontalList from './PageNavsHorizontalList.vue'
+import IconReadmore from '~/components/Icon/IconReadmore.vue'
 
 export default {
   components: {
-    PageNavsHorizontalList
+    PageNavsHorizontalList,
+    IconReadmore
   },
   props: {
     sections: {
@@ -143,6 +145,9 @@ export default {
 .category-list
   margin 24px 0 0 0 !important
 
+.read-more
+  display none
+
 @media (max-width 768px)
   .navs
     position relative
@@ -193,12 +198,6 @@ export default {
     align-items center
     background-color #eeeeee
     &__icon
-      width 0
-      height 0
-      border-style solid
-      border-width 5px 5px 0 5px
-      border-color #4a4a4a transparent transparent transparent
-      transform rotate(0deg)
       &--reverse
         transform rotate(180deg)
 </style>
