@@ -8,21 +8,35 @@
 </template>
 
 <style lang="stylus" scoped>
+@keyframes barAnimation
+  from
+    transform scaleY(1)
+  to
+    transform scaleY(0.5)
+
 .icon
   display flex
   transform rotate(180deg)
   &__bar
     width 4px
+    height 16px
     border-radius 1px
     background-color #d84939
+    transform-origin 0 0
+    transform scaleY(1)
+    animation-name barAnimation
+    animation-duration 0.5s
+    animation-iteration-count infinite
+    animation-direction alternate
+    animation-timing-function ease-in-out
     &:nth-child(1)
-      height 9px
+      animation-delay 0s
     &:nth-child(2)
-      height 16px
+      animation-delay 0.25s
     &:nth-child(3)
-      height 12px
+      animation-delay 0.5s
     &:nth-child(4)
-      height 6px
+      animation-delay 0.75s
     & + &
       margin 0 0 0 1px
 </style>
