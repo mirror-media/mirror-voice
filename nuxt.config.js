@@ -82,6 +82,7 @@ module.exports = {
   css: [
     '~/css/normalize.css',
     '~/css/default.css',
+    '~/css/animate.css',
     'swiper/dist/css/swiper.css'
   ],
 

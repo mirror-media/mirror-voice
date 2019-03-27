@@ -174,7 +174,7 @@ export default {
     width 100%
     height 100%
     object-fit cover
-    // transition filter .1s ease-out
+    transition filter .1s ease-out
     &--dimmed
       filter brightness(50%)
   &__play-icon
@@ -183,9 +183,10 @@ export default {
     height d
     z-index 2
     opacity 0
-    // transition opacity .1s ease-out
     &--show
       opacity 1
+      animation-name bounceIn
+      animation-duration 0.5s
 
 .info
   position relative
