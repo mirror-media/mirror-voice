@@ -71,9 +71,8 @@ export default {
   },
   computed: {
     bgStyleBackground() {
-      return `linear-gradient(90deg, #7d7d7d ${this.buffered}%, black ${
-        this.buffered
-      }%)`
+      const buffered = this.buffered * 100
+      return `linear-gradient(90deg, #7d7d7d ${buffered}%, black ${buffered}%)`
     }
   },
   watch: {
