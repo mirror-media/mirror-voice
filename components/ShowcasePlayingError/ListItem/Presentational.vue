@@ -108,8 +108,7 @@ export default {
     width 100%
     height 100%
     object-fit cover
-    // transition filter .1s ease-out
-    background-color black
+    transition filter .1s ease-out
     &--dimmed
       filter brightness(50%)
   &__play-icon
@@ -121,6 +120,8 @@ export default {
     // transition opacity .1s ease-out
     &--show
       opacity 1
+      animation-name bounceIn
+      animation-duration 0.5s
 
 .info
   position relative
