@@ -12,7 +12,8 @@
     "generate": "nuxt generate",
     "lint": "eslint --ext .js,.vue --ignore-path .gitignore --ignore-pattern !.eslintrc.js --max-warnings 0",
     "lintfix": "eslint --ext .js,.vue --ignore-path .gitignore --ignore-pattern !.eslintrc.js . --fix",
-    "commit": "npx git-cz"
+    "commit": "npx git-cz",
+    "release": "release"
   },
   "husky": {
     "hooks": {
@@ -82,6 +83,7 @@
     "lodash-webpack-plugin": "^0.11.5",
     "nodemon": "^1.18.9",
     "prettier": "1.14.3",
+    "release": "^6.0.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
     "winston": "^3.2.1"
