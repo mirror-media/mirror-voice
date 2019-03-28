@@ -56,7 +56,7 @@ write.on('error', error => {
 
 const readMiddle = (req, res, next) => {
   const entry = req.url
-  read.get(entry, (error, entries) => {
+  read.get(entry, (error, entries = []) => {
     if (error) {
       logger.error(
         `Error occurred during fetching data from Redis Read Server, entry: ${entry}`
@@ -64,7 +64,7 @@ const readMiddle = (req, res, next) => {
       next(new Error(error))
     }
 
-    if (entries.length === 0 && !('body' in entries)) {
+    if (entries.length === 0) {
       next()
     } else {
       const body = JSON.parse(_.get(entries, [0, 'body'], ''))
