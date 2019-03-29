@@ -3,14 +3,15 @@
     <nuxt-link
       v-for="(crumb, i) in crumbs"
       :key="i"
-      :to="crumb.path"
+      :to="getPath(crumb)"
     >
-      {{ crumb.title }}
+      {{ getTitle(crumb) }}
     </nuxt-link>
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
 import { mapState } from 'vuex'
 
 export default {
@@ -18,6 +19,14 @@ export default {
     ...mapState({
       crumbs: state => state.appBreadcrumb.crumbs
     })
+  },
+  methods: {
+    getPath(crumb) {
+      return _.get(crumb, 'path', '/')
+    },
+    getTitle(crumb) {
+      return _.get(crumb, 'title', '')
+    }
   }
 }
 </script>

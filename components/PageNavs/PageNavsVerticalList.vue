@@ -6,8 +6,8 @@
       class="list__list-item"
       @click="$emit('clickItem')"
     >
-      <nuxt-link :to="`/category/${item.name}`">
-        {{ item.title }}
+      <nuxt-link :to="`/category/${getName(item)}`">
+        {{ getTitle(item) }}
       </nuxt-link>
     </li>
   </ul>
@@ -29,6 +29,14 @@ export default {
   computed: {
     items() {
       return _.take(_.get(this.list, 'categories', []), 7)
+    }
+  },
+  methods: {
+    getName(item) {
+      return _.get(item, 'name', '')
+    },
+    getTitle(item) {
+      return _.get(item, 'title', '')
     }
   }
 }

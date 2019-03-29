@@ -41,7 +41,10 @@
         'info'
       ]"
     >
-      <nuxt-link :to="`/${toRoute}/${item.name}`" @click.native.stop>
+      <nuxt-link
+        :to="`/${toRoute}/${name}`"
+        @click.native.stop
+      >
         <h1 class="info__title">
           {{ title }}
         </h1>
@@ -129,6 +132,9 @@ export default {
     vocal() {
       const vocalName = _.get(this.item, ['vocals', 0, 'name'], '')
       return _.truncate(vocalName, { length: this.limitVocal })
+    },
+    name() {
+      return _.get(this.item, 'name', '')
     }
   },
   methods: {

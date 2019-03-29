@@ -23,7 +23,7 @@
           'left__title',
           { 'left__title--hover': !showOrder && isMouseover }
         ]"
-        :to="`/single/${item.slug}`"
+        :to="`/single/${slug}`"
         @click.native.stop
       >
         {{ item.title }}
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import dayjs from 'dayjs'
 
 import TrackMarker from './TrackMarker.vue'
@@ -86,6 +87,9 @@ export default {
     },
     relativeTime() {
       return this.calcRelativeTime(this.item.publishedDate)
+    },
+    slug() {
+      return _.get(this.item, 'slug', '')
     }
   },
   methods: {

@@ -2,8 +2,8 @@
   <div class="player">
     <audio ref="audio" />
     <div class="player__cover cover">
-      <nuxt-link :to="`/single/${currentSound.slug}`">
-        <img class="cover__img" :src="currentSound.cover" alt>
+      <nuxt-link :to="`/single/${getSlug(currentSound)}`">
+        <img class="cover__img" :src="getCover(currentSound)" alt>
       </nuxt-link>
     </div>
     <PlayerNavs
@@ -268,6 +268,13 @@ export default {
     },
     seek(percentage) {
       this.audio.currentTime = this.audio.duration * percentage
+    },
+
+    getSlug(item) {
+      return _.get(item, 'slug', '')
+    },
+    getCover(item) {
+      return _.get(item, 'cover', '')
     }
   }
 }

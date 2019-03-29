@@ -8,10 +8,10 @@
         @click="$emit('clickSection')"
       >
         <nuxt-link
-          :class="{ 'active': section.name === sectionName }"
-          :to="`/section/${section.name}`"
+          :class="{ 'active': getName(section) === sectionName }"
+          :to="`/section/${getName(section)}`"
         >
-          {{ section.title }}
+          {{ getTitle(section) }}
         </nuxt-link>
       </li>
     </ul>
@@ -109,6 +109,14 @@ export default {
   mounted() {
     // 182 is the max-height we want to display the category list
     this.shouldShowReadMore = this.$refs['category-list'].$el.offsetHeight > 182
+  },
+  methods: {
+    getName(item) {
+      return _.get(item, 'name', '')
+    },
+    getTitle(item) {
+      return _.get(item, 'title', '')
+    }
   }
 }
 </script>

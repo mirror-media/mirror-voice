@@ -10,7 +10,7 @@
         class="album-list__list-item"
         @click="$emit('clickItem')"
       >
-        <nuxt-link :to="`/album/${item.name}`">
+        <nuxt-link :to="`/album/${getName(item)}`">
           <figure class="album-list-figure">
             <img
               class="album-list-figure__img"
@@ -18,7 +18,7 @@
               alt=""
             >
             <figcaption class="album-list-figure__figcaption">
-              {{ truncate(item.title) }}
+              {{ truncate(getTitle(item)) }}
             </figcaption>
           </figure>
         </nuxt-link>
@@ -63,6 +63,12 @@ export default {
     },
     getImgUrl(item) {
       return _.get(this.$getImgs(item), ['mobile', 'url'], '')
+    },
+    getName(item) {
+      return _.get(item, 'name', '')
+    },
+    getTitle(item) {
+      return _.get(item, 'title', '')
     }
   }
 }

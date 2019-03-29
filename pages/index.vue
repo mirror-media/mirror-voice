@@ -28,7 +28,7 @@
             <nuxt-link
               slot="left"
               class="header__left"
-              :to="`/section/${section.name}`"
+              :to="`/section/${getName(section)}`"
               @click.native="clickSection"
             >
               {{ section.title }}
@@ -36,7 +36,7 @@
             <nuxt-link
               slot="right"
               class="header__right"
-              :to="`/section/${section.name}`"
+              :to="`/section/${getName(section)}`"
               @click.native="clickSection"
             >
               更多
@@ -183,6 +183,9 @@ export default {
     },
     clickSection() {
       this.$sendGAHome({ action: 'click', label: 'section' })
+    },
+    getName(item) {
+      return _.get(item, 'name', '')
     }
   }
 }
