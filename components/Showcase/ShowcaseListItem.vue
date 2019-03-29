@@ -95,8 +95,14 @@ export default {
   },
   data() {
     return {
-      limitTitleDesktop: 22,
-      limitTitleMobile: 24,
+      limitTitleDesktop: {
+        vertical: 22,
+        horizontal: 28
+      },
+      limitTitleMobile: {
+        vertical: 22,
+        horizontal: 38
+      },
       limitVocal: 16,
       isMouseover: false
     }
@@ -107,8 +113,8 @@ export default {
     }),
     title() {
       const limit = this.isDesktop
-        ? this.limitTitleDesktop
-        : this.limitTitleMobile
+        ? this.limitTitleDesktop[this.layout]
+        : this.limitTitleMobile[this.layout]
       return _.truncate(this.item.title, { length: limit })
     },
     date() {
