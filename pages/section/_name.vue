@@ -193,27 +193,27 @@ export default {
       error({ statusCode: 404, message: 'section/category not found' })
     }
 
-    // Breadcrumb
-    const crumbs = []
-    if (routeName.includes('section')) {
-      const section = _.find(audioSections, o => o.name === routeParam)
-      const title = _.get(section, 'title', '')
-      const path = route.path
+    // // Breadcrumb
+    // const crumbs = []
+    // if (routeName.includes('section')) {
+    //   const section = _.find(audioSections, o => o.name === routeParam)
+    //   const title = _.get(section, 'title', '')
+    //   const path = route.path
 
-      crumbs.push({ title, path })
-    } else if (routeName.includes('category')) {
-      const category = _.find(audioCategories, o => o.name === routeParam)
-      const titleCategory = _.get(category, 'title', '')
-      const pathCategory = route.path
-      const titleSection = _.get(category, 'sectionTitle', '')
-      const pathSection = `/section/${_.get(category, 'sectionName', '')}`
+    //   crumbs.push({ title, path })
+    // } else if (routeName.includes('category')) {
+    //   const category = _.find(audioCategories, o => o.name === routeParam)
+    //   const titleCategory = _.get(category, 'title', '')
+    //   const pathCategory = route.path
+    //   const titleSection = _.get(category, 'sectionTitle', '')
+    //   const pathSection = `/section/${_.get(category, 'sectionName', '')}`
 
-      crumbs.push(
-        { title: titleSection, path: pathSection },
-        { title: titleCategory, path: pathCategory }
-      )
-    }
-    store.commit('appBreadcrumb/PUSH', crumbs)
+    //   crumbs.push(
+    //     { title: titleSection, path: pathSection },
+    //     { title: titleCategory, path: pathCategory }
+    //   )
+    // }
+    // store.commit('appBreadcrumb/PUSH', crumbs)
 
     // The "where" variable should will be: sections or categories
     const { where, ids } = getShowcaseParam(

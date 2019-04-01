@@ -283,22 +283,22 @@ export default {
       error({ statusCode: 404, message: 'album not found' })
     }
 
-    // Breadcrumb
-    // TODO: Refactoring with /single
-    const crumbSection = {
-      title: _.get(album, ['sections', 0, 'title'], ''),
-      path: `/section/${_.get(album, ['sections', 0, 'name'], '')}`
-    }
-    const crumbCategory = {
-      title: _.get(album, ['categories', 0, 'title'], ''),
-      path: `/category/${_.get(album, ['categories', 0, 'name'], '')}`
-    }
-    const crumbAlbum = {
-      title: _.get(album, 'title', ''),
-      path: `/album/${_.get(album, 'name', '')}`
-    }
-    const crumbs = [crumbSection, crumbCategory, crumbAlbum]
-    store.commit('appBreadcrumb/PUSH', crumbs)
+    // // Breadcrumb
+    // // TODO: Refactoring with /single
+    // const crumbSection = {
+    //   title: _.get(album, ['sections', 0, 'title'], ''),
+    //   path: `/section/${_.get(album, ['sections', 0, 'name'], '')}`
+    // }
+    // const crumbCategory = {
+    //   title: _.get(album, ['categories', 0, 'title'], ''),
+    //   path: `/category/${_.get(album, ['categories', 0, 'name'], '')}`
+    // }
+    // const crumbAlbum = {
+    //   title: _.get(album, 'title', ''),
+    //   path: `/album/${_.get(album, 'name', '')}`
+    // }
+    // const crumbs = [crumbSection, crumbCategory, crumbAlbum]
+    // store.commit('appBreadcrumb/PUSH', crumbs)
 
     const vocalId = _.get(album, ['vocals', 0, 'id'], '')
     const [tracks, vocalAlbums] = await Promise.all([

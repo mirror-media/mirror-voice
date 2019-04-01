@@ -1,10 +1,10 @@
 <template>
   <div class="app">
     <AppHeader />
-    <AppBreadcrumb
+    <!-- <AppBreadcrumb
       v-show="!hideBreadcrumb"
       class="app__breadcrumb"
-    />
+    /> -->
     <div class="app__view-wrapper">
       <nuxt />
     </div>
@@ -35,7 +35,7 @@
 import { mapState } from 'vuex'
 
 import AppHeader from '~/components/AppHeader.vue'
-import AppBreadcrumb from '~/components/AppBreadcrumb.vue'
+// import AppBreadcrumb from '~/components/AppBreadcrumb.vue'
 import AppFooter from '~/components/AppFooter.vue'
 import AppPlayer from '~/components/AppPlayer.vue'
 import AppLightboxWrapper from '~/components/AppLightboxWrapper.vue'
@@ -46,7 +46,7 @@ export default {
   components: {
     AppHeader,
     AppFooter,
-    AppBreadcrumb,
+    // AppBreadcrumb,
     AppPlayer,
     AppLightboxWrapper,
     AppPlayingError,
@@ -64,10 +64,10 @@ export default {
       showPlayer: state => state.appPlayer.showAppPlayer,
       showLightbox: state => state.lightboxPlayingError.showLightbox
     }),
-    hideBreadcrumb() {
-      const paths = ['/', '/tos', '/privacy_rule']
-      return paths.includes(this.$route.path)
-    },
+    // hideBreadcrumb() {
+    //   const paths = ['/', '/tos', '/privacy_rule']
+    //   return paths.includes(this.$route.path)
+    // },
     shouldShowNativeNotification() {
       // name will be null if page is invalid and covered by 404/500
       return this.$route.name
