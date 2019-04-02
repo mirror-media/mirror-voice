@@ -77,9 +77,7 @@
       <AsideTrackList
         class="aside__wrapper tracks"
         :album="album"
-        :tracks="tracks.items"
-        :current-sound="currentSound"
-        :is-playing="appPlayer.isPlaying"
+        :tracks="tracks"
         @playTrack="playTrack"
         @clickAlbum="clickAlbum"
         @clickAlbumMore="clickAlbumMore"
@@ -101,7 +99,7 @@ import IconReadmore from '~/components/Icon/IconReadmore.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AppTag from '~/components/AppTag.vue'
 import AsideIntroAlbum from '~/components/Aside/AsideIntro/AsideIntroAlbum/Container.vue'
-import AsideTrackList from '~/components/Aside/AsideTrackList.vue'
+import AsideTrackList from '~/components/Aside/AsideTrackList/Container.vue'
 import NoSSR from 'vue-no-ssr'
 
 const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
@@ -160,9 +158,6 @@ export default {
     },
 
     ...mapState(['appPlayer']),
-    currentSound() {
-      return _.get(this.list, this.appPlayer.playingIndex, {})
-    },
     appPlayerSingleSlug() {
       return _.get(this.list, [this.appPlayer.playingIndex, 'slug'], '')
     },

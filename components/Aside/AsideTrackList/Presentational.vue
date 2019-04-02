@@ -32,8 +32,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
-
 import AppDiv from '~/components/AppDiv.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import TrackList from '~/components/Track/TrackList.vue'
@@ -51,6 +49,10 @@ export default {
         return {}
       }
     },
+    albumName: {
+      type: String,
+      default: ''
+    },
     tracks: {
       type: Array,
       default() {
@@ -67,11 +69,6 @@ export default {
     isPlaying: {
       type: Boolean,
       default: false
-    }
-  },
-  computed: {
-    albumName() {
-      return _.get(this.album, 'name', '')
     }
   }
 }
