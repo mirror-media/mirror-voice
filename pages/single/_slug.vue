@@ -68,12 +68,10 @@
       </AppDiv>
     </div>
     <div slot="aside" class="aside">
-      <AsideIntro
+      <AsideIntroAlbum
         class="aside__wrapper album"
+        :data="album"
         :title="'收錄於'"
-        :fig="asideIntroFig"
-        :figcaption="asideIntroFigcaption"
-        :description="asideIntroDescription"
         @clickFigure="linkToAlbum"
       />
       <AsideTrackList
@@ -102,7 +100,7 @@ import Info from '~/components/Info/Info.vue'
 import IconReadmore from '~/components/Icon/IconReadmore.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AppTag from '~/components/AppTag.vue'
-import AsideIntro from '~/components/Aside/AsideIntro.vue'
+import AsideIntroAlbum from '~/components/Aside/AsideIntro/AsideIntroAlbum/Container.vue'
 import AsideTrackList from '~/components/Aside/AsideTrackList.vue'
 import NoSSR from 'vue-no-ssr'
 
@@ -128,7 +126,7 @@ export default {
     IconReadmore,
     AppPlayingBanner,
     AppTag,
-    AsideIntro,
+    AsideIntroAlbum,
     AsideTrackList,
     NoSSR
   },
@@ -159,20 +157,6 @@ export default {
     },
     contentText() {
       return this.$getHtmlText(this.content)
-    },
-
-    // For aside intro
-    asideIntroFig() {
-      return _.get(this.$getImgs(this.album), ['mobile', 'url'], '')
-    },
-    asideIntroFigcaption() {
-      return _.get(this.album, 'title', '')
-    },
-    asideIntroDescription() {
-      return sanitizeHtml(
-        _.get(this.album, ['brief', 'html'], ''),
-        this.$SANITIZE_HTML_DEFAULT_OPTIONS
-      )
     },
 
     ...mapState(['appPlayer']),

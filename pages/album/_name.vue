@@ -95,13 +95,11 @@
       </AppDiv>
     </div>
     <div slot="aside" class="aside">
-      <AsideIntro
+      <AsideIntroVocal
         class="aside__wrapper author"
+        :data="album"
         :title="'主播'"
         :img-style="'round'"
-        :fig="asideIntroFig"
-        :figcaption="asideIntroFigcaption"
-        :description="asideIntroDescription"
       />
       <AsideAlbumList
         class="aside__wrapper author-relateds"
@@ -124,7 +122,7 @@ import Info from '~/components/Info/Info.vue'
 import IconReadmore from '~/components/Icon/IconReadmore.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
-import AsideIntro from '~/components/Aside/AsideIntro.vue'
+import AsideIntroVocal from '~/components/Aside/AsideIntro/AsideIntroVocal/Container.vue'
 import AsideAlbumList from '~/components/Aside/AsideAlbumList.vue'
 import TrackList from '~/components/Track/TrackList.vue'
 import AppPagination from '~/components/AppPagination.vue'
@@ -170,7 +168,7 @@ export default {
     IconReadmore,
     DivHeader,
     AppPlayingBanner,
-    AsideIntro,
+    AsideIntroVocal,
     AsideAlbumList,
     TrackList,
     AppPagination
@@ -206,23 +204,6 @@ export default {
     },
     briefText() {
       return this.$getHtmlText(this.brief)
-    },
-
-    // For aside intro
-    vocal() {
-      return _.get(this.album, ['vocals', 0], {})
-    },
-    asideIntroFig() {
-      return _.get(this.$getImgs(this.vocal), ['mobile', 'url'], '')
-    },
-    asideIntroFigcaption() {
-      return _.get(this.vocal, 'name', '')
-    },
-    asideIntroDescription() {
-      return sanitizeHtml(
-        _.get(this.vocal, ['bio', 'html'], ''),
-        this.$SANITIZE_HTML_DEFAULT_OPTIONS
-      )
     },
 
     ...mapState(['appPlayer']),
