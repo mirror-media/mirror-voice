@@ -26,7 +26,7 @@ export default {
       type: String,
       default: 'small',
       validator(value) {
-        return ['large', 'small'].includes(value)
+        return ['large', 'small', 'tiny'].includes(value)
       }
     },
     weight: {

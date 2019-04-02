@@ -1,8 +1,9 @@
 <template>
-  <AppDiv
-    class="aside__wrapper album-relateds-wrapper"
-  >
-    <DivHeader class="album-relateds-wrapper__header">
+  <div class="aside__wrapper album-relateds-wrapper">
+    <DivHeader
+      class="album-relateds-wrapper__header"
+      :size="'tiny'"
+    >
       <nuxt-link
         slot="left"
         :to="`/album/${albumName}`"
@@ -28,17 +29,15 @@
       :is-playing="isPlaying"
       @playTrack="v => $emit('playTrack', v)"
     />
-  </AppDiv>
+  </div>
 </template>
 
 <script>
-import AppDiv from '~/components/AppDiv.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import TrackList from '~/components/Track/TrackList.vue'
 
 export default {
   components: {
-    AppDiv,
     DivHeader,
     TrackList
   },
@@ -76,11 +75,10 @@ export default {
 
 <style lang="stylus" scoped>
 .album-relateds-wrapper
-  padding 25px 8px 7px 8px !important
   &__header
-    margin 0 17px !important
+    margin 0 10px !important
   &__track-list
-    margin 20px 0 0 0 !important
+    margin 12px 0 0 0 !important
 
 .album
   font-size 14px
@@ -89,7 +87,6 @@ export default {
 
 @media (max-width 768px)
   .album-relateds-wrapper
-    padding 17px 5px 0px 5px !important
     &__header
       margin 0 8px !important
     &__track-list

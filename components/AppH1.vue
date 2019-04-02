@@ -11,7 +11,7 @@ export default {
       type: String,
       default: 'small',
       validator(value) {
-        return ['large', 'small'].includes(value)
+        return ['large', 'small', 'tiny'].includes(value)
       }
     },
     weight: {
@@ -35,6 +35,8 @@ export default {
     font-size 21px
   &--small
     font-size 18px
+  &--tiny
+    font-size 14px
   &--normal
     font-weight 400
   &--bold
@@ -49,6 +51,8 @@ export default {
     &--large
       font-size 17px
     &--small
+      font-size 15px
+    &--tiny
       font-size 15px
     &--normal
       font-weight 400

@@ -8,7 +8,6 @@
         figcaption,
         description
       }"
-      :title="title"
       :img-style="imgStyle"
       :fig="fig"
       :figcaption="figcaption"
@@ -19,8 +18,8 @@
 </template>
 
 <script>
-import Presentational from '../Presentational.vue'
 import HOC from './HOC.vue'
+import Presentational from './Presentational.vue'
 
 export default {
   components: {
@@ -33,10 +32,6 @@ export default {
       default() {
         return {}
       }
-    },
-    title: {
-      type: String,
-      required: true
     },
     imgStyle: {
       type: String,

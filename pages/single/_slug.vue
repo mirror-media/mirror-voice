@@ -68,19 +68,11 @@
       </AppDiv>
     </div>
     <div slot="aside" class="aside">
-      <AsideIntroAlbum
-        class="aside__wrapper album"
-        :data="album"
-        :title="'收錄於'"
-        @clickFigure="linkToAlbum"
-      />
-      <AsideTrackList
-        class="aside__wrapper tracks"
+      <AsideSlideshowAlbum
+        class="aside__wrapper"
+        :albums="albums"
         :album="album"
         :tracks="tracks"
-        @playTrack="playTrack"
-        @clickAlbum="clickAlbum"
-        @clickAlbumMore="clickAlbumMore"
       />
     </div>
   </AppMainAsideWrapper>
@@ -98,8 +90,7 @@ import Info from '~/components/Info/Info.vue'
 import IconReadmore from '~/components/Icon/IconReadmore.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AppTag from '~/components/AppTag.vue'
-import AsideIntroAlbum from '~/components/Aside/AsideIntro/AsideIntroAlbum/Container.vue'
-import AsideTrackList from '~/components/Aside/AsideTrackList/Container.vue'
+import AsideSlideshowAlbum from '~/components/Aside/AsideSlideshowAlbum.vue'
 import NoSSR from 'vue-no-ssr'
 
 const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
@@ -124,8 +115,7 @@ export default {
     IconReadmore,
     AppPlayingBanner,
     AppTag,
-    AsideIntroAlbum,
-    AsideTrackList,
+    AsideSlideshowAlbum,
     NoSSR
   },
   head() {
@@ -190,6 +180,10 @@ export default {
 
     tags() {
       return _.get(this.single, 'tags', [])
+    },
+
+    albums() {
+      return _.get(this.single, 'albums', [])
     }
   },
   async asyncData({ app, store, route, error }) {
@@ -264,20 +258,6 @@ export default {
       CLEAR_PAGES: 'appPlayer/CLEAR_PAGES',
       SET_IS_PLAYING: 'appPlayer/SET_IS_PLAYING'
     }),
-    playTrack(slug) {
-      this.SET_ALBUM_ID(this.album.id)
-      this.SET_ALBUM_COVER(
-        _.get(this.$getImgs(this.album), ['mobile', 'url'], '')
-      )
-      this.CLEAR_PAGES()
-
-      this.PREPARE_SINGLES({ page: 1, res: this.tracks }).then(() => {
-        const playingIndex = _.findIndex(this.list, o => o.slug === slug)
-        this.SET_PLAYING_INDEX(playingIndex)
-      })
-
-      this.$sendGASingle({ action: 'click', label: 'other audio of album' })
-    },
     playSingle() {
       this.SET_ALBUM_ID(this.album.id)
       this.SET_ALBUM_COVER(
@@ -293,26 +273,6 @@ export default {
     setSingleDuration(e) {
       const duration = _.get(e, ['target', 'duration'], 0)
       this.singleDuration = duration
-    },
-
-    linkToAlbum() {
-      this.$sendGASingle({ action: 'click', label: 'album top' })
-
-      const albumName = _.get(this.album, 'name', '')
-      this.$router.push(`/album/${albumName}`)
-    },
-
-    clickAlbum() {
-      this.$sendGASingle({
-        action: 'click',
-        label: 'album bottom'
-      })
-    },
-    clickAlbumMore() {
-      this.$sendGASingle({
-        action: 'click',
-        label: 'album bottom more'
-      })
     }
   }
 }
@@ -320,11 +280,6 @@ export default {
 
 <style lang="stylus" scoped>
 .main
-  &__wrapper
-    & + &
-      margin 20px 0 0 0
-
-.aside
   &__wrapper
     & + &
       margin 20px 0 0 0
@@ -356,15 +311,11 @@ export default {
 .read-more
   display none
 
-.album
-  & >>> .figure
-    cursor pointer
-
-.album-relateds-wrapper
-  &__header
-    margin 0 17px
-  &__track-list
-    margin 20px 0 0 0 !important
+// .album-relateds-wrapper
+//   &__header
+//     margin 0 17px
+//   &__track-list
+//     margin 20px 0 0 0 !important
 
 @media (max-width 768px)
   .main
@@ -376,8 +327,6 @@ export default {
   .aside
     &__wrapper
       margin 0 13px 13px 13px
-      & + &
-        margin 13px
   
   .infos-wrapper
     border-radius 2px
@@ -439,7 +388,7 @@ export default {
       &--reverse
         transform rotate(180deg)
 
-  .tracks
-    border-radius 2px
-    box-shadow 0 0 2px 0 rgba(0, 0, 0, 0.1)
+  // .tracks
+  //   border-radius 2px
+  //   box-shadow 0 0 2px 0 rgba(0, 0, 0, 0.1)
 </style>

@@ -19,8 +19,8 @@
 </template>
 
 <script>
-import Presentational from '../Presentational.vue'
 import HOC from './HOC.vue'
+import Presentational from './Presentational.vue'
 
 export default {
   components: {
