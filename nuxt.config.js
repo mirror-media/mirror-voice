@@ -12,7 +12,7 @@ module.exports = {
 
   server: {
     host: isProd ? '0.0.0.0' : '127.0.0.1',
-    port: isProd ? SERVER_PORT : 8080
+    port: isProd ? '80' : 8080
   },
 
   // TODO: we could refactor this
