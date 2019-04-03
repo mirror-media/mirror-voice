@@ -1,8 +1,11 @@
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const zhTW = require('./i18n/zh-tw')
-const { SERVER_HOST, SERVER_PORT } = require('./server/config')
+const { SERVER_PROTOCOL, SERVER_HOST, SERVER_PORT } = require('./server/config')
 
 const isProd = process.env.NODE_ENV === 'production'
+const baseURL = isProd
+  ? `${SERVER_PROTOCOL}://${SERVER_HOST}:${SERVER_PORT}`
+  : `http://localhost:8080`
 
 module.exports = {
   mode: 'universal',
@@ -142,8 +145,7 @@ module.exports = {
   */
   axios: {
     // See https://github.com/nuxt-community/axios-module#options
-    host: isProd ? SERVER_HOST : 'localhost',
-    port: isProd ? SERVER_PORT : 8080
+    baseURL
   },
 
   /*
