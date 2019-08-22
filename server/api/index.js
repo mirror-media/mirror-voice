@@ -4,13 +4,7 @@ const _ = require('lodash')
 const axios = require('axios')
 const logger = require('../logger')
 
-const {
-  API_PROTOCOL,
-  API_HOST,
-  API_PORT,
-  API_TIMEOUT,
-  AUDIO_SECTION_NAMES
-} = require('../config')
+const { API_PROTOCOL, API_HOST, API_PORT, API_TIMEOUT } = require('../config')
 const apiURL = `${API_PROTOCOL}://${API_HOST}:${API_PORT}`
 const { readMiddle, writeMiddle } = require('./middle/redis')
 
@@ -21,9 +15,15 @@ const _axios = axios.create({
   timeout: API_TIMEOUT
 })
 
-// NOTE: workaround for audio sections
 router.get(
   '/sections',
+  (req, res, next) => {
+    const queryhead = _.isEmpty(req.query) ? '?' : '&'
+    const urlIsAudioSiteOnly =
+      req.url + queryhead + 'where={"isAudioSiteOnly":true}'
+    req.url = urlIsAudioSiteOnly
+    next()
+  },
   readMiddle,
   (req, res, next) => {
     _axios
@@ -35,10 +35,6 @@ router.get(
         logger.info(`Fetch data from API url: ${config.url}`)
 
         res.header('Cache-Control', 'public, max-age=300')
-        const audioSections = _.get(data, '_items', []).filter(section =>
-          AUDIO_SECTION_NAMES.includes(section.name)
-        )
-        data._items = audioSections
         res.data = data
         next()
       })
