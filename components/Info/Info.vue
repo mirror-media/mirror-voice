@@ -92,7 +92,9 @@
         @click="$emit('clickPlay')"
       >
         <img class="toggle-play__icon" src="~/assets/img/btn_play.png" alt="">
-        <span class="toggle-play__text">全部播放</span>
+        <span class="toggle-play__text">
+          全部播放
+        </span>
       </div>
     </div>
   </div>
