@@ -7,12 +7,13 @@
       :layout="listItemLayout"
       :item="item"
       :to-route="'album'"
-      @click.native="$emit('clickItem', item)"
+      @click.native="handleClickListItem(item)"
     />
   </ul>
 </template>
 
 <script>
+import _ from 'lodash'
 import ShowcaseListItem from './ShowcaseListItem.vue'
 
 export default {
@@ -32,6 +33,12 @@ export default {
       default() {
         return []
       }
+    }
+  },
+  methods: {
+    handleClickListItem(item) {
+      this.$emit('clickItem', item)
+      this.$router.push(`/album/${_.get(item, 'name', '')}`)
     }
   }
 }
