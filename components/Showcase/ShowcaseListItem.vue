@@ -41,14 +41,9 @@
         'info'
       ]"
     >
-      <nuxt-link
-        :to="`/${toRoute}/${name}`"
-        @click.native.stop
-      >
-        <h1 class="info__title">
-          {{ title }}
-        </h1>
-      </nuxt-link>
+      <h1 class="info__title">
+        {{ title }}
+      </h1>
       <p
         :class="[
           'info__vocal',
