@@ -35,7 +35,7 @@ export default {
     },
     getTitle(item) {
       let title = _.get(item, 'title', '')
-      title = title.replace(/，/g, '<br>')
+      title = title.replace(/，/g, '，<br>')
       return title
     }
   }
@@ -59,7 +59,7 @@ export default {
       height 100%
       font-size 16px
       color black
-      padding 10px
+      padding 5px
       text-align center
       line-height 1.25
       &:hover
