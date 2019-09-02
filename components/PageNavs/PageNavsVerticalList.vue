@@ -59,7 +59,7 @@ export default {
       height 100%
       font-size 16px
       color black
-      padding 5px
+      padding 6px
       text-align center
       line-height 1.25
       &:hover
