@@ -6,9 +6,7 @@
       class="list__list-item"
       @click="$emit('clickItem')"
     >
-      <nuxt-link :to="`/category/${getName(item)}`">
-        {{ getTitle(item) }}
-      </nuxt-link>
+      <nuxt-link :to="`/category/${getName(item)}`" v-html="getTitle(item)" />
     </li>
   </ul>
 </template>
@@ -36,7 +34,9 @@ export default {
       return _.get(item, 'name', '')
     },
     getTitle(item) {
-      return _.get(item, 'title', '')
+      let title = _.get(item, 'title', '')
+      title = title.replace(/，/g, '，<br>')
+      return title
     }
   }
 }
@@ -51,7 +51,7 @@ export default {
   &__list-item
     height 56px
     background-color white
-    *
+    a
       display flex
       justify-content center
       align-items center
@@ -59,6 +59,9 @@ export default {
       height 100%
       font-size 16px
       color black
+      padding 6px
+      text-align center
+      line-height 1.25
       &:hover
         color #d84939
     & + &
