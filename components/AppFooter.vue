@@ -1,12 +1,9 @@
 <template>
   <footer class="footer">
     <nav class="footer__navs navs">
-      <a
-        class="navs__nav"
-        :href="`mailto:${this.$MAIL}`"
-      >
+      <nuxt-link to="/contact" class="navs__nav">
         聯絡我們
-      </a>
+      </nuxt-link>
       <!-- <nuxt-link to="/tos" class="navs__nav">
         服務條款
       </nuxt-link> -->
