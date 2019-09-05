@@ -224,6 +224,7 @@ export default {
     display block
   &__input
     margin 10px 0 0 0
+    border 2px solid transparent
     &--had-submit-clicked
       &:invalid
         border 2px solid #d84939
@@ -231,6 +232,8 @@ export default {
       width 100%
 
 .contact-recaptcha
+  & >>> iframe
+    border 2px solid transparent
   &--invalid
     & >>> iframe
       border 2px solid #d84939
