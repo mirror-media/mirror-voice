@@ -131,6 +131,17 @@
           />
         </div>
         <div class="form__form-element">
+          <recaptcha
+            :class="[
+              'contact-recaptcha',
+              { 'contact-recaptcha--invalid': recaptchaValidationFail }
+            ]"
+            @error="handleRecaptchaError"
+            @success="handleRecaptchaSuccess"
+            @expired="handleRecaptchaExpired"
+          />
+        </div>
+        <div class="form__form-element">
           <ContactSubmitButton />
         </div>
       </form>
@@ -157,16 +168,31 @@ export default {
   },
   data() {
     return {
-      hadSubmitClicked: false
+      hadSubmitClicked: false,
+      isRecaptchaValid: false
+    }
+  },
+  computed: {
+    recaptchaValidationFail() {
+      return this.hadSubmitClicked && !this.isRecaptchaValid
     }
   },
   methods: {
     handleInput(e) {},
     handleSubmit(e) {
       this.hadSubmitClicked = true
-
-      // Prevent the form from being sent by canceling the event
-      e.preventDefault()
+    },
+    handleRecaptchaError(error) {
+      console.error('Recaptcha error: ', error)
+      this.isRecaptchaValid = false
+    },
+    handleRecaptchaExpired() {
+      console.log('Recaptcha expired')
+      this.isRecaptchaValid = false
+    },
+    handleRecaptchaSuccess(token) {
+      console.log('Recaptcha succeeded: ', token)
+      this.isRecaptchaValid = true
     }
   }
 }
@@ -203,6 +229,11 @@ export default {
         border 2px solid #d84939
     &--stretch
       width 100%
+
+.contact-recaptcha
+  &--invalid
+    & >>> iframe
+      border 2px solid #d84939
 
 @media (max-width 768px)
   .lighter
