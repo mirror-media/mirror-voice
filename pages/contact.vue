@@ -10,7 +10,7 @@
       <form
         class="contact__form form"
         novalidate
-        @submit="handleSubmit"
+        @submit.prevent="handleSubmit"
       >
         <div class="form__form-element form-element">
           <label
