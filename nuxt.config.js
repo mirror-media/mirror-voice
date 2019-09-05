@@ -126,6 +126,14 @@ module.exports = {
           }
         }
       }
+    ],
+    [
+      '@nuxtjs/recaptcha',
+      {
+        // This is a public test siteKey from Google
+        siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+        version: 2
+      }
     ]
   ],
 
