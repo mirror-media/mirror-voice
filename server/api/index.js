@@ -14,9 +14,31 @@ const _axios = axios.create({
   baseURL: apiURL,
   timeout: API_TIMEOUT
 })
+const fetchMiddle = (req, res, next) => {
+  _axios
+    .get(req.url)
+    .then(response => {
+      const { data = {}, config } = response
+
+      logger.info(`Fetch data from API url: ${config.url}`)
+
+      res.header('Cache-Control', 'public, max-age=300')
+      res.data = data
+      next()
+    })
+    .catch(error => {
+      const { config } = error
+
+      logger.error(
+        `Error occurred during fetching data from API url: ${config.url}`
+      )
+      next(new Error(error))
+    })
+}
 
 router.get(
   '/sections',
+  // isAudioSiteOnly filter middleware
   (req, res, next) => {
     const queryhead = _.isEmpty(req.query) ? '?' : '&'
     const urlIsAudioSiteOnly =
@@ -25,55 +47,10 @@ router.get(
     next()
   },
   readMiddle,
-  (req, res, next) => {
-    _axios
-      .get(req.url)
-      .then(response => {
-        const { config } = response
-        const data = _.get(response, 'data', {})
-
-        logger.info(`Fetch data from API url: ${config.url}`)
-
-        res.header('Cache-Control', 'public, max-age=300')
-        res.data = data
-        next()
-      })
-      .catch(error => {
-        const { config } = error
-
-        logger.error(
-          `Error occurred during fetching data from API url: ${config.url}`
-        )
-        next(new Error(error))
-      })
-  },
+  fetchMiddle,
   writeMiddle
 )
 
-router.get(
-  '*',
-  readMiddle,
-  (req, res, next) => {
-    _axios
-      .get(req.url)
-      .then(response => {
-        const { data, config } = response
-
-        logger.info(`Fetch data from API url: ${config.url}`)
-        res.header('Cache-Control', 'public, max-age=300')
-        res.data = data
-        next()
-      })
-      .catch(error => {
-        const { config } = error
-
-        logger.error(
-          `Error occurred during fetching data from API url: ${config.url}`
-        )
-        next(new Error(error))
-      })
-  },
-  writeMiddle
-)
+router.get('*', readMiddle, fetchMiddle, writeMiddle)
 
 module.exports = router
