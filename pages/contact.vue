@@ -1,6 +1,9 @@
 <template>
   <section class="section">
-    <AppDiv class="contact">
+    <AppDiv
+      v-show="contactView === 'form'"
+      class="contact"
+    >
       <AppH1 :size="'large'">
         聯絡我們
       </AppH1>
@@ -139,10 +142,18 @@
           />
         </div>
         <div class="form__form-element">
-          <ContactSubmitButton />
+          <ContactButton />
         </div>
       </form>
     </AppDiv>
+    <ContactRequestSuccess
+      v-show="contactView === 'requsetSuccess'"
+      @backToFormFromSuccess="handleBackToFormFromSuccess"
+    />
+    <ContactRequestFail
+      v-show="contactView === 'requestFail'"
+      @backToFormFromFail="handleBackToFormFromFail"
+    />
   </section>
 </template>
 
@@ -156,7 +167,10 @@ import AppH1 from '~/components/AppH1.vue'
 import ContactInput from '~/components/Contact/ContactInput.vue'
 import ContactSelect from '~/components/Contact/ContactSelect.vue'
 import ContactTextarea from '~/components/Contact/ContactTextarea.vue'
-import ContactSubmitButton from '~/components/Contact/ContactSubmitButton.vue'
+import ContactButton from '~/components/Contact/ContactButton.vue'
+
+import ContactRequestSuccess from '~/components/Contact/ContactRequestSuccess.vue'
+import ContactRequestFail from '~/components/Contact/ContactRequestFail.vue'
 
 export default {
   components: {
@@ -165,10 +179,14 @@ export default {
     ContactInput,
     ContactSelect,
     ContactTextarea,
-    ContactSubmitButton
+    ContactButton,
+    ContactRequestSuccess,
+    ContactRequestFail
   },
   data() {
     return {
+      contactView: 'form',
+
       hadSubmitClicked: false,
       isRecaptchaValid: false,
 
@@ -218,7 +236,31 @@ export default {
           ...this.formData
         }
         this.$postContact(form)
+          .then(() => {
+            this.contactView = 'requsetSuccess'
+          })
+          .catch(() => {
+            this.contactView = 'requestFail'
+          })
       }
+    },
+    resetFormState() {
+      this.contactView = 'form'
+      this.hadSubmitClicked = false
+    },
+    resetFormValues() {
+      this.formName = ''
+      this.formTel = ''
+      this.formEmail = ''
+      this.formCategory = ''
+      this.formContent = ''
+    },
+    handleBackToFormFromSuccess() {
+      this.resetFormState()
+      this.resetFormValues()
+    },
+    handleBackToFormFromFail() {
+      this.resetFormState()
     },
 
     handleRecaptchaError(error) {
