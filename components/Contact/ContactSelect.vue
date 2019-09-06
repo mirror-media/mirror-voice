@@ -1,8 +1,19 @@
 <template>
-  <select class="select">
+  <select class="select" :value="value">
     <slot />
   </select>
 </template>
+
+<script>
+export default {
+  props: {
+    value: {
+      type: String,
+      required: true
+    }
+  }
+}
+</script>
 
 <style lang="stylus" scoped>
 .select

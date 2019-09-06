@@ -1,6 +1,17 @@
 <template>
-  <input class="input">
+  <input class="input" :value="value">
 </template>
+
+<script>
+export default {
+  props: {
+    value: {
+      type: String,
+      required: true
+    }
+  }
+}
+</script>
 
 <style lang="stylus" scoped>
 .input

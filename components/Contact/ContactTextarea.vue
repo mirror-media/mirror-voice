@@ -1,6 +1,17 @@
 <template>
-  <textarea class="textarea" type="text" />
+  <textarea class="textarea" type="text" :value="value" />
 </template>
+
+<script>
+export default {
+  props: {
+    value: {
+      type: String,
+      required: true
+    }
+  }
+}
+</script>
 
 <style lang="stylus" scoped>
 .textarea
