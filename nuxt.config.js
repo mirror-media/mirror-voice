@@ -1,6 +1,11 @@
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin')
 const zhTW = require('./i18n/zh-tw')
-const { SERVER_PROTOCOL, SERVER_HOST, SERVER_PORT } = require('./server/config')
+const {
+  SERVER_PROTOCOL,
+  SERVER_HOST,
+  SERVER_PORT,
+  GOOGLE_RECAPTCHA_SITE_KEY
+} = require('./server/config')
 
 const isProd = process.env.NODE_ENV === 'production'
 const baseURL = isProd
@@ -130,8 +135,7 @@ module.exports = {
     [
       '@nuxtjs/recaptcha',
       {
-        // This is a public test siteKey from Google
-        siteKey: '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+        siteKey: GOOGLE_RECAPTCHA_SITE_KEY,
         version: 2
       }
     ]
