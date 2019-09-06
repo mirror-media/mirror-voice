@@ -1,6 +1,6 @@
 <template>
   <button class="button">
-    送出
+    <slot>送出</slot>
   </button>
 </template>
 
