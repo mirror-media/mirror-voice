@@ -1,5 +1,5 @@
 <template>
-  <AppDiv class="success-wrapper">
+  <AppDiv class="fail-wrapper">
     <AppH1 :size="'large'">
       訊息傳送失敗
     </AppH1>
@@ -12,7 +12,7 @@
       回前頁
     </ContactButton>
     <img
-      class="success-wrapper__img"
+      class="fail-wrapper__img"
       src="~/assets/img/robot_404_half.png"
       alt=""
     >
@@ -34,7 +34,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.success-wrapper
+.fail-wrapper
   position relative
   p
     margin 24px 0 0 0
