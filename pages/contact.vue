@@ -27,7 +27,8 @@
             ]"
             type="text"
             required
-            @input.native="handleInput"
+            :value="formName"
+            @input.native="handleInput('formName', $event)"
           />
         </div>
         <div class="form__form-element form-element">
@@ -44,6 +45,8 @@
               { 'form-element__input--had-submit-clicked': hadSubmitClicked }
             ]"
             type="tel"
+            :value="formTel"
+            @input.native="handleInput('formTel', $event)"
           />
         </div>
         <div class="form__form-element form-element">
@@ -61,7 +64,8 @@
             ]"
             type="email"
             required
-            @input.native="handleInput"
+            :value="formEmail"
+            @input.native="handleInput('formEmail', $event)"
           />
         </div>
         <div class="form__form-element form-element">
@@ -78,6 +82,8 @@
               { 'form-element__input--had-submit-clicked': hadSubmitClicked }
             ]"
             required
+            :value="formCategory"
+            @input.native="handleInput('formCategory', $event)"
           >
             <option value="">
               請選擇分類
@@ -109,7 +115,8 @@
             ]"
             type="text"
             required
-            @input.native="handleInput"
+            :value="formTitle"
+            @input.native="handleInput('formTitle', $event)"
           />
         </div>
         <div class="form__form-element form-element">
@@ -127,7 +134,8 @@
               { 'form-element__input--had-submit-clicked': hadSubmitClicked }
             ]"
             required
-            @input.native="handleInput"
+            :value="formContent"
+            @input.native="handleInput('formContent', $event)"
           />
         </div>
         <div class="form__form-element">
@@ -150,6 +158,10 @@
 </template>
 
 <script>
+import _ from 'lodash'
+import dayjs from 'dayjs'
+import 'dayjs/locale/zh-tw'
+
 import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
 import ContactInput from '~/components/Contact/ContactInput.vue'
@@ -169,19 +181,58 @@ export default {
   data() {
     return {
       hadSubmitClicked: false,
-      isRecaptchaValid: false
+      isRecaptchaValid: false,
+
+      formName: '',
+      formTel: '',
+      formEmail: '',
+      formCategory: '',
+      formTitle: '',
+      formContent: ''
     }
   },
   computed: {
     recaptchaValidationFail() {
       return this.hadSubmitClicked && !this.isRecaptchaValid
+    },
+    formData() {
+      return {
+        formName: this.formName,
+        formTel: this.formTel,
+        formEmail: this.formEmail,
+        formCategory: this.formCategory,
+        formTitle: this.formTitle,
+        formContent: this.formContent
+      }
     }
   },
   methods: {
-    handleInput(e) {},
+    handleInput(key, e) {
+      this[key] = e.target.value
+    },
+    validateForm() {
+      const elements = document.querySelectorAll('.form-element__input')
+      const isElementsValid = _.reduce(
+        elements,
+        (acc, curr) => acc && _.get(curr, ['validity', 'valid'], false),
+        true
+      )
+      return isElementsValid && this.isRecaptchaValid
+    },
     handleSubmit(e) {
       this.hadSubmitClicked = true
+      if (this.validateForm()) {
+        const currentTime = dayjs()
+          .locale('zh-tw')
+          .format()
+        const form = {
+          formTime: currentTime,
+          ...this.formData
+        }
+        this.$postContact(form)
+      }
     },
+
     handleRecaptchaError(error) {
       console.error('Recaptcha error: ', error)
       this.isRecaptchaValid = false
