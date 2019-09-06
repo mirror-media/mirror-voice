@@ -99,26 +99,6 @@
         <div class="form__form-element form-element">
           <label
             class="lighter form-element__label"
-            for="contact-title"
-          >
-            主旨*
-          </label>
-          <ContactInput
-            id="contact-title"
-            :class="[
-              'form-element__input',
-              'form-element__input--stretch',
-              { 'form-element__input--had-submit-clicked': hadSubmitClicked }
-            ]"
-            type="text"
-            required
-            :value="formTitle"
-            @input.native="handleInput('formTitle', $event)"
-          />
-        </div>
-        <div class="form__form-element form-element">
-          <label
-            class="lighter form-element__label"
             for="contact-content"
           >
             內容*
@@ -198,7 +178,6 @@ export default {
         formTel: this.formTel,
         formEmail: this.formEmail,
         formCategory: this.formCategory,
-        formTitle: this.formTitle,
         formContent: this.formContent
       }
     }

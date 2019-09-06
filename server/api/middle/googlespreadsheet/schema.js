@@ -16,9 +16,6 @@ module.exports = {
     formCategory: Joi.string()
       .required()
       .min(1),
-    formTitle: Joi.string()
-      .required()
-      .min(1),
     formContent: Joi.string()
       .required()
       .min(1)
