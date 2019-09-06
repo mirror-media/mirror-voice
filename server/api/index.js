@@ -10,6 +10,8 @@ const { readMiddle, writeMiddle } = require('./middle/redis')
 
 // const debug = require('debug')('express:api/index')
 
+router.use('/googlespreadsheet', require('./middle/googlespreadsheet'))
+
 const _axios = axios.create({
   baseURL: apiURL,
   timeout: API_TIMEOUT
