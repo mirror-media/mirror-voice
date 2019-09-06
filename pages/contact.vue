@@ -88,15 +88,12 @@
             <option value="">
               請選擇分類
             </option>
-            <option value="category1">
-              分類一
-            </option>
-            <option value="category2">
-              分類二
-            </option>
-            <option value="category3">
-              分類三
-            </option>
+            <option
+              v-for="category in formCategories"
+              :key="category"
+              :value="category"
+              v-text="category"
+            />
           </ContactSelect>
         </div>
         <div class="form__form-element form-element">
@@ -187,7 +184,7 @@ export default {
       formTel: '',
       formEmail: '',
       formCategory: '',
-      formTitle: '',
+      formCategories: ['音檔播放', '節目專輯詢問', '網頁操作', '其他回饋'],
       formContent: ''
     }
   },
