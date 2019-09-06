@@ -30,6 +30,9 @@
             :value="formName"
             @input.native="handleInput('formName', $event)"
           />
+          <p class="form-element__hint">
+            請輸入姓名
+          </p>
         </div>
         <div class="form__form-element form-element">
           <label
@@ -67,6 +70,9 @@
             :value="formEmail"
             @input.native="handleInput('formEmail', $event)"
           />
+          <p class="form-element__hint">
+            請檢查電子信箱格式
+          </p>
         </div>
         <div class="form__form-element form-element">
           <label
@@ -95,6 +101,9 @@
               v-text="category"
             />
           </ContactSelect>
+          <p class="form-element__hint">
+            請選擇需求分類
+          </p>
         </div>
         <div class="form__form-element form-element">
           <label
@@ -114,6 +123,9 @@
             :value="formContent"
             @input.native="handleInput('formContent', $event)"
           />
+          <p class="form-element__hint form-element__hint--stretch">
+            請輸入內容
+          </p>
         </div>
         <div class="form__form-element">
           <recaptcha
@@ -251,19 +263,31 @@ export default {
     display block
   &__input
     margin 10px 0 0 0
-    border 2px solid transparent
+    border 1px solid transparent
     &--had-submit-clicked
       &:invalid
-        border 2px solid #d84939
+        border 1px solid #d84939
+        & + .form-element__hint
+          display block
+    &--stretch
+      width 100%
+  &__hint
+    width 270px
+    text-align right
+    margin 10px 0 0 0
+    color #d84939
+    font-size 14px
+    font-weight 600
+    display none
     &--stretch
       width 100%
 
 .contact-recaptcha
   & >>> iframe
-    border 2px solid transparent
+    border 1px solid transparent
   &--invalid
     & >>> iframe
-      border 2px solid #d84939
+      border 1px solid #d84939
 
 @media (max-width 768px)
   .lighter
@@ -278,5 +302,7 @@ export default {
 
   .form-element
     &__input
+      width 100%
+    &__hint
       width 100%
 </style>
