@@ -11,9 +11,19 @@ export default class Axios {
   }
 
   get(url) {
-    return this.$axios.get(url).then(res => camelizeKeys(res.data))
+    return this.$axios
+      .get(url)
+      .then(res => camelizeKeys(res.data))
+      .catch(err => {
+        throw err
+      })
   }
   post(url, payload) {
-    return this.$axios.post(url, payload).then(res => camelizeKeys(res.data))
+    return this.$axios
+      .post(url, payload)
+      .then(res => camelizeKeys(res.data))
+      .catch(err => {
+        throw err
+      })
   }
 }
