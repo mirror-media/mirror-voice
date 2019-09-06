@@ -46,4 +46,9 @@ export default {
     bottom 0
     right 23px
     width 202px
+
+@media (max-width 768px)
+  .fail-wrapper
+    &__img
+      display none
 </style>
