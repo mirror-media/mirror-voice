@@ -24,4 +24,9 @@ export default ({ $axios }, inject) => {
     const url = `/api/posts?${query}`
     return _axios.get(url).then(res => res)
   })
+
+  inject('postContact', params => {
+    const url = `/api/googlespreadsheet/contact`
+    return _axios.post(url, params).then(res => res)
+  })
 }
