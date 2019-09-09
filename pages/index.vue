@@ -45,7 +45,7 @@
           <ShowcaseList
             class="showcase__showcase"
             :list="getSectionAlbums(section.name)"
-            @clickItem="playAlbum"
+            @clickItem="handleClickShowcaseListItem"
           />
         </AppDiv>
       </template>
@@ -70,19 +70,6 @@ import Slider from '~/components/Slider/Slider.vue'
 import PageNavsHorizontalList from '~/components/PageNavs/PageNavsHorizontalList.vue'
 import ShowcaseList from '~/components/Showcase/ShowcaseList.vue'
 import PageNavsVertical from '~/components/PageNavs/PageNavsVertical.vue'
-
-const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
-  return store.dispatch('appPlayer/FETCH', {
-    max_results: 10,
-    page,
-    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
-    where: {
-      albums: {
-        $in: [albumId]
-      }
-    }
-  })
-}
 
 export default {
   components: {
@@ -167,12 +154,7 @@ export default {
     ...mapMutations({
       SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER'
     }),
-    playAlbum(album) {
-      // TODO: rewrite this workaround for albumCover
-      const albumId = _.get(album, 'id', '')
-      const albumCover = _.get(this.$getImgs(album), ['mobile', 'url'], '')
-      this.SET_ALBUM_COVER(albumCover)
-      fetchPlayerTracks(this.$store, albumId)
+    handleClickShowcaseListItem() {
       this.$sendGAHome({ action: 'click', label: 'album' })
     },
     clickSlide() {
