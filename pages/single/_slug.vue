@@ -141,7 +141,7 @@ export default {
       return sanitizeHtml(
         _.get(this.single, ['content', 'html'], ''),
         this.$SANITIZE_HTML_DEFAULT_OPTIONS
-      )
+      ).replace(/\n/g, '<br>')
     },
     contentText() {
       return this.$getHtmlText(this.content)
