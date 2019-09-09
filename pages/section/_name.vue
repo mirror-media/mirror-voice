@@ -28,7 +28,7 @@
         class="bottom-wrapper__showcase"
         :list-item-layout="'horizontal'"
         :list="showcase.items"
-        @clickItem="playAlbum"
+        @clickItem="handleClickShowcaseListItem"
       />
       <AppPagination
         v-if="total > $MAXRESULT_SHOWCASE_SECTION_CATEGORY"
@@ -89,19 +89,6 @@ const fetchShowcase = (app, where, ids, page = 1) => {
         $not: {
           $size: 0
         }
-      }
-    }
-  })
-}
-
-const fetchPlayerTracks = (app, albumId, isLatestFirst = true, page = 1) => {
-  return app.$store.dispatch('appPlayer/FETCH', {
-    max_results: app.$MAXRESULT_TRACKS_HOME,
-    page,
-    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
-    where: {
-      albums: {
-        $in: [albumId]
       }
     }
   })
@@ -254,12 +241,7 @@ export default {
     ...mapMutations({
       SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER'
     }),
-    playAlbum(album) {
-      // TODO: rewrite this workaround for albumCover
-      const albumId = _.get(album, 'id', '')
-      const albumCover = _.get(this.$getImgs(album), ['mobile', 'url'], '')
-      this.SET_ALBUM_COVER(albumCover)
-      fetchPlayerTracks(this, albumId)
+    handleClickShowcaseListItem() {
       this.$sendGAListing({ action: 'click', label: 'album' })
     },
 
