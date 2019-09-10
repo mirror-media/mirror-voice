@@ -112,7 +112,6 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
-import sanitizeHtml from 'sanitize-html'
 import _ from 'lodash'
 
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
@@ -126,6 +125,8 @@ import AsideIntroVocal from '~/components/Aside/AsideIntro/AsideIntroVocal/Conta
 import AsideAlbumList from '~/components/Aside/AsideAlbumList.vue'
 import TrackList from '~/components/Track/TrackList.vue'
 import AppPagination from '~/components/AppPagination.vue'
+
+import sanitizeContent from '~/plugins/util/sanitizeContent'
 
 import Vue from 'vue'
 if (process.browser) {
@@ -197,10 +198,7 @@ export default {
     }),
 
     brief() {
-      return sanitizeHtml(
-        _.get(this.album, ['brief', 'html'], ''),
-        this.$SANITIZE_HTML_DEFAULT_OPTIONS
-      )
+      return sanitizeContent(_.get(this.album, ['brief', 'html'], ''))
     },
     briefText() {
       return this.$getHtmlText(this.brief)
@@ -402,7 +400,7 @@ export default {
 .body-wrapper
   &__body
     margin 17px 0 0 0
-    color #7d7d7d
+    color black
     font-size 14px
     line-height 1.71
     text-align justify

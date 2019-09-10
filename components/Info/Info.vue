@@ -75,27 +75,16 @@
           </template>
         </div>
       </div>
-      <div
-        v-if="layout === 'single'"
-        class="info__tags tags"
+      <AppPlayingButton
+        :class="[
+          'info__toggle-play',
+          { 'info__toggle-play--static': layout === 'single' }
+        ]"
+        :is-playing="isPlaying"
+        @click.native="handleClickPlayButton"
       >
-        <AppTag
-          v-for="(tag, i) in tags"
-          :key="i"
-          class="tags__tag"
-          :tag="tag"
-        />
-      </div>
-      <div
-        v-if="layout === 'album'"
-        class="info__toggle-play toggle-play"
-        @click="$emit('clickPlay')"
-      >
-        <img class="toggle-play__icon" src="~/assets/img/btn_play.png" alt="">
-        <span class="toggle-play__text">
-          全部播放
-        </span>
-      </div>
+        {{ togglePlayText }}
+      </AppPlayingButton>
     </div>
   </div>
 </template>
@@ -105,13 +94,13 @@ import _ from 'lodash'
 
 import AppH1 from '~/components/AppH1.vue'
 import AppDate from '~/components/AppDate.vue'
-import AppTag from '~/components/AppTag.vue'
+import AppPlayingButton from '~/components/AppPlayingButton.vue'
 
 export default {
   components: {
     AppH1,
     AppDate,
-    AppTag
+    AppPlayingButton
   },
   props: {
     layout: {
@@ -124,6 +113,10 @@ export default {
     info: {
       type: Object,
       required: true
+    },
+    isPlaying: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -141,11 +134,29 @@ export default {
     },
     writers() {
       return _.get(this.info, 'writers', [])
+    },
+    togglePlayText() {
+      if (this.layout === 'album') {
+        return '全部播放'
+      } else if (this.layout === 'single' && this.isPlaying) {
+        return '暫停'
+      } else if (this.layout === 'single' && !this.isPlaying) {
+        return '播放'
+      } else {
+        return ''
+      }
     }
   },
   methods: {
     getName(person) {
       return _.get(person, 'name', '')
+    },
+    handleClickPlayButton() {
+      if (this.layout === 'album') {
+        this.$emit('clickPlay')
+      } else if (this.layout === 'single') {
+        this.$emit('update:isPlaying', !this.isPlaying)
+      }
     }
   }
 }
@@ -182,15 +193,13 @@ export default {
     line-height 1
   &__basic
     margin 16px 0 0 0
-  &__tags
-    display flex
-    margin 7px 0 0 0
-    position relative
-    left -12px
   &__toggle-play
     position absolute
     bottom 0
     width 100%
+    &--static
+      position static
+      margin 16px 0 0 0
 
 .basic
   display flex
@@ -203,24 +212,6 @@ export default {
     flex-wrap wrap
     & + &
       margin 10px 0 0 0
-
-.tags
-  flex-wrap wrap
-  &__tag
-    margin 12px 0 0 12px
-
-.toggle-play
-  display inline-flex
-  align-items center
-  height 36px
-  cursor pointer
-  &__icon
-    width 36px
-    height 36px
-  &__text
-    margin 0 0 0 16px
-    font-size 18px
-    color #d84939
 
 @media (max-width 768px)
   .info-wrapper
@@ -247,16 +238,12 @@ export default {
     &__basic
       order 1
       margin 5px 0 0 0
+    &__toggle-play
+      display none !important
 
   .basic
     font-size 13px
     &__row
       & + &
         margin 0
-
-  .tags
-    display none
-
-  .toggle-play
-    display none
 </style>
