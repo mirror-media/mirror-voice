@@ -41,17 +41,6 @@
         <NoSSR>
           <div class="body-wrapper__body-tags body-tags">
             <div class="body-tags__body" v-html="content" />
-            <div
-              v-if="tags.length > 0"
-              class="body-tags__tags tags"
-            >
-              <AppTag
-                v-for="(tag, i) in tags"
-                :key="i"
-                class="tags__tag"
-                :tag="tag"
-              />
-            </div>
           </div>
         </NoSSR>
         <div
@@ -88,7 +77,6 @@ import AppH1 from '~/components/AppH1.vue'
 import Info from '~/components/Info/Info.vue'
 import IconReadmore from '~/components/Icon/IconReadmore.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
-import AppTag from '~/components/AppTag.vue'
 import AsideSlideshowAlbum from '~/components/Aside/AsideSlideshowAlbum.vue'
 import NoSSR from 'vue-no-ssr'
 
@@ -115,7 +103,6 @@ export default {
     Info,
     IconReadmore,
     AppPlayingBanner,
-    AppTag,
     AsideSlideshowAlbum,
     NoSSR
   },
@@ -303,8 +290,6 @@ export default {
       margin 20px 0 0 0
     & >>> a
       color #21516f
-  &__tags
-    display none
 
 .read-more
   display none
@@ -367,16 +352,6 @@ export default {
         margin 20px 0 0 0
       & >>> *:nth-child(1)
         margin 0
-    &__tags
-      position relative
-      left -5px
-      margin 10px 0
-
-  .tags
-    display flex
-    flex-wrap wrap
-    &__tag
-      margin 5px
 
   .read-more
     display flex

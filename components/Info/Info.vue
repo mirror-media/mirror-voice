@@ -76,17 +76,6 @@
         </div>
       </div>
       <div
-        v-if="layout === 'single'"
-        class="info__tags tags"
-      >
-        <AppTag
-          v-for="(tag, i) in tags"
-          :key="i"
-          class="tags__tag"
-          :tag="tag"
-        />
-      </div>
-      <div
         v-if="layout === 'album'"
         class="info__toggle-play toggle-play"
         @click="$emit('clickPlay')"
@@ -105,13 +94,11 @@ import _ from 'lodash'
 
 import AppH1 from '~/components/AppH1.vue'
 import AppDate from '~/components/AppDate.vue'
-import AppTag from '~/components/AppTag.vue'
 
 export default {
   components: {
     AppH1,
-    AppDate,
-    AppTag
+    AppDate
   },
   props: {
     layout: {
@@ -182,11 +169,6 @@ export default {
     line-height 1
   &__basic
     margin 16px 0 0 0
-  &__tags
-    display flex
-    margin 7px 0 0 0
-    position relative
-    left -12px
   &__toggle-play
     position absolute
     bottom 0
@@ -203,11 +185,6 @@ export default {
     flex-wrap wrap
     & + &
       margin 10px 0 0 0
-
-.tags
-  flex-wrap wrap
-  &__tag
-    margin 12px 0 0 12px
 
 .toggle-play
   display inline-flex
@@ -253,9 +230,6 @@ export default {
     &__row
       & + &
         margin 0
-
-  .tags
-    display none
 
   .toggle-play
     display none
