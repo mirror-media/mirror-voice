@@ -15,11 +15,17 @@
         {{ figcaption }}
       </figcaption>
     </figure>
-    <div class="intro__description" v-html="description" />
+    <div
+      v-if="!isDescriptionEmpty"
+      class="intro__description"
+      v-html="description"
+    />
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   props: {
     imgStyle: {
@@ -40,6 +46,11 @@ export default {
     description: {
       type: String,
       required: true
+    }
+  },
+  computed: {
+    isDescriptionEmpty() {
+      return _.isEmpty(this.description)
     }
   }
 }

@@ -19,12 +19,18 @@
           {{ figcaption }}
         </figcaption>
       </figure>
-      <div class="intro__description" v-html="description" />
+      <div
+        v-if="!isDescriptionEmpty"
+        class="intro__description"
+        v-html="description"
+      />
     </div>
   </AppDiv>
 </template>
 
 <script>
+import _ from 'lodash'
+
 import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
 
@@ -56,6 +62,11 @@ export default {
     description: {
       type: String,
       required: true
+    }
+  },
+  computed: {
+    isDescriptionEmpty() {
+      return _.isEmpty(this.description)
     }
   }
 }
