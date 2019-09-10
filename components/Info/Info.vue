@@ -219,7 +219,7 @@ export default {
       order 1
       margin 5px 0 0 0
     &__toggle-play
-      display none
+      display none !important
 
   .basic
     font-size 13px
