@@ -400,7 +400,7 @@ export default {
 .body-wrapper
   &__body
     margin 17px 0 0 0
-    color #7d7d7d
+    color black
     font-size 14px
     line-height 1.71
     text-align justify
