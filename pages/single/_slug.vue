@@ -273,7 +273,7 @@ export default {
 
 .body-tags
   &__body
-    color #7d7d7d
+    color black
     font-size 14px
     line-height 1.71
     text-align justify
