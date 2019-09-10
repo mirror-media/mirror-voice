@@ -15,11 +15,17 @@
         {{ figcaption }}
       </figcaption>
     </figure>
-    <div class="intro__description" v-html="description" />
+    <div
+      v-if="!isDescriptionEmpty"
+      class="intro__description"
+      v-html="description"
+    />
   </div>
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   props: {
     imgStyle: {
@@ -41,6 +47,11 @@ export default {
       type: String,
       required: true
     }
+  },
+  computed: {
+    isDescriptionEmpty() {
+      return _.isEmpty(this.description)
+    }
   }
 }
 </script>
@@ -49,11 +60,12 @@ export default {
 .intro
   &__description
     margin 18px 0 0 0
-    & >>> p
-      font-size 14px
-      line-height 1.71
-      text-align justify
-      color #7d7d7d
+    color #7d7d7d
+    font-size 14px
+    line-height 1.71
+    text-align justify
+    & >>> *
+      margin 20px 0 0 0
     & >>> a
       color #21516f
 

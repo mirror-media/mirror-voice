@@ -1,6 +1,6 @@
 <script>
 import _ from 'lodash'
-import sanitizeHtml from 'sanitize-html'
+import sanitizeContent from '~/plugins/util/sanitizeContent'
 
 export default {
   props: {
@@ -19,10 +19,7 @@ export default {
       return _.get(this.data, 'title', '')
     },
     description() {
-      return sanitizeHtml(
-        _.get(this.data, ['brief', 'html'], ''),
-        this.$SANITIZE_HTML_DEFAULT_OPTIONS
-      )
+      return sanitizeContent(_.get(this.data, ['brief', 'html'], ''), true)
     }
   },
   render() {
