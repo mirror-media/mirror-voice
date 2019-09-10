@@ -75,16 +75,15 @@
           </template>
         </div>
       </div>
-      <div
-        v-if="layout === 'album'"
-        class="info__toggle-play toggle-play"
-        @click="$emit('clickPlay')"
+      <AppPlayingButton
+        :class="[
+          'info__toggle-play',
+          { 'info__toggle-play--static': layout === 'single' }
+        ]"
+        @click.native="$emit('clickPlay')"
       >
-        <img class="toggle-play__icon" src="~/assets/img/btn_play.png" alt="">
-        <span class="toggle-play__text">
-          全部播放
-        </span>
-      </div>
+        {{ togglePlayText }}
+      </AppPlayingButton>
     </div>
   </div>
 </template>
@@ -94,11 +93,13 @@ import _ from 'lodash'
 
 import AppH1 from '~/components/AppH1.vue'
 import AppDate from '~/components/AppDate.vue'
+import AppPlayingButton from '~/components/AppPlayingButton.vue'
 
 export default {
   components: {
     AppH1,
-    AppDate
+    AppDate,
+    AppPlayingButton
   },
   props: {
     layout: {
@@ -128,6 +129,9 @@ export default {
     },
     writers() {
       return _.get(this.info, 'writers', [])
+    },
+    togglePlayText() {
+      return this.layout === 'album' ? '全部播放' : '播放'
     }
   },
   methods: {
@@ -173,6 +177,9 @@ export default {
     position absolute
     bottom 0
     width 100%
+    &--static
+      position static
+      margin 16px 0 0 0
 
 .basic
   display flex
@@ -185,19 +192,6 @@ export default {
     flex-wrap wrap
     & + &
       margin 10px 0 0 0
-
-.toggle-play
-  display inline-flex
-  align-items center
-  height 36px
-  cursor pointer
-  &__icon
-    width 36px
-    height 36px
-  &__text
-    margin 0 0 0 16px
-    font-size 18px
-    color #d84939
 
 @media (max-width 768px)
   .info-wrapper
@@ -224,13 +218,12 @@ export default {
     &__basic
       order 1
       margin 5px 0 0 0
+    &__toggle-play
+      display none
 
   .basic
     font-size 13px
     &__row
       & + &
         margin 0
-
-  .toggle-play
-    display none
 </style>

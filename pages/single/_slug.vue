@@ -267,9 +267,9 @@ export default {
 .infos-wrapper
   padding 0 !important
   &__info
-    padding 25px 25px 0 25px
+    padding 25px
   &__playing-banner
-    margin 20px 0 0 0
+    display none !important
 
 .body-tags
   &__body
