@@ -80,7 +80,6 @@
 
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
-import sanitizeHtml from 'sanitize-html'
 import _ from 'lodash'
 
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
@@ -92,6 +91,8 @@ import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AppTag from '~/components/AppTag.vue'
 import AsideSlideshowAlbum from '~/components/Aside/AsideSlideshowAlbum.vue'
 import NoSSR from 'vue-no-ssr'
+
+import sanitizeContent from '~/plugins/util/sanitizeContent'
 
 const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
   return app.$fetchSingle({
@@ -138,10 +139,7 @@ export default {
     }),
 
     content() {
-      return sanitizeHtml(
-        _.get(this.single, ['content', 'html'], ''),
-        this.$SANITIZE_HTML_DEFAULT_OPTIONS
-      ).replace(/\n/g, '<br>')
+      return sanitizeContent(_.get(this.single, ['content', 'html'], ''))
     },
     contentText() {
       return this.$getHtmlText(this.content)
