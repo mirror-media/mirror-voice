@@ -80,7 +80,8 @@
           'info__toggle-play',
           { 'info__toggle-play--static': layout === 'single' }
         ]"
-        @click.native="$emit('clickPlay')"
+        :is-playing="isPlaying"
+        @click.native="handleClickPlayButton"
       >
         {{ togglePlayText }}
       </AppPlayingButton>
@@ -112,6 +113,10 @@ export default {
     info: {
       type: Object,
       required: true
+    },
+    isPlaying: {
+      type: Boolean,
+      default: false
     }
   },
   computed: {
@@ -131,12 +136,27 @@ export default {
       return _.get(this.info, 'writers', [])
     },
     togglePlayText() {
-      return this.layout === 'album' ? '全部播放' : '播放'
+      if (this.layout === 'album') {
+        return '全部播放'
+      } else if (this.layout === 'single' && this.isPlaying) {
+        return '暫停'
+      } else if (this.layout === 'single' && !this.isPlaying) {
+        return '播放'
+      } else {
+        return ''
+      }
     }
   },
   methods: {
     getName(person) {
       return _.get(person, 'name', '')
+    },
+    handleClickPlayButton() {
+      if (this.layout === 'album') {
+        this.$emit('clickPlay')
+      } else if (this.layout === 'single') {
+        this.$emit('update:isPlaying', !this.isPlaying)
+      }
     }
   }
 }

@@ -7,7 +7,7 @@
         <Info
           class="infos-wrapper__info"
           :info="single"
-          @clickPlay="playSingle"
+          :is-playing.sync="isSinglePlaying"
         />
 
         <audio
