@@ -34,9 +34,6 @@
           { 'body-wrapper--expand': !isBodyWrapperFold }
         ]"
       >
-        <AppH1 class="body-wrapper__title">
-          文稿
-        </AppH1>
         <!-- NoSSR due to SEO concerns -->
         <NoSSR>
           <div class="body-wrapper__body-tags body-tags">
@@ -73,7 +70,6 @@ import _ from 'lodash'
 
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
-import AppH1 from '~/components/AppH1.vue'
 import Info from '~/components/Info/Info.vue'
 import IconReadmore from '~/components/Icon/IconReadmore.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
@@ -99,7 +95,6 @@ export default {
   components: {
     AppMainAsideWrapper,
     AppDiv,
-    AppH1,
     Info,
     IconReadmore,
     AppPlayingBanner,
@@ -276,17 +271,13 @@ export default {
   &__playing-banner
     margin 20px 0 0 0
 
-.body-wrapper
-  &__body-tags
-    margin 17px 0 0 0
-
 .body-tags
   &__body
     color #7d7d7d
     font-size 14px
     line-height 1.71
     text-align justify
-    & >>> *
+    & >>> *:not(:first-child)
       margin 20px 0 0 0
     & >>> a
       color #21516f
@@ -332,8 +323,6 @@ export default {
       max-height none
     &__title
       display none
-    &__body-tags
-      margin 0
     &__read-more
       width 100%
       height 19px
@@ -348,10 +337,6 @@ export default {
       font-size 13px
       line-height 1.54
       text-align justify
-      & >>> *
-        margin 20px 0 0 0
-      & >>> *:nth-child(1)
-        margin 0
 
   .read-more
     display flex
