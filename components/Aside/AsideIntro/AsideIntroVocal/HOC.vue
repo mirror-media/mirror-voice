@@ -22,7 +22,7 @@ export default {
       return _.get(this.vocal, 'name', '')
     },
     description() {
-      return sanitizeContent(_.get(this.vocal, ['bio', 'html'], ''))
+      return sanitizeContent(_.get(this.vocal, ['bio', 'html'], ''), true)
     }
   },
   render() {
