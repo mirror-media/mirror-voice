@@ -19,10 +19,10 @@
           :is-playing.sync="isSinglePlaying"
         >
           <template v-if="!isSinglePlaying">
-            播放 {{ $secondsToHms(singleDuration) }}
+            播放
           </template>
           <template v-else>
-            暫停 {{ $secondsToHms(appPlayer.playedTime) }} / {{ $secondsToHms(singleDuration) }}
+            暫停
           </template>
         </AppPlayingBanner>
       </AppDiv>
