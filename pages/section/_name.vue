@@ -78,7 +78,7 @@ const fetchShowcase = (app, where, ids, page = 1) => {
   return app.$fetchAlbums({
     max_results: app.$MAXRESULT_SHOWCASE_SECTION_CATEGORY,
     page,
-    sort: '-publishedDate',
+    sort: 'sortOrder',
     where: {
       [where]: {
         $in: ids
