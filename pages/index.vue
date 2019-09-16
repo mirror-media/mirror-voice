@@ -99,7 +99,7 @@ export default {
             app.$fetchAlbums({
               max_results: app.$MAXRESULT_SHOWCASE_HOME,
               page: 1,
-              sort: '-publishedDate',
+              sort: 'sortOrder',
               where: {
                 sections: {
                   $in: [id]
