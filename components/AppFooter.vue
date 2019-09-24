@@ -1,5 +1,10 @@
 <template>
-  <footer class="footer">
+  <footer
+    :class="[
+      'footer',
+      { 'footer--higher': showAppPlayer }
+    ]"
+  >
     <nav class="footer__main-navs main-navs">
       <nuxt-link
         class="main-navs__nav"
@@ -44,6 +49,18 @@
   </footer>
 </template>
 
+<script>
+import { mapState } from 'vuex'
+
+export default {
+  computed: {
+    ...mapState({
+      showAppPlayer: state => state.appPlayer.showAppPlayer
+    })
+  }
+}
+</script>
+
 <style lang="stylus" scoped>
 .footer
   border-top 2px solid #FE5000
@@ -53,6 +70,9 @@
   justify-content space-between
   align-items center
   padding 0 83px
+  &--higher
+    height calc(60px + 60px)
+    padding 0 83px 60px 83px
 
 .main-navs
   display flex
@@ -84,9 +104,12 @@
 
 @media (max-width 768px)
   .footer
-    height auto
+    height 152px
     padding 16px 0 10px 0
     flex-direction column
+    &--higher
+      height calc(152px + 60px)
+      padding 16px 0 70px 0
     &__external-navs
       margin 20px 0 0 0
     &__rights
