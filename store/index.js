@@ -10,7 +10,10 @@ export const mutations = {
 
 export const actions = {
   async nuxtServerInit({ commit }, { app }) {
-    const { items } = await app.$fetchSections({ max_results: 20 })
+    const { items } = await app.$fetchSections({
+      sort: 'sortOrder',
+      max_results: 20
+    })
     commit('SET_SECTIONS', items)
   }
 }
