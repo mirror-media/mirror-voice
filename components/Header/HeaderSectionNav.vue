@@ -91,7 +91,7 @@ export default {
   margin 0
   padding 0
   list-style none
-  width 100%
+  width max-content
   border-top 3px solid #FE5000
   background-color white
   box-shadow 0px 3px 6px #00000029
