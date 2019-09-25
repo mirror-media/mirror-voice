@@ -1,11 +1,21 @@
 <template>
-  <div class="app">
+  <div
+    :class="[
+      'app',
+      { 'app--white': isPageHome }
+    ]"
+  >
     <AppHeader />
     <!-- <AppBreadcrumb
       v-show="!hideBreadcrumb"
       class="app__breadcrumb"
     /> -->
-    <div class="app__view-wrapper">
+    <div
+      :class="[
+        'app__view-wrapper',
+        { 'app__view-wrapper--marginless': isPageHome },
+      ]"
+    >
       <nuxt />
     </div>
     <AppFooter />
@@ -71,6 +81,9 @@ export default {
     shouldShowNativeNotification() {
       // name will be null if page is invalid and covered by 404/500
       return this.$route.name
+    },
+    isPageHome() {
+      return this.$route.name && this.$route.name.includes('index')
     }
   },
   watch: {
@@ -133,11 +146,15 @@ export default {
 <style lang="stylus" scoped>
 .app
   background-color #eeeeee
+  &--white
+    background-color white
   &__breadcrumb
     max-width 1000px
     margin 20px auto 0 auto
   &__view-wrapper
     margin 18px auto 60px auto
+    &--marginless
+      margin 0
   &__player
     position fixed
     bottom 0
