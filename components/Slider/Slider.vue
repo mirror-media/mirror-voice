@@ -11,9 +11,9 @@
         @click="$emit('clickSlide')"
       >
         <nuxt-link :to="getHref(item)">
-          <div class="swper-slide__slide">
+          <div class="swiper-slide__slide">
             <img
-              class="swper-slide__image"
+              class="swiper-slide__image"
               :src="getImgUrl(item)"
               alt=""
             >
@@ -21,6 +21,8 @@
         </nuxt-link>
       </div>
     </div>
+    <div class="swiper-button swiper-button-prev" />
+    <div class="swiper-button swiper-button-next" />
     <div class="swiper-pagination swiper-pagination-bullets" />
   </div>
 </template>
@@ -52,11 +54,15 @@ export default {
         loop: true,
         slidesPerView: 'auto',
         centeredSlides: true,
-        spaceBetween: 30,
+        spaceBetween: 0,
         pagination: {
           el: '.swiper-pagination',
           dynamicBullets: false,
           clickable: true
+        },
+        navigation: {
+          nextEl: '.swiper-button-next',
+          prevEl: '.swiper-button-prev'
         },
         grabCursor: false,
         autoplay: true
@@ -81,9 +87,34 @@ export default {
 
 <style lang="stylus" scoped>
 .slider
-  height 335px
+  height 345px
+  padding 0 0 20px 0
+  position relative
+  &:before
+    position absolute
+    left 0
+    top 0
+    height calc(100% - 20px)
+    width 300px
+    content ''
+    background linear-gradient(to left, #FFFFFF00 0%, #6F6F6F 100%)
+    pointer-events none
+    z-index 999
+    opacity .7
+  &:after
+    position absolute
+    right 0
+    top 0
+    height calc(100% - 20px)
+    width 300px
+    content ''
+    background linear-gradient(to right, #FFFFFF00 0%, #6F6F6F 100%)
+    pointer-events none
+    z-index 999
+    opacity .7
 
-.swper-slide
+.swiper-slide
+  width 50%
   &__slide
     width 100%
     height 100%
@@ -92,36 +123,50 @@ export default {
     height 100%
     object-fit cover
 
+.swiper-button
+  position absolute
+  z-index 1000
+  filter brightness(.7)
+
+.swiper-button-prev
+  left 23px
+  background-image url('~assets/img/revamp/icon-left-arrow.svg')
+
+.swiper-button-next
+  right 23px
+  background-image url('~assets/img/revamp/icon-right-arrow.svg')
+  filter brightness(.7)
+
 .swiper-pagination
-  bottom 16px
-  text-align right
-  padding 0 20px 0 0
+  bottom 0px
   & >>> [role=button]
-    width 12px
-    height 12px
-    margin 0 4px
+    width 8px
+    height 8px
+    margin 0 10px
   & >>> .swiper-pagination-bullet
-    background-color #7d7d7d
+    background-color gray
   & >>> .swiper-pagination-bullet-active
-    background-color #d84939
+    background-color #1E170F
 
 @media (max-width 768px)
   .slider
-    height calc(100vw * 0.464)
+    height 200px
+    padding 0 0 30px 0
+    &:before, &:after
+      display none
 
-  .swiper-pagination
-    bottom 10px
-    text-align center
-    padding 0
-    & >>> [role=button]
-      width 4px
-      height 4px
-    & >>> .swiper-pagination-bullet
-      background-color white !important
-      background none
-      opacity 1
-    & >>> .swiper-pagination-bullet-active
-      background-color #d84939 !important
-      background none
-      opacity 1
+  .swiper-slide
+    width 100%
+
+  .swiper-button
+    filter none
+    opacity .8
+
+  .swiper-button-prev
+    left 5px
+    transform translateY(-15px)
+
+  .swiper-button-next
+    right 5px
+    transform translateY(-15px)
 </style>
