@@ -61,6 +61,7 @@ export default {
 
 <style lang="stylus" scoped>
 .header
+  position relative
   z-index 1000
   height 60px
   background-color white
