@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-const titleSuffix = '鏡語音 Mirror Voice'
+const titleSuffix = '鏡好聽 Mirror Voice'
 const baseUrl = 'https://voice.mirrormedia.mg'
 
 /* 

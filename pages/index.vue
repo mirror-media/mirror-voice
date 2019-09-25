@@ -1,85 +1,93 @@
 <template>
-  <AppMainAsideWrapper>
-    <div slot="main" class="main">
-      <Slider
-        :items="audioPromotions.items"
-        @clickSlide="clickSlide"
-      />
-      <PageNavsHorizontalList
-        class="main__navs"
-        :items="categories"
-        :should-wrap="false"
-        @clickItem="clickCategory"
-      />
-      <template
-        v-for="(section, i) in sections"
-      >
-        <AppDiv
-          v-if="getSectionAlbums(section.name).length > 0"
-          :key="i"
-          class="main__wrapper showcase"
-        >
-          <DivHeader
-            class="showcase__header header"
-            :size="'large'"
-            :weight="'bold'"
-            :align-items="'flex-end'"
+  <section class="home">
+    <!-- <section class="home__slideshow slideshow"></section> -->
+    <Slider
+      class="home__slideshow"
+      :items="audioPromotions.items"
+    />
+    <section class="home__showcase showcase">
+      <main class="showcase__main main">
+        <header class="showcase-header">
+          <nuxt-link
+            class="showcase-header__title"
+            :to="`/section/${getName(sectionMain)}`"
+            v-text="getTitle(sectionMain)"
+          />
+          <nuxt-link
+            class="showcase-header__more"
+            :to="`/section/${getName(sectionMain)}`"
+          >
+            更多
+          </nuxt-link>
+        </header>
+        <ol class="showcase-list">
+          <li
+            v-for="album in sectionMainShowcaseAlbums"
+            :key="album.id"
+            class="showcase-list__list-item"
           >
             <nuxt-link
-              slot="left"
-              class="header__left"
-              :to="`/section/${getName(section)}`"
-              @click.native="clickSection"
+              :to="`/album/${getName(album)}`"
             >
-              {{ section.title }}
+              <img
+                v-lazy="getImgUrl(album)"
+                alt=""
+              >
+              <div>
+                <h1 v-text="getTitle(album)" />
+                <p v-text="getVocal(album)" />
+              </div>
             </nuxt-link>
-            <nuxt-link
-              slot="right"
-              class="header__right"
-              :to="`/section/${getName(section)}`"
-              @click.native="clickSection"
-            >
-              更多
-            </nuxt-link>
-          </DivHeader>
-          <ShowcaseList
-            class="showcase__showcase"
-            :list="getSectionAlbums(section.name)"
-            @clickItem="handleClickShowcaseListItem"
+          </li>
+        </ol>
+      </main>
+      <aside class="showcase__aside aside">
+        <header class="showcase-header">
+          <nuxt-link
+            class="showcase-header__title"
+            :to="`/section/${getName(sectionAside)}`"
+            v-text="getTitle(sectionAside)"
           />
-        </AppDiv>
-      </template>
-    </div>
-    <PageNavsVertical
-      slot="aside"
-      class="aside"
-      :items="sections"
-      @clickItem="clickCategory"
-    />
-  </AppMainAsideWrapper>
+          <nuxt-link
+            class="showcase-header__more"
+            :to="`/section/${getName(sectionAside)}`"
+          >
+            更多
+          </nuxt-link>
+        </header>
+        <ol class="showcase-list">
+          <li
+            v-for="album in sectionAsideShowcaseAlbums"
+            :key="album.id"
+            class="showcase-list__list-item"
+          >
+            <nuxt-link
+              :to="`/album/${getName(album)}`"
+            >
+              <img
+                v-lazy="getImgUrl(album)"
+                alt=""
+              >
+              <div>
+                <h1 v-text="getTitle(album)" />
+                <p v-text="getVocal(album)" />
+              </div>
+            </nuxt-link>
+          </li>
+        </ol>
+      </aside>
+    </section>
+  </section>
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
 import _ from 'lodash'
 
-import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
-import AppDiv from '~/components/AppDiv.vue'
-import DivHeader from '~/components/Div/DivHeader.vue'
 import Slider from '~/components/Slider/Slider.vue'
-import PageNavsHorizontalList from '~/components/PageNavs/PageNavsHorizontalList.vue'
-import ShowcaseList from '~/components/Showcase/ShowcaseList.vue'
-import PageNavsVertical from '~/components/PageNavs/PageNavsVertical.vue'
 
 export default {
   components: {
-    AppMainAsideWrapper,
-    AppDiv,
-    DivHeader,
-    Slider,
-    PageNavsHorizontalList,
-    ShowcaseList,
-    PageNavsVertical
+    Slider
   },
   async asyncData({ app }) {
     const fetchAudioPromotions = () => {
@@ -88,8 +96,7 @@ export default {
 
     /*
     ** 1. Fetch all sections
-    ** 2. Filter audio sections
-    ** 3. Fetch albums belong to each audio sections
+    ** 2. Fetch albums belong to each audio sections
     */
     const getAudioSectionsAndAlbums = async () => {
       const getSectionAlbums = async sectionIds => {
@@ -117,10 +124,8 @@ export default {
         )
         return result.map(d => d.items)
       }
-      const { items } = await app.$fetchSections({ max_results: 20 })
 
-      // NOTE: workaround for audio sections
-      // const audioSections = app.$filterAudioSections(items)
+      const { items } = await app.$fetchSections({ max_results: 20 })
       const audioSections = items
       let albums = await getSectionAlbums(
         audioSections.map(section => section.id)
@@ -143,6 +148,20 @@ export default {
       albums
     }
   },
+  computed: {
+    sectionMain() {
+      return _.get(this.sections, 0, {})
+    },
+    sectionMainShowcaseAlbums() {
+      return this.getSectionAlbums(this.getName(this.sectionMain))
+    },
+    sectionAside() {
+      return _.get(this.sections, 1, {})
+    },
+    sectionAsideShowcaseAlbums() {
+      return _.take(this.getSectionAlbums(this.getName(this.sectionAside)), 4)
+    }
+  },
   methods: {
     getSectionAlbums(sectionName) {
       return this.albums.filter(album => {
@@ -151,9 +170,6 @@ export default {
       })
     },
 
-    ...mapMutations({
-      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER'
-    }),
     handleClickShowcaseListItem() {
       this.$sendGAHome({ action: 'click', label: 'album' })
     },
@@ -166,48 +182,130 @@ export default {
     clickSection() {
       this.$sendGAHome({ action: 'click', label: 'section' })
     },
+
     getName(item) {
       return _.get(item, 'name', '')
+    },
+    getTitle(item) {
+      return _.truncate(_.get(item, 'title', ''), { length: 15 })
+    },
+    getImgUrl(item) {
+      return _.get(this.$getImgs(item), ['mobile', 'url'], '')
+    },
+    getVocal(item) {
+      return _.get(item, ['vocals', 0, 'name'], '')
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-.main
-  &__navs
-    display none !important
-  &__wrapper
-    margin 20px 0 0 0
+.home
+  &__showcase
+    margin-top 30px
 
 .showcase
-  &__showcase
-    margin 24px 0 0 0 !important
+  min-height 675px
+  max-width 1200px
+  margin-left auto
+  margin-right auto
+  display flex
+  &__aside
+    margin 0 0 0 40px
 
-.header
-  &__right
-    font-size 14px
-    color #7d7d7d
-    cursor pointer
+.main
+  width 770px
+
+.aside
+  width 390px
+
+.showcase-header
+  height 30px
+  border-bottom 3px solid #EFEFEF
+  padding 0 18px
+  display flex
+  justify-content space-between
+  &__title
+    font-size 18px
+    font-weight bold
+    color #1E170F
+    margin 0
+    border-bottom 3px solid #FE5000
+    height 30px
+    display inline-block
+    padding 0 5px
+  &__more
+    display flex
+    align-items center
+    font-size 13px
+    color #1E170F
+    margin 0 0 5px 0
+    &:before
+      content ''
+      width 0
+      height 0
+      border-style solid
+      border-width 4px 0 4px 7px
+      border-color transparent transparent transparent #FE5000
+      margin 0 5px 0 0
+
+.showcase-list
+  list-style none
+  margin -2px 3px // margin calc(18px - 20px) calc(18px - 15px)
+  padding 0
+  display flex
+  flex-wrap wrap
+  &__list-item
+    margin 20px 15px
+    img
+      d = 160px
+      width d
+      height d
+      min-width d
+      min-height d
+      object-fit cover
+    div
+      text-align center
+      margin 10px 0 0 0
+    h1
+      margin 0
+      font-size 16px
+      color #2E2526
+    p
+      margin 10px 0 0 0
+      font-size 13px
+      color #6F6F6F
 
 @media (max-width 768px)
+  .showcase
+    min-height 0
+    max-width 100%
+    margin-left 0
+    margin-right 0
+    flex-direction column
+    &__aside
+      margin 40px 0 20px 0
+
   .main
-    &__navs
-      display flex !important
-      padding 0 18px !important
-    &__wrapper
-      margin 16px 0 0 0
+    width 100%
 
   .aside
-    display none !important
+    width 100%
 
-  .showcase
-    border-top 6px solid #d84939
-    padding 18px 18px 0 18px !important
-
-  .header
-    &__right
-      font-size 11px
-      color #4a4a4a
-      text-decoration underline
+  .showcase-header
+    &__title
+      font-size 16px
+    
+  .showcase-list
+    margin 8px -2px // margin calc(18px - 10px) calc(18px - 20px)
+    &__list-item
+      margin 10px 20px
+      img
+        d = calc((100vw - 18px * 2 - 40px) / 2)
+        width d
+        height d
+        min-width d
+        min-height d
+      h1
+        font-size 15px
 </style>

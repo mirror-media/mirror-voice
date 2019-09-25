@@ -25,7 +25,7 @@ module.exports = {
   ** Headers of the page
   */
   head: {
-    title: '鏡語音 Mirror Voice',
+    title: '鏡好聽 Mirror Voice',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -33,12 +33,12 @@ module.exports = {
         hid: 'description',
         name: 'description',
         content:
-          '鏡語音是一個以台灣為基地的語音平台，集結網路副刊、專欄、知識型聲音節目與深度文化專題等，以多媒體形式，將文字播種，使眾聲思潮得以綻放。'
+          '鏡好聽是一個以台灣為基地的語音平台，集結網路副刊、專欄、知識型聲音節目與深度文化專題等，以多媒體形式，將文字播種，使眾聲思潮得以綻放。'
       },
       {
         hid: 'og:site_name',
         property: 'og:site_name',
-        content: '鏡語音 Mirror Voice'
+        content: '鏡好聽 Mirror Voice'
       },
       {
         hid: 'og:locale',
@@ -53,13 +53,13 @@ module.exports = {
       {
         hid: 'og:title',
         property: 'og:title',
-        content: '鏡語音 Mirror Voice'
+        content: '鏡好聽 Mirror Voice'
       },
       {
         hid: 'og:description',
         property: 'og:description',
         content:
-          '鏡語音是一個以台灣為基地的語音平台，集結網路副刊、專欄、知識型聲音節目與深度文化專題等，以多媒體形式，將文字播種，使眾聲思潮得以綻放。'
+          '鏡好聽是一個以台灣為基地的語音平台，集結網路副刊、專欄、知識型聲音節目與深度文化專題等，以多媒體形式，將文字播種，使眾聲思潮得以綻放。'
       },
       {
         hid: 'og:url',
@@ -146,7 +146,7 @@ module.exports = {
   ** https://github.com/nuxt-community/analytics-module
   */
   googleAnalytics: {
-    id: 'UA-83609754-3',
+    id: 'UA-89807207-2',
     debug: {
       sendHitTask: isProd
     }

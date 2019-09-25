@@ -274,6 +274,7 @@ export default {
       margin 18px 0 0 0
 
 .bottom-wrapper
+  min-height 900px
   &__header-desktop
     display flex
   &__header-mobile
@@ -293,6 +294,7 @@ export default {
     background-color transparent !important
 
   .bottom-wrapper
+    min-height auto
     background-color transparent !important
     padding 0 13px !important
     &__header-desktop
