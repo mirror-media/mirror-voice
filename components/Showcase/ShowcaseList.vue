@@ -74,5 +74,5 @@ export default {
       width 100%
     &__list-item
       &--horizontal
-        margin 10px 0 0 0
+        margin 20px 0 0 0
 </style>

@@ -1,46 +1,48 @@
 <template>
   <header class="header">
-    <nav class="header__main-navs main-navs">
-      <nuxt-link to="/">
-        <img
-          class="header__mv-logo"
-          src="~/assets/img/revamp/mirrorvoice_logo@2x.png"
-          alt=""
-        >
-      </nuxt-link>
-      <nav class="main-navs__section-navs section-navs">
-        <HeaderSectionNav
-          v-for="section in sections"
-          :key="section.id"
-          :section="section"
-          class="section-navs__nav"
-        />
+    <div class="header__wrapper">
+      <nav class="header__main-navs main-navs">
+        <nuxt-link to="/">
+          <img
+            class="header__mv-logo"
+            src="~/assets/img/revamp/mirrorvoice_logo@2x.png"
+            alt=""
+          >
+        </nuxt-link>
+        <nav class="main-navs__section-navs section-navs">
+          <HeaderSectionNav
+            v-for="section in sections"
+            :key="section.id"
+            :section="section"
+            class="section-navs__nav"
+          />
+        </nav>
       </nav>
-    </nav>
-    <nav class="header__aside-navs aside-navs">
-      <a
-        href="https://www.mirrormedia.mg"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          class="header__mm-logo"
-          src="~/assets/img/revamp/mirrorvoice_media@2x.png"
-          alt=""
+      <nav class="header__aside-navs aside-navs">
+        <a
+          href="https://www.mirrormedia.mg"
+          target="_blank"
+          rel="noopener noreferrer"
         >
-      </a>
-      <a
-        href="https://www.mirrorfiction.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          class="header__mf-logo"
-          src="~/assets/img/revamp/mirrorfiction_logo@2x.png"
-          alt=""
-        >      
-      </a>
-    </nav>
+          <img
+            class="header__mm-logo"
+            src="~/assets/img/revamp/mirrorvoice_media@2x.png"
+            alt=""
+          >
+        </a>
+        <a
+          href="https://www.mirrorfiction.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            class="header__mf-logo"
+            src="~/assets/img/revamp/mirrorfiction_logo@2x.png"
+            alt=""
+          >      
+        </a>
+      </nav>
+    </div>
   </header>
 </template>
 
@@ -67,12 +69,17 @@ export default {
   background-color white
   box-shadow 0px 3px 6px #00000029
   padding 0 80px
-  display flex
-  justify-content space-between
-  align-items center
+  &__wrapper
+    display flex
+    justify-content space-between
+    align-items center
+    max-width 1200px
+    margin 0 auto
   &__mv-logo
     height 32px
-  &__mm-logo, &__mf-logo
+  &__mm-logo
+    height 24px
+  &__mf-logo
     height 20px
 
 .main-navs

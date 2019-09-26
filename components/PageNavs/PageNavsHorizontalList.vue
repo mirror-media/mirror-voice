@@ -62,6 +62,7 @@ export default {
   color #7d7d7d
   position relative
   left -28px
+  top -6px
   &__list-item
     margin 13px 0 0 28px
     cursor pointer
@@ -75,11 +76,13 @@ export default {
     flex-wrap nowrap
     font-size 13px
     color #4a4a4a
-    left -13px
+    left -10px
+    top 0
     &--wrap
       flex-wrap wrap
+      width calc(100% + 10px)
     &--no-wrap
-      width calc(100% + 13px)
+      width calc(100% + 10px)
       overflow-x scroll
       -webkit-overflow-scrolling touch
       &::-webkit-scrollbar
@@ -90,21 +93,24 @@ export default {
       &::-webkit-scrollbar-thumb
         background-color transparent
     &__list-item
-      margin 15px 0 0 13px
+      margin 16px 0 0 10px
       cursor pointer
-      box-shadow 1px 1px 1px 0 rgba(0, 0, 0, 0.1)
-      background-color #ffffff
-      border-radius 4px
+      background-color #B8B8B8
+      min-width 110px
+      height 25px
       &--no-wrap
         flex 0 0 auto
       a
-        display inline-block
+        padding 0 10px
+        display flex
+        justify-content center
+        align-items center
         width 100%
         height 100%
-        color #4a4a4a
-        padding 10px 16px
+        color white
+        font-weight bold
         border-radius 4px
         &.nuxt-link-active
           color white
-          background-color #273947
+          background-color #FE5000
 </style>

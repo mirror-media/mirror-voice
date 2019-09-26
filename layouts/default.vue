@@ -182,7 +182,7 @@ export default {
     &__breadcrumb
       display none
     &__view-wrapper
-      margin 0
+      margin 0 0 50px 0
     &__native-notification
       transform translate(0, 325px)
       opacity 1

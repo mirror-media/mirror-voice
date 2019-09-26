@@ -25,14 +25,14 @@
         ]"
         alt=""
       >
-      <img
+      <!-- <img
         :class="[
           'cover__play-icon',
           { 'cover__play-icon--show': isMouseover }
         ]"
         src="~/assets/img/btn_play.png"
         alt=""
-      >
+      > -->
     </div>
     <div
       :class="[
@@ -231,7 +231,7 @@ export default {
         height d
         min-height d
       &--horizontal
-        d = 80px
+        d = 120px
         width d
         min-width d
         height d
@@ -241,7 +241,7 @@ export default {
         margin 10px 0 0 0
       &--horizontal
         margin 0
-        padding 5px 15px
+        padding 15px 18px
 
   .cover
     &__img
@@ -254,16 +254,16 @@ export default {
   .info
     position relative
     &__title
-      font-size 13px
+      font-size 18px
       font-weight 400
       line-height 1.31
     &__vocal
       font-size 11px
-      line-height 1.64
-      margin 5px 0 0 0
+      line-height 1.25
+      margin 12px 0 0 0
       &--horizontal
-        font-size 13px
+        font-size 15px
     &__date
       position absolute
-      bottom 5px
+      bottom 15px
 </style>
