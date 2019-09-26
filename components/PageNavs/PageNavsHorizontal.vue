@@ -107,8 +107,8 @@ export default {
     }
   },
   mounted() {
-    // 182 is the max-height we want to display the category list
-    this.shouldShowReadMore = this.$refs['category-list'].$el.offsetHeight > 182
+    // 150 is the max-height we want to display the category list
+    this.shouldShowReadMore = this.$refs['category-list'].$el.offsetHeight > 160
   },
   methods: {
     getName(item) {
@@ -162,7 +162,8 @@ export default {
     &__category-list-wrapper
       overflow-y hidden
       &--fold
-        max-height calc((15px + 34px) * 3 + 32px)
+        // max-height calc((15px + 34px) * 3 + 32px)
+        max-height 150px
       &--expand
         max-height none
     &__read-more
@@ -198,7 +199,7 @@ export default {
 
   .category-list
     margin 0 !important
-    padding 0 18px 35px 18px !important
+    padding 0 10px 35px 10px !important
 
   .read-more
     display flex

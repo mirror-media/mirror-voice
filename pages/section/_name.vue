@@ -22,7 +22,7 @@
         </template>
       </DivHeader>
       <div class="bottom-wrapper__header-mobile">
-        共 {{ total }} 筆
+        共 <span>{{ total }}</span> 筆
       </div>
       <ShowcaseList
         class="bottom-wrapper__showcase"
@@ -300,9 +300,22 @@ export default {
     &__header-desktop
       display none !important
     &__header-mobile
-      display block
-      font-size 11px
-      color #7d7d7d
+      display flex
+      justify-content flex-end
+      align-items center
+      font-size 13px
+      color #1E170F
+      &:before
+        content ''
+        width 0
+        height 0
+        border-style solid
+        border-width 4px 0 4px 7px
+        border-color transparent transparent transparent #FE5000
+        margin 0 2px 0 0
+      span
+        font-size 15px
+        margin 0 5px
     &__showcase
       margin 5px 0 0 0 !important
     &__pagination
