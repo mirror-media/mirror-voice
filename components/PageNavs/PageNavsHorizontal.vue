@@ -1,6 +1,6 @@
 <template>
   <nav class="navs">
-    <ul class="navs__list section-list">
+    <!-- <ul class="navs__list section-list">
       <li
         v-for="(section, i) in sections"
         :key="i"
@@ -14,7 +14,7 @@
           {{ getTitle(section) }}
         </nuxt-link>
       </li>
-    </ul>
+    </ul> -->
     <!-- This wrapper is for mobile's folding prupose -->
     <div
       :class="[
@@ -150,8 +150,8 @@ export default {
       &.active
         color black
 
-.category-list
-  margin 24px 0 0 0 !important
+// .category-list
+//   margin 24px 0 0 0 !important
 
 .read-more
   display none

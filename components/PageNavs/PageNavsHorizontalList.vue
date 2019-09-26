@@ -62,6 +62,7 @@ export default {
   color #7d7d7d
   position relative
   left -28px
+  top -6px
   &__list-item
     margin 13px 0 0 28px
     cursor pointer
@@ -76,6 +77,7 @@ export default {
     font-size 13px
     color #4a4a4a
     left -13px
+    top 0
     &--wrap
       flex-wrap wrap
     &--no-wrap
