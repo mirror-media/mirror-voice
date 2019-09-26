@@ -72,7 +72,7 @@ module.exports = {
         content: '/ogImg/default.jpg'
       }
     ],
-    link: [{ rel: 'icon', type: 'image/png', href: '/favicon05.png' }]
+    link: [{ rel: 'icon', type: 'image/png', href: '/favicon_revamp.ico' }]
   },
 
   router: {
