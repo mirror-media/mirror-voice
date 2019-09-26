@@ -98,10 +98,10 @@ export default {
       background-color #B8B8B8
       min-width 110px
       height 25px
-      padding 0 10px
       &--no-wrap
         flex 0 0 auto
       a
+        padding 0 10px
         display flex
         justify-content center
         align-items center
