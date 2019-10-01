@@ -113,6 +113,7 @@
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import _ from 'lodash'
+import Vue from 'vue'
 
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
@@ -128,7 +129,6 @@ import AppPagination from '~/components/AppPagination.vue'
 
 import sanitizeContent from '~/plugins/util/sanitizeContent'
 
-import Vue from 'vue'
 if (process.browser) {
   const infiniteScroll = require('vue-infinite-scroll')
   Vue.use(infiniteScroll)

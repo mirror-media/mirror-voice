@@ -89,6 +89,20 @@ export default {
   components: {
     Slider
   },
+  computed: {
+    sectionMain() {
+      return _.get(this.sections, 0, {})
+    },
+    sectionMainShowcaseAlbums() {
+      return this.getSectionAlbums(this.getName(this.sectionMain))
+    },
+    sectionAside() {
+      return _.get(this.sections, 1, {})
+    },
+    sectionAsideShowcaseAlbums() {
+      return _.take(this.getSectionAlbums(this.getName(this.sectionAside)), 4)
+    }
+  },
   async asyncData({ app }) {
     const fetchAudioPromotions = () => {
       return app.$fetchAudioPromotions()
@@ -146,20 +160,6 @@ export default {
       sections,
       categories,
       albums
-    }
-  },
-  computed: {
-    sectionMain() {
-      return _.get(this.sections, 0, {})
-    },
-    sectionMainShowcaseAlbums() {
-      return this.getSectionAlbums(this.getName(this.sectionMain))
-    },
-    sectionAside() {
-      return _.get(this.sections, 1, {})
-    },
-    sectionAsideShowcaseAlbums() {
-      return _.take(this.getSectionAlbums(this.getName(this.sectionAside)), 4)
     }
   },
   methods: {
