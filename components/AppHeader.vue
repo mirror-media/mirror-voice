@@ -2,7 +2,10 @@
   <header class="header">
     <div class="header__wrapper">
       <nav class="header__main-navs main-navs">
-        <nuxt-link to="/">
+        <nuxt-link
+          to="/"
+          @click.native="handleLogoClick"
+        >
           <img
             class="header__mv-logo"
             src="~/assets/img/revamp/mirrorvoice_logo@2x.png"
@@ -56,6 +59,11 @@ export default {
   },
   computed: {
     ...mapState(['sections'])
+  },
+  methods: {
+    handleLogoClick() {
+      this.$sendGAHeader({ action: 'click', label: 'logo' })
+    }
   }
 }
 </script>
