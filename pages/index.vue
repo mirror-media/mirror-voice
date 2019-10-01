@@ -4,6 +4,7 @@
     <Slider
       class="home__slideshow"
       :items="audioPromotions.items"
+      @clickSlide="clickSlide"
     />
     <section class="home__showcase showcase">
       <main class="showcase__main main">
@@ -25,6 +26,7 @@
             v-for="album in sectionMainShowcaseAlbums"
             :key="album.id"
             class="showcase-list__list-item"
+            @click="handleClickShowcaseListItem"
           >
             <nuxt-link
               :to="`/album/${getName(album)}`"
@@ -60,6 +62,7 @@
             v-for="album in sectionAsideShowcaseAlbums"
             :key="album.id"
             class="showcase-list__list-item"
+            @click="handleClickShowcaseListItem"
           >
             <nuxt-link
               :to="`/album/${getName(album)}`"
@@ -175,12 +178,6 @@ export default {
     },
     clickSlide() {
       this.$sendGAHome({ action: 'click', label: 'slideshow' })
-    },
-    clickCategory() {
-      this.$sendGAHome({ action: 'click', label: 'category' })
-    },
-    clickSection() {
-      this.$sendGAHome({ action: 'click', label: 'section' })
     },
 
     getName(item) {

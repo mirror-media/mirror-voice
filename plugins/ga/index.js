@@ -10,6 +10,15 @@ const sendGA = (
 }
 
 export default (context, inject) => {
+  // header event trackings
+  inject('sendGAHeader', ({ action = '', label = '' }) => {
+    sendGA(context.$ga, {
+      eventCategory: 'header',
+      eventAction: action,
+      eventLabel: label
+    })
+  })
+
   // home page ga event trackings
   inject('sendGAHome', ({ action = '', label = '' }) => {
     sendGA(context.$ga, {
