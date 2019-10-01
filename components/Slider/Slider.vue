@@ -114,7 +114,7 @@ export default {
     opacity .7
 
 .swiper-slide
-  width 33%
+  width 33.33%
   &__slide
     width 100%
     height 100%
