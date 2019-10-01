@@ -4,7 +4,7 @@
     <Slider
       class="home__slideshow"
       :items="audioPromotions.items"
-      @clickSlide="clickSlide"
+      @clickSlide="handleClickSlide"
     />
     <section class="home__showcase showcase">
       <main class="showcase__main main">
@@ -12,11 +12,13 @@
           <nuxt-link
             class="showcase-header__title"
             :to="`/section/${getName(sectionMain)}`"
+            @click.native="handleClickSectionTitle"
             v-text="getTitle(sectionMain)"
           />
           <nuxt-link
             class="showcase-header__more"
             :to="`/section/${getName(sectionMain)}`"
+            @click.native="handleClickSectionMore"
           >
             更多
           </nuxt-link>
@@ -48,11 +50,13 @@
           <nuxt-link
             class="showcase-header__title"
             :to="`/section/${getName(sectionAside)}`"
+            @click.native="handleClickSectionTitle"
             v-text="getTitle(sectionAside)"
           />
           <nuxt-link
             class="showcase-header__more"
             :to="`/section/${getName(sectionAside)}`"
+            @click.native="handleClickSectionMore"
           >
             更多
           </nuxt-link>
@@ -176,8 +180,14 @@ export default {
     handleClickShowcaseListItem() {
       this.$sendGAHome({ action: 'click', label: 'album' })
     },
-    clickSlide() {
+    handleClickSlide() {
       this.$sendGAHome({ action: 'click', label: 'slideshow' })
+    },
+    handleClickSectionTitle() {
+      this.$sendGAHome({ action: 'click', label: 'section' })
+    },
+    handleClickSectionMore() {
+      this.$sendGAHome({ action: 'click', label: 'section more' })
     },
 
     getName(item) {
