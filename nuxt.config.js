@@ -33,7 +33,7 @@ module.exports = {
         hid: 'description',
         name: 'description',
         content:
-          '鏡好聽是一個以台灣為基地的語音平台，集結網路副刊、專欄、知識型聲音節目與深度文化專題等，以多媒體形式，將文字播種，使眾聲思潮得以綻放。'
+          '鏡好聽是一個以台灣為基地、放眼國際的語音內容平台，集結名家精選、百工職人、生活文化、獨家內幕、專欄評析、小說劇本等知識暨文學型聲音節目，以多媒體形式，將文字播種，使眾聲思潮得以綻放。'
       },
       {
         hid: 'og:site_name',
@@ -59,12 +59,12 @@ module.exports = {
         hid: 'og:description',
         property: 'og:description',
         content:
-          '鏡好聽是一個以台灣為基地的語音平台，集結網路副刊、專欄、知識型聲音節目與深度文化專題等，以多媒體形式，將文字播種，使眾聲思潮得以綻放。'
+          '鏡好聽是一個以台灣為基地、放眼國際的語音內容平台，集結名家精選、百工職人、生活文化、獨家內幕、專欄評析、小說劇本等知識暨文學型聲音節目，以多媒體形式，將文字播種，使眾聲思潮得以綻放。'
       },
       {
         hid: 'og:url',
         property: 'og:url',
-        content: 'https://voice.mirrormedia.mg'
+        content: 'https://voice.mirrorfiction.com'
       },
       {
         hid: 'og:image',
