@@ -10,12 +10,14 @@
         <nuxt-link
           class="main-navs__nav"
           to="/privacy_rule"
+          @click.native="handlePrivacyRuleClick"
         >
           隱私政策
         </nuxt-link>
         <nuxt-link
           class="main-navs__nav"
           to="/about"
+          @click.native="handleAboutClick"
         >
           關於我們
         </nuxt-link>
@@ -59,6 +61,14 @@ export default {
     ...mapState({
       showAppPlayer: state => state.appPlayer.showAppPlayer
     })
+  },
+  methods: {
+    handlePrivacyRuleClick() {
+      this.$sendGAFooter({ action: 'click', label: 'privacy_rule' })
+    },
+    handleAboutClick() {
+      this.$sendGAFooter({ action: 'click', label: 'about' })
+    }
   }
 }
 </script>

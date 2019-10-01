@@ -19,6 +19,15 @@ export default (context, inject) => {
     })
   })
 
+  // footer event trackings
+  inject('sendGAFooter', ({ action = '', label = '' }) => {
+    sendGA(context.$ga, {
+      eventCategory: 'footer',
+      eventAction: action,
+      eventLabel: label
+    })
+  })
+
   // home page ga event trackings
   inject('sendGAHome', ({ action = '', label = '' }) => {
     sendGA(context.$ga, {
