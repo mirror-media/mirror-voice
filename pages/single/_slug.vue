@@ -67,6 +67,7 @@
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import _ from 'lodash'
+import NoSSR from 'vue-no-ssr'
 
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
@@ -74,7 +75,6 @@ import Info from '~/components/Info/Info.vue'
 import IconReadmore from '~/components/Icon/IconReadmore.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AsideSlideshowAlbum from '~/components/Aside/AsideSlideshowAlbum.vue'
-import NoSSR from 'vue-no-ssr'
 
 import sanitizeContent from '~/plugins/util/sanitizeContent'
 

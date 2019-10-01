@@ -44,6 +44,7 @@
 <script>
 import _ from 'lodash'
 import { mapState, mapMutations } from 'vuex'
+import Vue from 'vue'
 
 import AppDiv from '~/components/AppDiv.vue'
 import PageNavsHorizontal from '~/components/PageNavs/PageNavsHorizontal.vue'
@@ -51,7 +52,6 @@ import DivHeader from '~/components/Div/DivHeader.vue'
 import ShowcaseList from '~/components/Showcase/ShowcaseList.vue'
 import AppPagination from '~/components/AppPagination.vue'
 
-import Vue from 'vue'
 if (process.browser) {
   const infiniteScroll = require('vue-infinite-scroll')
   Vue.use(infiniteScroll)

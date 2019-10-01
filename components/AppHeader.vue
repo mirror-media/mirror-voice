@@ -47,9 +47,8 @@
 </template>
 
 <script>
-import HeaderSectionNav from '~/components/Header/HeaderSectionNav.vue'
-
 import { mapState } from 'vuex'
+import HeaderSectionNav from '~/components/Header/HeaderSectionNav.vue'
 
 export default {
   components: {
