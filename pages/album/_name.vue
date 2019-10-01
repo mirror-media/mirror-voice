@@ -84,6 +84,7 @@
           :total="tracks.meta.total"
           :items-per-page="isDesktop ? $MAXRESULT_TRACKS_ALBUM : tracks.meta.total"
           @playTrack="playTrack"
+          @clickLink="handleClickLink"
         />
         <AppPagination
           v-if="tracks.meta.total > $MAXRESULT_TRACKS_ALBUM"
@@ -104,7 +105,7 @@
       <AsideAlbumList
         class="aside__wrapper author-relateds"
         :data="vocalAlbums"
-        @clickItem="clickAuthorRelateds"
+        @clickItem="handleClickAuthorRelateds"
       />
     </div>
   </AppMainAsideWrapper>
@@ -333,6 +334,7 @@ export default {
     }),
     playAlbum(albumId = this.album.id) {
       fetchPlayerTracks(this.$store, albumId)
+      this.$sendGAAlbum({ action: 'click', label: 'play all' })
     },
 
     ...mapMutations({
@@ -366,7 +368,7 @@ export default {
         this.SET_PLAYING_INDEX(playingIndex)
       })
 
-      this.$sendGAAlbum({ action: 'click', label: 'other audio of album' })
+      this.$sendGAAlbum({ action: 'click', label: 'play single' })
     },
 
     loadmore() {
@@ -379,8 +381,11 @@ export default {
       }
     },
 
-    clickAuthorRelateds() {
-      this.$sendGAAlbum({ action: 'click', label: 'other audio of author' })
+    handleClickAuthorRelateds() {
+      this.$sendGAAlbum({ action: 'click', label: 'other album of author' })
+    },
+    handleClickLink() {
+      this.$sendGAAlbum({ action: 'click', label: 'single page' })
     }
   }
 }
