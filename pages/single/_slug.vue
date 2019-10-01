@@ -59,6 +59,7 @@
         :albums="albums"
         :album="album"
         :tracks="tracks"
+        @clickLink="handleClickLink"
       />
     </div>
   </AppMainAsideWrapper>
@@ -253,6 +254,10 @@ export default {
     setSingleDuration(e) {
       const duration = _.get(e, ['target', 'duration'], 0)
       this.singleDuration = duration
+    },
+
+    handleClickLink() {
+      this.$sendGASingle({ action: 'click', label: 'single page' })
     }
   }
 }

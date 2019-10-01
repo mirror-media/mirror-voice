@@ -28,6 +28,7 @@
       :current-sound="currentSound"
       :is-playing="isPlaying"
       @playTrack="v => $emit('playTrack', v)"
+      @clickLink="$emit('clickLink')"
     />
   </div>
 </template>
