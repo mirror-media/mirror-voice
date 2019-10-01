@@ -29,7 +29,7 @@
         :section-name="sectionName"
         :items="categoryListItems"
         @clickItemFirst="$emit('clickSection')"
-        @clickItem="$emit('clickCategory')"
+        @clickItem="v => $emit('clickCategory', v)"
       />
     </div>
     <div

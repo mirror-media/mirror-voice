@@ -13,7 +13,7 @@
       v-for="(category, i) in items"
       :key="i"
       :class="`list__list-item list__list-item--${shouldWrap ? 'wrap' : 'no-wrap'}`"
-      @click="$emit('clickItem')"
+      @click="$emit('clickItem', getTitle(category))"
     >
       <nuxt-link :to="`/category/${getName(category)}`">
         {{ getTitle(category) }}
