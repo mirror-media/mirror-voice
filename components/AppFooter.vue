@@ -5,46 +5,48 @@
       { 'footer--higher': showAppPlayer }
     ]"
   >
-    <nav class="footer__main-navs main-navs">
-      <nuxt-link
-        class="main-navs__nav"
-        to="/privacy_rule"
-      >
-        隱私政策
-      </nuxt-link>
-      <nuxt-link
-        class="main-navs__nav"
-        to="/about"
-      >
-        關於我們
-      </nuxt-link>
-    </nav>
-    <nav class="footer__external-navs external-navs">
-      <a
-        href="https://www.mirrormedia.mg"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          class="external-navs__logo"
-          src="~/assets/img/revamp/mirrorvoice_media@2x.png"
-          alt=""
+    <div class="footer__wrapper">
+      <nav class="footer__main-navs main-navs">
+        <nuxt-link
+          class="main-navs__nav"
+          to="/privacy_rule"
         >
-      </a>
-      <a
-        href="https://www.mirrorfiction.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        <img
-          class="external-navs__logo"
-          src="~/assets/img/revamp/mirrorfiction_logo@2x.png"
-          alt=""
-        >      
-      </a>
-    </nav>
-    <div class="footer__rights rights">
-      <p>Copyright © 2019 精鏡傳媒股份有限公司 <span>All Rights Reserved.</span></p>
+          隱私政策
+        </nuxt-link>
+        <nuxt-link
+          class="main-navs__nav"
+          to="/about"
+        >
+          關於我們
+        </nuxt-link>
+      </nav>
+      <nav class="footer__external-navs external-navs">
+        <a
+          href="https://www.mirrormedia.mg"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            class="external-navs__logo"
+            src="~/assets/img/revamp/mirrorvoice_media@2x.png"
+            alt=""
+          >
+        </a>
+        <a
+          href="https://www.mirrorfiction.com/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img
+            class="external-navs__logo"
+            src="~/assets/img/revamp/mirrorfiction_logo@2x.png"
+            alt=""
+          >      
+        </a>
+      </nav>
+      <div class="footer__rights rights">
+        <p>Copyright © 2019 精鏡傳媒股份有限公司 <span>All Rights Reserved.</span></p>
+      </div>
     </div>
   </footer>
 </template>
@@ -66,13 +68,17 @@ export default {
   border-top 2px solid #FE5000
   height 60px
   background-color white
-  display flex
-  justify-content space-between
-  align-items center
   padding 0 83px
   &--higher
     height calc(60px + 60px)
     padding 0 83px 60px 83px
+  &__wrapper
+    height 100%
+    display flex
+    justify-content space-between
+    align-items center
+    max-width 1200px
+    margin 0 auto
 
 .main-navs
   display flex
@@ -106,10 +112,11 @@ export default {
   .footer
     height 152px
     padding 16px 0 10px 0
-    flex-direction column
     &--higher
       height calc(152px + 60px)
       padding 16px 0 70px 0
+    &__wrapper
+      flex-direction column
     &__external-navs
       margin 20px 0 0 0
     &__rights
