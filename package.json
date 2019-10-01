@@ -2,7 +2,7 @@
   "name": "mirror-voice",
   "version": "1.0.8-beta.2",
   "engines" : {
-    "node" : ">=10.16.0"
+    "node" : ">=10.15.1"
   },
   "description": "mirror-voice frontend",
   "author": "mirror-media",
