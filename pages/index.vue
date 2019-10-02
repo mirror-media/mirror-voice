@@ -4,6 +4,7 @@
     <Slider
       class="home__slideshow"
       :items="audioPromotions.items"
+      @clickSlide="handleClickSlide"
     />
     <section class="home__showcase showcase">
       <main class="showcase__main main">
@@ -11,11 +12,13 @@
           <nuxt-link
             class="showcase-header__title"
             :to="`/section/${getName(sectionMain)}`"
+            @click.native="handleClickSectionTitle"
             v-text="getTitle(sectionMain)"
           />
           <nuxt-link
             class="showcase-header__more"
             :to="`/section/${getName(sectionMain)}`"
+            @click.native="handleClickSectionMore"
           >
             更多
           </nuxt-link>
@@ -25,6 +28,7 @@
             v-for="album in sectionMainShowcaseAlbums"
             :key="album.id"
             class="showcase-list__list-item"
+            @click="handleClickShowcaseListItem"
           >
             <nuxt-link
               :to="`/album/${getName(album)}`"
@@ -46,11 +50,13 @@
           <nuxt-link
             class="showcase-header__title"
             :to="`/section/${getName(sectionAside)}`"
+            @click.native="handleClickSectionTitle"
             v-text="getTitle(sectionAside)"
           />
           <nuxt-link
             class="showcase-header__more"
             :to="`/section/${getName(sectionAside)}`"
+            @click.native="handleClickSectionMore"
           >
             更多
           </nuxt-link>
@@ -60,6 +66,7 @@
             v-for="album in sectionAsideShowcaseAlbums"
             :key="album.id"
             class="showcase-list__list-item"
+            @click="handleClickShowcaseListItem"
           >
             <nuxt-link
               :to="`/album/${getName(album)}`"
@@ -173,14 +180,14 @@ export default {
     handleClickShowcaseListItem() {
       this.$sendGAHome({ action: 'click', label: 'album' })
     },
-    clickSlide() {
+    handleClickSlide() {
       this.$sendGAHome({ action: 'click', label: 'slideshow' })
     },
-    clickCategory() {
-      this.$sendGAHome({ action: 'click', label: 'category' })
-    },
-    clickSection() {
+    handleClickSectionTitle() {
       this.$sendGAHome({ action: 'click', label: 'section' })
+    },
+    handleClickSectionMore() {
+      this.$sendGAHome({ action: 'click', label: 'section more' })
     },
 
     getName(item) {

@@ -4,12 +4,14 @@
       <nuxt-link
         class="nav__section"
         :to="`/section/${sectionName}`"
+        @click.native="clickSection(section)"
         v-text="sectionTitle"
       />
       <ol class="nav__categories-list categories-list">
         <li
           v-for="category in categories"
           :key="category.id"
+          @click="clickCategory(category)"
         >
           <nuxt-link
             :to="`/category/${getName(category)}`"
@@ -48,6 +50,15 @@ export default {
     },
     getCategoryTitle(item) {
       return _.get(item, 'title', '')
+    },
+
+    clickSection(section) {
+      const title = _.get(section, 'title', '')
+      this.$sendGAHeader({ action: 'click', label: `section ${title}` })
+    },
+    clickCategory(category) {
+      const title = _.get(category, 'title', '')
+      this.$sendGAHeader({ action: 'click', label: `category ${title}` })
     }
   }
 }

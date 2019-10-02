@@ -242,7 +242,7 @@ export default {
       SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER'
     }),
     handleClickShowcaseListItem() {
-      this.$sendGAListing({ action: 'click', label: 'album' })
+      this.$sendGAListing({ action: 'click', label: 'album page' })
     },
 
     loadmore() {
@@ -255,8 +255,8 @@ export default {
       }
     },
 
-    clickCategory() {
-      this.$sendGAListing({ action: 'click', label: 'category' })
+    clickCategory(title) {
+      this.$sendGAListing({ action: 'click', label: `category ${title}` })
     },
     clickSection() {
       this.$sendGAListing({ action: 'click', label: 'section' })

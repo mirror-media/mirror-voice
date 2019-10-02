@@ -16,6 +16,7 @@
       @playTrack="v => $emit('playTrack', v)"
       @clickAlbum="$emit('clickAlbum')"
       @clickAlbumMore="$emit('clickAlbumMore')"
+      @clickLink="$emit('clickLink')"
     />
   </HOC>
 </template>

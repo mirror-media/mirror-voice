@@ -24,7 +24,7 @@
           { 'left__title--hover': !showOrder && isMouseover }
         ]"
         :to="`/single/${slug}`"
-        @click.native.stop
+        @click.native.stop="$emit('clickLink')"
       >
         {{ item.title }}
       </nuxt-link>
