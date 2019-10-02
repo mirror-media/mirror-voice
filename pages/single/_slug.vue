@@ -151,6 +151,8 @@ export default {
           // pause
           this.SET_IS_PLAYING(false)
         }
+
+        this.$sendGASingle({ action: 'click', label: 'play current single' })
       }
     },
 
