@@ -41,6 +41,7 @@
             @playTrack="playTrack"
             @clickAlbum="clickAlbum"
             @clickAlbumMore="clickAlbumMore"
+            @clickLink="$emit('clickLink')"
           />
         </div>
       </div>
@@ -179,7 +180,7 @@ export default {
     },
 
     linkToAlbum() {
-      this.$sendGASingle({ action: 'click', label: 'album top' })
+      this.$sendGASingle({ action: 'click', label: 'album page' })
 
       const albumName = _.get(this.slideDataAlbum, 'name', '')
       this.$router.push(`/album/${albumName}`)
@@ -219,7 +220,7 @@ export default {
         this.SET_PLAYING_INDEX(playingIndex)
       })
 
-      this.$sendGASingle({ action: 'click', label: 'other audio of album' })
+      this.$sendGASingle({ action: 'click', label: 'play single' })
     }
   }
 }

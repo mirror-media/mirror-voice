@@ -12,6 +12,7 @@
       :item="track"
       :is-playing="getIsPlaying(track)"
       @click.native="$emit('playTrack', track.slug)"
+      @clickLink="$emit('clickLink')"
     />
   </ol>
 </template>

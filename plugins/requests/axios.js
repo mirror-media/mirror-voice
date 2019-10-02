@@ -18,6 +18,7 @@ export default class Axios {
         throw err
       })
   }
+
   post(url, payload) {
     return this.$axios
       .post(url, payload)

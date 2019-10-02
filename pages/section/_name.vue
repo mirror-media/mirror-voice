@@ -44,6 +44,7 @@
 <script>
 import _ from 'lodash'
 import { mapState, mapMutations } from 'vuex'
+import Vue from 'vue'
 
 import AppDiv from '~/components/AppDiv.vue'
 import PageNavsHorizontal from '~/components/PageNavs/PageNavsHorizontal.vue'
@@ -51,7 +52,6 @@ import DivHeader from '~/components/Div/DivHeader.vue'
 import ShowcaseList from '~/components/Showcase/ShowcaseList.vue'
 import AppPagination from '~/components/AppPagination.vue'
 
-import Vue from 'vue'
 if (process.browser) {
   const infiniteScroll = require('vue-infinite-scroll')
   Vue.use(infiniteScroll)
@@ -242,7 +242,7 @@ export default {
       SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER'
     }),
     handleClickShowcaseListItem() {
-      this.$sendGAListing({ action: 'click', label: 'album' })
+      this.$sendGAListing({ action: 'click', label: 'album page' })
     },
 
     loadmore() {
@@ -255,8 +255,8 @@ export default {
       }
     },
 
-    clickCategory() {
-      this.$sendGAListing({ action: 'click', label: 'category' })
+    clickCategory(title) {
+      this.$sendGAListing({ action: 'click', label: `category ${title}` })
     },
     clickSection() {
       this.$sendGAListing({ action: 'click', label: 'section' })

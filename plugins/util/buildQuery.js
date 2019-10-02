@@ -15,7 +15,7 @@ export default (params = {}) => {
     'writers'
   ]
   whitelist.forEach(ele => {
-    if (params.hasOwnProperty(ele)) {
+    if (Object.prototype.hasOwnProperty.call(params, ele)) {
       if (ele === 'where' || ele === 'embedded') {
         query[ele] = JSON.stringify(params[ele])
       } else if (ele === 'id') {

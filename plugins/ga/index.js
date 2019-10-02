@@ -10,6 +10,24 @@ const sendGA = (
 }
 
 export default (context, inject) => {
+  // header event trackings
+  inject('sendGAHeader', ({ action = '', label = '' }) => {
+    sendGA(context.$ga, {
+      eventCategory: 'header',
+      eventAction: action,
+      eventLabel: label
+    })
+  })
+
+  // footer event trackings
+  inject('sendGAFooter', ({ action = '', label = '' }) => {
+    sendGA(context.$ga, {
+      eventCategory: 'footer',
+      eventAction: action,
+      eventLabel: label
+    })
+  })
+
   // home page ga event trackings
   inject('sendGAHome', ({ action = '', label = '' }) => {
     sendGA(context.$ga, {

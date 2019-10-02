@@ -114,7 +114,7 @@ export default {
     opacity .7
 
 .swiper-slide
-  width 50%
+  width 33.33%
   &__slide
     width 100%
     height 100%
@@ -150,7 +150,7 @@ export default {
 
 @media (max-width 768px)
   .slider
-    height 200px
+    height calc(100vw * 0.65)
     padding 0 0 30px 0
     &:before, &:after
       display none

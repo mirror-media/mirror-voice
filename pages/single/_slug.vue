@@ -59,6 +59,7 @@
         :albums="albums"
         :album="album"
         :tracks="tracks"
+        @clickLink="handleClickLink"
       />
     </div>
   </AppMainAsideWrapper>
@@ -67,6 +68,7 @@
 <script>
 import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import _ from 'lodash'
+import NoSSR from 'vue-no-ssr'
 
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
@@ -74,7 +76,6 @@ import Info from '~/components/Info/Info.vue'
 import IconReadmore from '~/components/Icon/IconReadmore.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AsideSlideshowAlbum from '~/components/Aside/AsideSlideshowAlbum.vue'
-import NoSSR from 'vue-no-ssr'
 
 import sanitizeContent from '~/plugins/util/sanitizeContent'
 
@@ -150,6 +151,8 @@ export default {
           // pause
           this.SET_IS_PLAYING(false)
         }
+
+        this.$sendGASingle({ action: 'click', label: 'play current single' })
       }
     },
 
@@ -253,6 +256,10 @@ export default {
     setSingleDuration(e) {
       const duration = _.get(e, ['target', 'duration'], 0)
       this.singleDuration = duration
+    },
+
+    handleClickLink() {
+      this.$sendGASingle({ action: 'click', label: 'single page' })
     }
   }
 }
