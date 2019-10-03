@@ -69,7 +69,7 @@ module.exports = {
       {
         hid: 'og:image',
         property: 'og:image',
-        content: 'https://voice.mirrorfiction.com/ogImg/default.jpg'
+        content: 'https://voice.mirrorfiction.com/ogImg/release.jpg'
       }
     ],
     link: [{ rel: 'icon', type: 'image/png', href: '/favicon_revamp.ico' }]
