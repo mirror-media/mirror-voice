@@ -82,7 +82,7 @@ export default {
 
 <style lang="stylus" scoped>
 .slider
-  height calc(100vw / 1080px * 0.56203) // 607 / 1080 = 0.56203
+  height calc(100vw / 1080 * 0.56203 * 1px) // 607 / 1080 = 0.56203
   padding 0 0 20px 0
   position relative
 
