@@ -146,7 +146,7 @@ module.exports = {
   ** https://github.com/nuxt-community/analytics-module
   */
   googleAnalytics: {
-    id: 'UA-89807207-2',
+    id: 'UA-83609754-1',
     debug: {
       sendHitTask: isProd
     }
