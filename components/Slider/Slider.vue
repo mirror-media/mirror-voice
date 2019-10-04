@@ -87,7 +87,7 @@ export default {
 
 <style lang="stylus" scoped>
 .slider
-  height 345px
+  height calc(100vw / 1080px * 0.56203) // 607 / 1080 = 0.56203
   padding 0 0 20px 0
   position relative
   &:before
@@ -121,7 +121,8 @@ export default {
   &__image
     width 100%
     height 100%
-    object-fit cover
+    object-fit contain
+    object-position 0 0
 
 .swiper-button
   position absolute
