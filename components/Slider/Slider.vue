@@ -76,7 +76,7 @@ export default {
   },
   methods: {
     getImgUrl(item) {
-      return _.get(this.$getImgs(item), ['tablet', 'url'], '')
+      return _.get(this.$getImgs(item), ['desktop', 'url'], '')
     },
     getHref(item) {
       return _.get(item, 'href', '/')
