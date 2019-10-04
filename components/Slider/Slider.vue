@@ -69,11 +69,6 @@ export default {
       }
     }
   },
-  computed: {
-    href() {
-      return _.get()
-    }
-  },
   methods: {
     getImgUrl(item) {
       return _.get(this.$getImgs(item), ['desktop', 'url'], '')
