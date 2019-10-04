@@ -85,28 +85,6 @@ export default {
   height calc(100vw / 1080px * 0.56203) // 607 / 1080 = 0.56203
   padding 0 0 20px 0
   position relative
-  &:before
-    position absolute
-    left 0
-    top 0
-    height calc(100% - 20px)
-    width 300px
-    content ''
-    background linear-gradient(to left, #FFFFFF00 0%, #6F6F6F 100%)
-    pointer-events none
-    z-index 999
-    opacity .7
-  &:after
-    position absolute
-    right 0
-    top 0
-    height calc(100% - 20px)
-    width 300px
-    content ''
-    background linear-gradient(to right, #FFFFFF00 0%, #6F6F6F 100%)
-    pointer-events none
-    z-index 999
-    opacity .7
 
 .swiper-slide
   width 33.33%
@@ -148,8 +126,6 @@ export default {
   .slider
     height calc(100vw * 0.65)
     padding 0 0 30px 0
-    &:before, &:after
-      display none
 
   .swiper-slide
     width 100%
