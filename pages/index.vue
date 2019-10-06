@@ -264,6 +264,7 @@ export default {
   flex-wrap wrap
   &__list-item
     margin 20px 15px
+    max-width 160px
     img
       d = 160px
       width d
@@ -278,6 +279,7 @@ export default {
       margin 0
       font-size 16px
       color #2E2526
+      line-height 1.5
     p
       margin 10px 0 0 0
       font-size 13px
@@ -307,6 +309,7 @@ export default {
     margin 8px -2px // margin calc(18px - 10px) calc(18px - 20px)
     &__list-item
       margin 10px 20px
+      max-width calc((100vw - 18px * 2 - 40px) / 2)
       img
         d = calc((100vw - 18px * 2 - 40px) / 2)
         width d
