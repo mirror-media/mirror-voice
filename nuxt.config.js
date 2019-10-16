@@ -72,7 +72,8 @@ module.exports = {
         content: 'https://voice.mirrorfiction.com/ogImg/release.jpg'
       }
     ],
-    link: [{ rel: 'icon', type: 'image/png', href: '/favicon_revamp.ico' }]
+    link: [{ rel: 'icon', type: 'image/png', href: '/favicon_revamp.ico' }],
+    script: [{ src: '/scripts/comscore.js' }]
   },
 
   router: {
