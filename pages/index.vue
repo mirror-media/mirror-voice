@@ -258,7 +258,7 @@ export default {
   padding 0 18px
   display flex
   justify-content space-between
-  &--B
+  &--b
     justify-content flex-start
     .showcase-header__more
       margin 0 0 5px 10px
