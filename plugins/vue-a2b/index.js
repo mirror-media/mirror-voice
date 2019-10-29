@@ -60,7 +60,9 @@ const VueAB = {
         const option = this.$options.abtest
         if (option) {
           const { name = 'abtest', variants = {} } = option
-          this.abWinner = this.$abtest(name, variants)
+          const { ab } = this.$route.query
+          const isABQueryValid = ab && ab in variants
+          this.abWinner = isABQueryValid ? ab : this.$abtest(name, variants)
         }
       }
     })

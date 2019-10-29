@@ -111,7 +111,7 @@ import Slider from '~/components/Slider/Slider.vue'
 export default {
   abtest: {
     name: 'home-showcase-swap-abtest',
-    variants: { A: 50, B: 50 }
+    variants: { a: 50, b: 50 }
   },
   components: {
     Slider
@@ -239,7 +239,7 @@ export default {
   display flex
   &__aside
     margin 0 0 0 40px
-  &--B
+  &--b
     flex-direction row-reverse
     .showcase__main
       margin 0 0 0 40px
@@ -324,7 +324,7 @@ export default {
     flex-direction column
     &__aside
       margin 40px 0 20px 0
-    &--B
+    &--b
       flex-direction column-reverse
       .showcase__main
         margin 0
