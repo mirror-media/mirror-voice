@@ -6,9 +6,20 @@
       :items="audioPromotions.items"
       @clickSlide="handleClickSlide"
     />
-    <section class="home__showcase showcase">
+    <section
+      :class="[
+        'home__showcase',
+        'showcase',
+        `showcase--${abWinner}`
+      ]"
+    >
       <main class="showcase__main main">
-        <header class="showcase-header">
+        <header
+          :class="[
+            'showcase-header',
+            `showcase-header--${abWinner}`
+          ]"
+        >
           <nuxt-link
             class="showcase-header__title"
             :to="`/section/${getName(sectionMain)}`"
@@ -46,7 +57,12 @@
         </ol>
       </main>
       <aside class="showcase__aside aside">
-        <header class="showcase-header">
+        <header
+          :class="[
+            'showcase-header',
+            `showcase-header--${abWinner}`
+          ]"
+        >
           <nuxt-link
             class="showcase-header__title"
             :to="`/section/${getName(sectionAside)}`"
@@ -93,6 +109,10 @@ import _ from 'lodash'
 import Slider from '~/components/Slider/Slider.vue'
 
 export default {
+  abtest: {
+    name: 'home-showcase-swap-abtest',
+    variants: { a: 50, b: 50 }
+  },
   components: {
     Slider
   },
@@ -219,6 +239,12 @@ export default {
   display flex
   &__aside
     margin 0 0 0 40px
+  &--b
+    flex-direction row-reverse
+    .showcase__main
+      margin 0 0 0 40px
+    .showcase__aside
+      margin 0
 
 .main
   width 770px
@@ -232,6 +258,10 @@ export default {
   padding 0 18px
   display flex
   justify-content space-between
+  &--B
+    justify-content flex-start
+    .showcase-header__more
+      margin 0 0 5px 10px
   &__title
     font-size 18px
     font-weight bold
@@ -294,6 +324,10 @@ export default {
     flex-direction column
     &__aside
       margin 40px 0 20px 0
+    &--b
+      flex-direction column-reverse
+      .showcase__main
+        margin 0
 
   .main
     width 100%
