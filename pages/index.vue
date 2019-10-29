@@ -324,6 +324,10 @@ export default {
     flex-direction column
     &__aside
       margin 40px 0 20px 0
+    &--B
+      flex-direction column-reverse
+      .showcase__main
+        margin 0
 
   .main
     width 100%
