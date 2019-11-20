@@ -82,8 +82,10 @@ export default {
       },
       set(sound) {
         let index = _.findIndex(this.list, o => o.src === sound.src)
-        // Should fetch next page
-        if (index === this.list.length - 1 && this.isListHaveNext) {
+        const shouldFetchNextPage =
+          index === this.list.length - 1 && this.isListHaveNext
+        const shouldFetchPrevPage = index === 0 && this.isListHavePrev
+        if (shouldFetchNextPage) {
           fetchPlayerTracks(
             this.$store,
             this.albumId,
@@ -93,7 +95,7 @@ export default {
             index = _.findIndex(this.list, o => o.src === sound.src)
             this.SET_PLAYING_INDEX(index)
           })
-        } else if (index === 0 && this.isListHavePrev) {
+        } else if (shouldFetchPrevPage) {
           fetchPlayerTracks(
             this.$store,
             this.albumId,
