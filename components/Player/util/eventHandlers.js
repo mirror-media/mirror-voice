@@ -28,6 +28,9 @@ function onAudioWaiting() {
 }
 function onAudioCanplay() {
   this.isLoading = false
+  if (this.sound.fromLocalStorage && this.audio.currentTime === 0) {
+    this.audio.currentTime = this.playedTime
+  }
 }
 function onAudioProgress() {
   if (this.audio.buffered.length) {
@@ -40,6 +43,7 @@ function onAudioProgress() {
 }
 function onAudioDurationChange() {
   if (this.audio.duration !== 1) {
+    this.showSlider = true
     this.playStatDuration = this.audio.duration
   }
 }
