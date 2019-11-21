@@ -1,6 +1,8 @@
 export default {
   TTS_BASEURL: 'https://www.mirrormedia.mg/assets/audios',
   TTS_DEFAULT_EXT: 'wav',
+
+  // This data is from prod
   TTS_VOCALS: [
     {
       id: '5c91abd96e99d110002a8be0',
