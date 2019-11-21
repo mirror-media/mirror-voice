@@ -8,6 +8,7 @@
           class="infos-wrapper__info"
           :info="single"
           :is-playing.sync="isSinglePlaying"
+          :should-filter-tts-vocal="hasAudioAsset"
         />
 
         <AppPlayingBanner
@@ -163,6 +164,12 @@ export default {
 
     albums() {
       return _.get(this.single, 'albums', [])
+    },
+
+    hasAudioAsset() {
+      return (
+        typeof _.get(this.single, ['audio', 'audio', 'url'], false) === 'string'
+      )
     }
   },
   async asyncData({ app, store, route, error }) {
