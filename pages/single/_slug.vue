@@ -10,10 +10,6 @@
           :is-playing.sync="isSinglePlaying"
         />
 
-        <audio
-          ref="audio"
-          @durationchange="setSingleDuration"
-        />
         <AppPlayingBanner
           class="infos-wrapper__playing-banner"
           :is-playing.sync="isSinglePlaying"
@@ -226,10 +222,6 @@ export default {
       tracks
     }
   },
-  mounted() {
-    const id = _.get(this.single, 'id', '')
-    this.audio.src = `${this.$TTS_BASEURL}/${id}.${this.$TTS_DEFAULT_EXT}`
-  },
   methods: {
     ...mapActions({
       PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
@@ -252,10 +244,6 @@ export default {
           this.SET_PLAYING_INDEX(0)
         }
       )
-    },
-    setSingleDuration(e) {
-      const duration = _.get(e, ['target', 'duration'], 0)
-      this.singleDuration = duration
     },
 
     handleClickLink() {

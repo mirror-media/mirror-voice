@@ -139,7 +139,8 @@ module.exports = {
         siteKey: GOOGLE_RECAPTCHA_SITE_KEY,
         version: 2
       }
-    ]
+    ],
+    'nuxt-vuex-localstorage'
   ],
 
   /*
