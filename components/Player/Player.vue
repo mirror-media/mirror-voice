@@ -3,7 +3,14 @@
     <audio ref="audio" />
     <div class="player__cover cover">
       <nuxt-link :to="`/single/${getSlug(currentSound)}`">
-        <img class="cover__img" :src="getCover(currentSound)" alt>
+        <!-- If current sound was load from localStorage -->
+        <!-- src will be empty, which cause unknown src issue -->
+        <!-- since localStorage is client side only -->
+        <img
+          class="cover__img"
+          :src="getCover(currentSound)"
+          alt
+        >
       </nuxt-link>
     </div>
     <PlayerNavs
@@ -22,11 +29,13 @@
         :duration="playStatDuration"
         :played="playStatPlayedTime"
       />
+      <!-- Dont't show slider if playStatDuration is 0 -->
       <PlayerSlider
+        v-if="showSlider"
         class="middle__progress"
         :direction="'horizontal'"
-        :buffered="(playStatLoadedTime / playStatDuration) || 0"
-        :value="(playStatPlayedTime / playStatDuration) || 0"
+        :buffered="buffered"
+        :value="progress"
         @valueChange="seek"
       />
     </div>
@@ -106,6 +115,10 @@ export default {
     shouldPlaying: {
       type: Boolean,
       default: false
+    },
+    playedTime: {
+      type: Number,
+      default: 0
     }
   },
   data() {
@@ -116,11 +129,13 @@ export default {
       internalPlaybackRate: this.playbackRate,
       internalBufferedAmount: 0,
       internalPlayedAmount: 0,
+      internalPlayedTime: this.playedTime,
       isPlaying: false,
       isLoading: false,
       playStatDuration: 0,
       playStatLoadedTime: 0,
-      playStatPlayedTime: 0
+      // playStatPlayedTime: 0
+      showSlider: false
     }
   },
   computed: {
@@ -177,6 +192,23 @@ export default {
         this.$emit('update:playbackRate', val)
         this.internalPlaybackRate = val
       }
+    },
+    playStatPlayedTime: {
+      get() {
+        return this.internalPlayedTime
+      },
+      set(val) {
+        this.$emit('update:playedTime', val)
+        this.internalPlayedTime = val
+      }
+    },
+
+    buffered() {
+      const value = this.playStatLoadedTime / this.playStatDuration || 0
+      return value > 1 ? 1 : value
+    },
+    progress() {
+      return this.playStatPlayedTime / this.playStatDuration || 0
     }
   },
   watch: {
@@ -210,6 +242,9 @@ export default {
     },
     playbackRate() {
       this.internalPlaybackRate = this.playbackRate
+    },
+    playedTime() {
+      this.internalPlayedTime = this.playedTime
     },
 
     // coordinate volume and muted
