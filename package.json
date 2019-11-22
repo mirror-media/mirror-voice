@@ -60,6 +60,7 @@
     "mixin-deep": "^2.0.1",
     "nuxt": "^2.9.2",
     "nuxt-i18n": "^5.8.0",
+    "nuxt-vuex-localstorage": "^1.2.6",
     "qs": "^6.6.0",
     "redis-connection-pool": "^1.7.2",
     "sanitize-html": "^1.20.0",

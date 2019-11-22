@@ -9,12 +9,10 @@
       :muted.sync="playerMuted"
       :playback-rate.sync="playerplaybackRate"
       :should-playing="isPlaying"
+      :played-time.sync="currentPlayedTime"
       @play="syncPlay"
       @pause="syncPause"
       @durationchange="syncDuration"
-      @seeking="syncPlayedTime"
-      @seeked="syncPlayedTime"
-      @timeupdate="syncPlayedTime"
       @error="onError"
       @playingError="onPlayingError"
     />
@@ -57,7 +55,10 @@ export default {
       pages: state => state.appPlayer.pages,
       albumId: state => state.appPlayer.albumId,
       playingIndex: state => state.appPlayer.playingIndex,
-      isPlaying: state => state.appPlayer.isPlaying
+      isPlaying: state => state.appPlayer.isPlaying,
+      playedTime: state => state.appPlayer.playedTime,
+      lastTrackStorage: state => state.localStorage.lastTrackStorage,
+      lastTrackPlayedTime: state => state.localStorage.lastTrackPlayedTime
     }),
     ...mapGetters({
       list: 'appPlayer/LIST'
@@ -78,12 +79,20 @@ export default {
     },
     sound: {
       get() {
-        return this.list[this.playingIndex]
+        const sound = this.list[this.playingIndex]
+        if (!sound && !_.isEmpty(this.lastTrackStorage)) {
+          this.SHOW_APP_PLAYER()
+          return this.lastTrackStorage
+        }
+        this.MEMORIZE_TRACK(sound)
+        return sound
       },
       set(sound) {
         let index = _.findIndex(this.list, o => o.src === sound.src)
-        // Should fetch next page
-        if (index === this.list.length - 1 && this.isListHaveNext) {
+        const shouldFetchNextPage =
+          index === this.list.length - 1 && this.isListHaveNext
+        const shouldFetchPrevPage = index === 0 && this.isListHavePrev
+        if (shouldFetchNextPage) {
           fetchPlayerTracks(
             this.$store,
             this.albumId,
@@ -93,7 +102,7 @@ export default {
             index = _.findIndex(this.list, o => o.src === sound.src)
             this.SET_PLAYING_INDEX(index)
           })
-        } else if (index === 0 && this.isListHavePrev) {
+        } else if (shouldFetchPrevPage) {
           fetchPlayerTracks(
             this.$store,
             this.albumId,
@@ -106,6 +115,19 @@ export default {
         } else {
           this.SET_PLAYING_INDEX(index)
         }
+      }
+    },
+    currentPlayedTime: {
+      get() {
+        const sound = this.list[this.playingIndex]
+        if (!sound && !_.isEmpty(this.lastTrackStorage)) {
+          return this.lastTrackPlayedTime
+        }
+        return this.playedTime
+      },
+      set(time) {
+        this.SET_PLAYED_TIME(time)
+        this.MEMORIZE_TRACK_PLAYEDTIME(time)
       }
     },
     isListHavePrev() {
@@ -121,7 +143,10 @@ export default {
       SET_IS_PLAYING: 'appPlayer/SET_IS_PLAYING',
       SET_DUARTION: 'appPlayer/SET_DUARTION',
       SET_PLAYED_TIME: 'appPlayer/SET_PLAYED_TIME',
-      SET_SHOW_LIGHTBOX: 'lightboxPlayingError/SET_SHOW_LIGHTBOX'
+      SHOW_APP_PLAYER: 'appPlayer/SHOW_APP_PLAYER',
+      SET_SHOW_LIGHTBOX: 'lightboxPlayingError/SET_SHOW_LIGHTBOX',
+      MEMORIZE_TRACK: 'localStorage/MEMORIZE_TRACK',
+      MEMORIZE_TRACK_PLAYEDTIME: 'localStorage/MEMORIZE_TRACK_PLAYEDTIME'
     }),
     syncPlay() {
       this.SET_IS_PLAYING(true)
@@ -132,10 +157,6 @@ export default {
     syncDuration(e) {
       const duration = _.get(e, ['target', 'duration'], 0)
       this.SET_DUARTION(duration)
-    },
-    syncPlayedTime(e) {
-      const playedTime = _.get(e, ['target', 'currentTime'], 0)
-      this.SET_PLAYED_TIME(playedTime)
     },
 
     onError(e) {

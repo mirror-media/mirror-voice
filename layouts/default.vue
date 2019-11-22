@@ -19,9 +19,11 @@
       <nuxt />
     </div>
     <AppFooter />
-    <AppPlayer
-      :class="[ 'app__player', { 'app__player--hide': !showPlayer } ]"
-    />
+    <NoSSR>
+      <AppPlayer
+        :class="[ 'app__player', { 'app__player--hide': !showPlayer } ]"
+      />
+    </NoSSR>
     <transition name="fade" mode="out-in">
       <AppLightboxWrapper
         v-show="showLightbox"
@@ -44,6 +46,7 @@
 <script>
 import { mapState } from 'vuex'
 
+import NoSSR from 'vue-no-ssr'
 import AppHeader from '~/components/AppHeader.vue'
 // import AppBreadcrumb from '~/components/AppBreadcrumb.vue'
 import AppFooter from '~/components/AppFooter.vue'
@@ -54,6 +57,7 @@ import AppNativeNotification from '~/components/AppNativeNotification.vue'
 
 export default {
   components: {
+    NoSSR,
     AppHeader,
     AppFooter,
     // AppBreadcrumb,

@@ -116,7 +116,7 @@ export default {
       return _.truncate(this.item.title, { length: limit })
     },
     date() {
-      return new Date(_.get(this.item, 'updatedAt', ''))
+      return new Date(_.get(this.item, 'createTime', ''))
     },
     imgUrl() {
       return _.get(this.$getImgs(this.item), ['mobile', 'url'], '')

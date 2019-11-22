@@ -117,11 +117,15 @@ export default {
     isPlaying: {
       type: Boolean,
       default: false
+    },
+    shouldFilterTtsVocal: {
+      type: Boolean,
+      required: true
     }
   },
   computed: {
     date() {
-      return new Date(_.get(this.info, 'updatedAt', ''))
+      return new Date(_.get(this.info, 'createTime', ''))
     },
     tags() {
       return _.get(this.info, 'tags', [])
@@ -130,7 +134,10 @@ export default {
       return _.get(this.$getImgs(this.info), ['mobile', 'url'], '')
     },
     vocals() {
-      return _.get(this.info, 'vocals', [])
+      return _.get(this.info, 'vocals', []).filter(vocal => {
+        const { id = '' } = vocal
+        return !this.$TTS_VOCALS.map(vocal => vocal.id).includes(id)
+      })
     },
     writers() {
       return _.get(this.info, 'writers', [])
