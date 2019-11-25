@@ -338,7 +338,7 @@ export default {
       PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
     }),
     playAlbum(albumId = this.album.id) {
-      fetchPlayerTracks(this.$store, albumId)
+      fetchPlayerTracks(this.$store, albumId, false)
       this.$sendGAAlbum({ action: 'click', label: 'play all' })
     },
 
