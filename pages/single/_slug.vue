@@ -129,16 +129,21 @@ export default {
     appPlayerSingleSlug() {
       return _.get(this.list, [this.appPlayer.playingIndex, 'slug'], '')
     },
+    isSlugEqualToTrackInPlayer() {
+      return this.appPlayerSingleSlug === _.get(this.single, 'slug', '')
+    },
     isSinglePlaying: {
       get() {
-        return (
-          this.appPlayer.isPlaying &&
-          this.appPlayerSingleSlug === _.get(this.single, 'slug', '')
-        )
+        /*
+        ** 1. Check playing status in player
+        ** 2. track's slug in player === single's slug on current page
+        **    if slugs are equal, we can say current single is playing
+        */
+        return this.appPlayer.isPlaying && this.isSlugEqualToTrackInPlayer
       },
       set(val) {
         if (val) {
-          if (this.appPlayerSingleSlug !== _.get(this.single, 'slug', '')) {
+          if (!this.isSlugEqualToTrackInPlayer) {
             this.playSingle()
           } else {
             // continue
