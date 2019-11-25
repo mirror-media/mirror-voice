@@ -47,7 +47,7 @@
         </a>
       </nav>
       <div class="footer__rights rights">
-        <p>Copyright © 2019 精鏡傳媒股份有限公司 <span>All Rights Reserved.</span></p>
+        <p>Copyright © 2019 鏡文學股份有限公司 <span>All Rights Reserved.</span></p>
       </div>
     </div>
   </footer>
