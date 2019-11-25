@@ -120,7 +120,7 @@ export default {
     },
     shouldFilterTtsVocal: {
       type: Boolean,
-      required: true
+      default: true
     }
   },
   computed: {
