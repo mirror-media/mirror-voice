@@ -21,6 +21,7 @@
 
 <script>
 import _ from 'lodash'
+import queryString from 'query-string'
 import { mapState, mapMutations, mapGetters } from 'vuex'
 
 import Player from '~/components/Player/Player.vue'
@@ -93,20 +94,36 @@ export default {
           index === this.list.length - 1 && this.isListHaveNext
         const shouldFetchPrevPage = index === 0 && this.isListHavePrev
         if (shouldFetchNextPage) {
+          // NOTE: workaround for specify the sort
+          const sort = _.get(
+            queryString.parse(
+              _.get(this.currentPageLinks, ['next', 'href'], '')
+            ),
+            'sort',
+            ''
+          )
           fetchPlayerTracks(
             this.$store,
             this.albumId,
-            true,
+            sort !== 'publishedDate',
             this.currentPageMeta.page + 1
           ).then(() => {
             index = _.findIndex(this.list, o => o.src === sound.src)
             this.SET_PLAYING_INDEX(index)
           })
         } else if (shouldFetchPrevPage) {
+          // NOTE: workaround for specify the sort
+          const sort = _.get(
+            queryString.parse(
+              _.get(this.currentPageLinks, ['prev', 'href'], '')
+            ),
+            'sort',
+            ''
+          )
           fetchPlayerTracks(
             this.$store,
             this.albumId,
-            true,
+            sort !== 'publishedDate',
             this.currentPageMeta.page - 1
           ).then(() => {
             index = _.findIndex(this.list, o => o.src === sound.src)
