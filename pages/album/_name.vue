@@ -211,6 +211,11 @@ export default {
     },
     isAlbumPlaying: {
       get() {
+        /*
+        ** 1. Check playing status in player
+        ** 2. album's id in player === album's id on current page
+        **    if ids are equal, we can say current album is playing
+        */
         return (
           this.appPlayer.isPlaying &&
           this.appPlayer.albumId === _.get(this.album, 'id', '')
@@ -333,7 +338,7 @@ export default {
       PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
     }),
     playAlbum(albumId = this.album.id) {
-      fetchPlayerTracks(this.$store, albumId)
+      fetchPlayerTracks(this.$store, albumId, false)
       this.$sendGAAlbum({ action: 'click', label: 'play all' })
     },
 

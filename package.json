@@ -62,6 +62,7 @@
     "nuxt-i18n": "^5.8.0",
     "nuxt-vuex-localstorage": "^1.2.6",
     "qs": "^6.6.0",
+    "query-string": "^6.9.0",
     "redis-connection-pool": "^1.7.2",
     "sanitize-html": "^1.20.0",
     "set-value": "^3.0.1",
