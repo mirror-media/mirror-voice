@@ -125,7 +125,7 @@ export default {
   },
   computed: {
     date() {
-      return new Date(_.get(this.info, 'createTime', ''))
+      return new Date(_.get(this.info, 'publishedDate', ''))
     },
     tags() {
       return _.get(this.info, 'tags', [])
