@@ -125,7 +125,10 @@ export default {
   },
   computed: {
     date() {
-      return new Date(_.get(this.info, 'publishedDate', ''))
+      if ('publishedDate' in this.info) {
+        return new Date(_.get(this.info, 'publishedDate', ''))
+      }
+      return new Date(_.get(this.info, 'updatedAt', ''))
     },
     tags() {
       return _.get(this.info, 'tags', [])
