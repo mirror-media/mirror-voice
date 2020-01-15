@@ -1,5 +1,6 @@
 import MAX_RESULTS from './maxResults'
 import TTS_CONFIG from './ttsConfig'
+import SECTION_CONFIG from './section'
 
 const injectConstants = (constants, inject) => {
   Object.entries(constants).forEach(pair => {
@@ -13,4 +14,5 @@ export default (context, inject) => {
   inject('MAIL', 'voiceservice@mirrormedia.mg')
   injectConstants(MAX_RESULTS, inject)
   injectConstants(TTS_CONFIG, inject)
+  injectConstants(SECTION_CONFIG, inject)
 }
