@@ -9,7 +9,7 @@ export const state = () => ({
   showAppPlayer: false,
   isPlaying: false,
   pages: {},
-  playingIndex: 0,
+  playingIndex: null,
   duration: 0,
   playedTime: 0,
   albumId: '',

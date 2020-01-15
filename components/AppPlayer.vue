@@ -22,7 +22,7 @@
 <script>
 import _ from 'lodash'
 import queryString from 'query-string'
-import { mapState, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 
 import Player from '~/components/Player/Player.vue'
 
@@ -58,8 +58,9 @@ export default {
       playingIndex: state => state.appPlayer.playingIndex,
       isPlaying: state => state.appPlayer.isPlaying,
       playedTime: state => state.appPlayer.playedTime,
-      lastTrackStorage: state => state.localStorage.lastTrackStorage,
-      lastTrackPlayedTime: state => state.localStorage.lastTrackPlayedTime
+      lastTrackStorage: state => state.localStorageLastTrack.lastTrackStorage,
+      lastTrackPlayedTime: state =>
+        state.localStorageLastTrack.lastTrackPlayedTime
     }),
     ...mapGetters({
       list: 'appPlayer/LIST'
@@ -161,9 +162,19 @@ export default {
       SET_DUARTION: 'appPlayer/SET_DUARTION',
       SET_PLAYED_TIME: 'appPlayer/SET_PLAYED_TIME',
       SHOW_APP_PLAYER: 'appPlayer/SHOW_APP_PLAYER',
-      SET_SHOW_LIGHTBOX: 'lightboxPlayingError/SET_SHOW_LIGHTBOX',
-      MEMORIZE_TRACK: 'localStorage/MEMORIZE_TRACK',
-      MEMORIZE_TRACK_PLAYEDTIME: 'localStorage/MEMORIZE_TRACK_PLAYEDTIME'
+      SET_SHOW_LIGHTBOX: 'lightboxPlayingError/SET_SHOW_LIGHTBOX'
+      // MEMORIZE_TRACK: 'localStorageLastTrack/MEMORIZE_TRACK',
+      // MEMORIZE_TRACK_PLAYEDTIME:
+      //   'localStorageLastTrack/MEMORIZE_TRACK_PLAYEDTIME',
+      // MEMORIZE_TRACK_DURATIONTIME:
+      //   'localStorageLastTrack/MEMORIZE_TRACK_DURATIONTIME'
+    }),
+    ...mapActions({
+      MEMORIZE_TRACK: 'localStorageLastTrack/MEMORIZE_TRACK',
+      MEMORIZE_TRACK_PLAYEDTIME:
+        'localStorageLastTrack/MEMORIZE_TRACK_PLAYEDTIME',
+      MEMORIZE_TRACK_DURATIONTIME:
+        'localStorageLastTrack/MEMORIZE_TRACK_DURATIONTIME'
     }),
     syncPlay() {
       this.SET_IS_PLAYING(true)
@@ -174,6 +185,7 @@ export default {
     syncDuration(e) {
       const duration = _.get(e, ['target', 'duration'], 0)
       this.SET_DUARTION(duration)
+      this.MEMORIZE_TRACK_DURATIONTIME(duration)
     },
 
     onError(e) {

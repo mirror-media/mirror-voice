@@ -140,7 +140,12 @@ module.exports = {
         version: 2
       }
     ],
-    'nuxt-vuex-localstorage'
+    [
+      'nuxt-vuex-localstorage',
+      {
+        localStorage: ['localStorageLastTrack', 'localStorageTrackHistory']
+      }
+    ]
   ],
 
   /*
