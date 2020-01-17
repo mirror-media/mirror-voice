@@ -145,7 +145,8 @@ module.exports = {
       {
         localStorage: ['localStorageLastTrack', 'localStorageTrackHistory']
       }
-    ]
+    ],
+    'vue-scrollto/nuxt'
   ],
 
   /*
