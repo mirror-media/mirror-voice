@@ -13,52 +13,41 @@
           >
         </nuxt-link>
         <nav class="main-navs__section-navs section-navs">
-          <HeaderSectionNav
-            v-for="section in sections"
-            :key="section.id"
-            :section="section"
+          <HeaderNav
+            v-for="category in categories"
+            :key="category.id"
+            :text="category.title"
+            :to="`/category/${category.name}`"
             class="section-navs__nav"
           />
         </nav>
       </nav>
-      <nav class="header__aside-navs aside-navs">
-        <a
-          href="https://www.mirrormedia.mg"
-          target="_blank"
-          rel="noopener noreferrer"
+      <!-- <nav class="header__aside-navs aside-navs">
+        <nuxt-link
+          class="aside-navs__nav"
+          to="/history"
         >
           <img
-            class="header__mm-logo"
-            src="~/assets/img/revamp/mirrorvoice_media@2x.png"
+            class="header__history-icon"
+            src="~/assets/img/revamp/history.svg"
             alt=""
           >
-        </a>
-        <a
-          href="https://www.mirrorfiction.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            class="header__mf-logo"
-            src="~/assets/img/revamp/mirrorfiction_logo@2x.png"
-            alt=""
-          >      
-        </a>
-      </nav>
+        </nuxt-link>
+      </nav> -->
     </div>
   </header>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import HeaderSectionNav from '~/components/Header/HeaderSectionNav.vue'
+import HeaderNav from '~/components/Header/HeaderNav.vue'
 
 export default {
   components: {
-    HeaderSectionNav
+    HeaderNav
   },
   computed: {
-    ...mapState(['sections'])
+    ...mapState(['categories'])
   },
   methods: {
     handleLogoClick() {
@@ -75,50 +64,43 @@ export default {
   height 60px
   background-color white
   box-shadow 0px 3px 6px #00000029
-  padding 0 80px
+  display flex
+  align-items center
   &__wrapper
     display flex
     justify-content space-between
     align-items center
-    max-width 1200px
+    width 1280px
     margin 0 auto
   &__mv-logo
     height 32px
-  &__mm-logo
-    height 24px
-  &__mf-logo
-    height 20px
+  &__history-icon
+    height 23px
 
 .main-navs
   display flex
   align-items center
   &__section-navs
-    margin 0 0 0 21px
+    margin 0 0 0 50px
 
 .section-navs
   display flex
   align-items center
-
-.aside-navs
-  a + a
-    margin 0 0 0 12px
+  position relative
+  top 3px
+  &__nav
+    & + &
+      margin 0 0 0 60px
 
 @media (max-width 768px)
   .header
     height 50px
-    padding 0 10px
+    padding 0 20px 0 10px
+    &__wrapper
+      width 100%
 
   .main-navs
     width 100%
-    justify-content space-between
     &__section-navs
-      margin 0 0 0 12px
-
-  .aside-navs
-    display none
-
-@media (max-width 320px)
-  .main-navs
-    &__section-navs
-      margin 0
+      display none
 </style>
