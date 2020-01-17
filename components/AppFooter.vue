@@ -5,49 +5,134 @@
       { 'footer--higher': showAppPlayer }
     ]"
   >
-    <div class="footer__wrapper">
-      <nav class="footer__main-navs main-navs">
-        <nuxt-link
-          class="main-navs__nav"
-          to="/privacy_rule"
-          @click.native="handlePrivacyRuleClick"
-        >
-          隱私政策
-        </nuxt-link>
-        <nuxt-link
-          class="main-navs__nav"
-          to="/about"
-          @click.native="handleAboutClick"
-        >
-          關於我們
-        </nuxt-link>
-      </nav>
-      <nav class="footer__external-navs external-navs">
-        <a
-          href="https://www.mirrormedia.mg"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div class="footer__top top">
+      <div class="top__wrapper">
+        <nav class="top__mobile-external-link-navs mobile-external-link-navs">
+          <a
+            class="mobile-external-link-navs__nav"
+            :href="externalLinks.mirrormedia"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              class="mobile-mm-logo"
+              src="~/assets/img/revamp/mirrorvoice_media@2x.png"
+              alt=""
+            >
+          </a>
+          <a
+            class="mobile-external-link-navs__nav"
+            :href="externalLinks.mirrorfiction"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <img
+              class="mobile-mf-logo"
+              src="~/assets/img/revamp/mirrorfiction_logo@2x.png"
+              alt=""
+            > 
+          </a>
+        </nav>
+        <button
+          v-scroll-to="'.header'"
+          class="top__back-to-page-top back-to-page-top"
         >
           <img
-            class="external-navs__logo"
-            src="~/assets/img/revamp/mirrorvoice_media@2x.png"
+            class="back-to-page-top__icon"
+            src="~/assets/img/revamp/top_arrow.svg"
             alt=""
           >
-        </a>
-        <a
-          href="https://www.mirrorfiction.com/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img
-            class="external-navs__logo"
-            src="~/assets/img/revamp/mirrorfiction_logo@2x.png"
-            alt=""
-          >      
-        </a>
-      </nav>
-      <div class="footer__rights rights">
-        <p>Copyright © 2019 鏡文學股份有限公司 <span>All Rights Reserved.</span></p>
+        </button>
+      </div>
+    </div>
+    <div class="footer__bottom bottom">
+      <div class="bottom__wrapper">
+        <div class="bottom__main-navs main-navs">
+          <nav class="main-navs__voice-navs voice-navs">
+            <nuxt-link
+              class="voice-navs__nav"
+              :to="internalLinks.privacy"
+            >
+              隱私政策
+            </nuxt-link>
+            <nuxt-link
+              class="voice-navs__nav"
+              :to="internalLinks.about"
+            >
+              關於我們
+            </nuxt-link>
+            <nuxt-link
+              class="voice-navs__nav"
+              :to="internalLinks.contact"
+            >
+              聯絡我們
+            </nuxt-link>
+          </nav>
+          <nav class="main-navs__sns-navs sns-navs">
+            <a
+              class="sns-navs__link"
+              :href="externalLinks.mirrorvoiceFB"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                class="fb-icon"
+                src="~/assets/img/revamp/facebook.svg"
+                alt=""
+              >
+            </a>
+            <a
+              class="sns-navs__link"
+              :href="externalLinks.mirrorvoiceIG"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                class="ig-icon"
+                src="~/assets/img/revamp/instagram.svg"
+                alt=""
+              >
+            </a>
+          </nav>
+        </div>
+        <div class="bottom__aside-navs aside-navs">
+          <nav class="aside-navs__desktop-external-link-navs desktop-external-link-navs">
+            <a
+              class="desktop-external-link-navs__nav"
+              :href="externalLinks.mirrormedia"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                class="desktop-mm-logo"
+                src="~/assets/img/revamp/mirrorvoice_media@2x.png"
+                alt=""
+              >
+            </a>
+            <a
+              class="desktop-external-link-navs__nav"
+              :href="externalLinks.mirrorfiction"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                class="desktop-mf-logo"
+                src="~/assets/img/revamp/mirrorfiction_logo@2x.png"
+                alt=""
+              > 
+            </a>
+          </nav>
+          <p class="aside-navs__copyright-hint copyright-hint">
+            <span
+              class="copyright-hint__company"
+              v-text="copyrightHint.company"
+            />
+            <span
+              class="copyright-hint__content"
+              v-text="copyrightHint.content"
+            />
+          </p>
+        </div>
       </div>
     </div>
   </footer>
@@ -57,6 +142,25 @@
 import { mapState } from 'vuex'
 
 export default {
+  data() {
+    return {
+      copyrightHint: {
+        company: 'Copyright © 鏡文學股份有限公司',
+        content: 'All Rights Reserved.'
+      },
+      externalLinks: {
+        mirrormedia: 'https://www.mirrormedia.mg',
+        mirrorfiction: 'https://mirrorfiction.com',
+        mirrorvoiceFB: 'https://www.facebook.com/mirrormediaculture',
+        mirrorvoiceIG: 'https://www.instagram.com/mirror_voice'
+      },
+      internalLinks: {
+        privacy: '/privacy_rule',
+        about: '/about',
+        contact: '/contact'
+      }
+    }
+  },
   computed: {
     ...mapState({
       showAppPlayer: state => state.appPlayer.showAppPlayer
@@ -75,82 +179,161 @@ export default {
 
 <style lang="stylus" scoped>
 .footer
-  border-top 2px solid #FE5000
-  height 60px
-  background-color white
-  padding 0 83px
+  display flex
+  flex-direction column
   &--higher
-    height calc(60px + 60px)
-    padding 0 83px 60px 83px
+    padding 0 0 60px 0
+
+.top
+  background-color transparent
+  height 40px
+  display flex
+  align-items center
   &__wrapper
-    height 100%
+    width 100%
+    max-width 1280px
+    margin 0 auto
+    display flex
+    justify-content flex-end
+  &__mobile-external-link-navs
+    display none
+
+.back-to-page-top
+  background-color transparent
+  border none
+  cursor pointer
+  outline none
+  padding 0
+  &__icon
+    width 20px
+    height 20px
+    filter: invert(92%) sepia(2%) saturate(16%) hue-rotate(316deg) brightness(92%) contrast(96%);
+
+.bottom
+  background-color #FF6D2D
+  display flex
+  align-items center
+  height 60px
+  &__wrapper
+    width 100%
+    max-width 1280px
+    margin 0 auto
     display flex
     justify-content space-between
     align-items center
-    max-width 1200px
-    margin 0 auto
 
 .main-navs
   display flex
+  &__sns-navs
+    margin 2px 0 0 13px
+.voice-navs
+  display flex
   align-items center
-  a
-    font-size 15px
-    color #1E170F
+  &__nav
+    color white
+    font-size 14px
     display flex
     align-items center
-  a + a
-    &:before
-      content ''
-      display inline-block
-      width 3px
-      height 3px
-      border-radius 100%
-      background-color #1E170F
-      margin 0 10px
-      pointer-events none
+    height 21px
+    & + &
+      margin 0 0 0 16px
+      padding 0 0 0 16px
+      border-left 1px solid white
+.sns-navs
+  display flex
+  align-items center
+  &__link
+    & + &
+      margin 0 0 0 26px
+.fb-icon
+  width 16px
+  height 20px
+  // background-color black
+  filter: invert(92%) sepia(90%) saturate(3%) hue-rotate(201deg) brightness(111%) contrast(100%);
+.ig-icon
+  width 20px
+  height 20px
+  filter: invert(92%) sepia(90%) saturate(3%) hue-rotate(201deg) brightness(111%) contrast(100%);
 
-.external-navs
-  display none
+.aside-navs
+  display flex
+  align-items center
+  &__copyright-hint
+    margin 0 0 0 26px
+.desktop-external-link-navs
+  &__nav
+    & + &
+      margin 0 0 0 20px
+.desktop-mm-logo
+  height 20px
+.desktop-mf-logo
+  height 20px
 
-.rights
+.copyright-hint
+  color white
   font-size 13px
-  color #6F6F6F
-  span
-    font-size 12px
 
 @media (max-width 768px)
-  .footer
-    height 152px
-    padding 16px 0 10px 0
-    &--higher
-      height calc(152px + 60px)
-      padding 16px 0 70px 0
-    &__wrapper
-      flex-direction column
-    &__external-navs
-      margin 20px 0 0 0
-    &__rights
-      margin 20px 0 0 0
-
-  .main-navs
-    a + a
-      margin 0 0 0 14px
-      &:before
-       display none
-
-  .external-navs
+  .top
+    background-color white
+    height 70px
     display flex
-    &__logo
-      height 32px
-    a + a
-      margin 0 0 0 20px
+    align-items center
+    &__wrapper
+      width 100%
+      max-width auto
+      margin 0
+      padding 0 25px
+      display flex
+      justify-content center
+      position relative
+    &__mobile-external-link-navs
+      display flex
+    &__back-to-page-top
+      position absolute
+      right 25px
+      top calc(100% / 2 - 10px)
 
-  .rights
+  .mobile-external-link-navs
+    display flex
+    align-items center
+    &__nav
+      & + &
+        margin 0 0 0 20px
+  .mobile-mm-logo
+    height 32px
+  .mobile-mf-logo
+    height 24px
+
+  .bottom
+    height auto
+    padding 22px 0 10px 0
+    &__wrapper
+      width 100%
+      max-width auto
+      margin 0
+      display flex
+      flex-direction column
+      justify-content flex-start
+      align-items center
+
+  .sns-navs
+    &__link
+      & + &
+        margin 0 0 0 20px
+
+  .aside-navs
+    &__copyright-hint
+      margin 13px 0 0 0
+  .desktop-external-link-navs
+    display none
+
+  .copyright-hint
     display flex
     flex-direction column
     align-items center
-    span
-      display block
-      text-align center
+    &__company
+      font-weight bold
+    &__content
       margin 5px 0 0 0
 </style>

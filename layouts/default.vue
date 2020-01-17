@@ -157,6 +157,7 @@ export default {
     margin 20px auto 0 auto
   &__view-wrapper
     margin 18px auto 60px auto
+    min-height calc(100vh - 60px - 60px - 40px - 18px - 60px)
     &--marginless
       margin 0
   &__player
