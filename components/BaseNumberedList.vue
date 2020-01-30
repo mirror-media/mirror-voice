@@ -135,4 +135,5 @@ export default {
   .list-item
     padding-top 10.5px
     padding-bottom 10.5px
+    width 100%
 </style>

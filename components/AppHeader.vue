@@ -92,5 +92,5 @@ export default {
   .main-navs
     width 100%
     &__categories-navs
-      display none
+      display none !important
 </style>
