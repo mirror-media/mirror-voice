@@ -1,5 +1,8 @@
 <template>
   <section class="home">
+    <AppCategoriesNav
+      class="home__categories-nav"
+    />
     <Slider
       class="home__slideshow"
       :items="audioPromotions.items"
@@ -51,6 +54,7 @@
 <script>
 import _ from 'lodash'
 
+import AppCategoriesNav from '~/components/AppCategoriesNav.vue'
 import Slider from '~/components/Slider/Slider.vue'
 import BaseCoverImgList from '~/components/BaseCoverImgList.vue'
 import BaseNumberedList from '~/components/BaseNumberedList.vue'
@@ -59,6 +63,7 @@ import BaseCategoryShowcaseList from '~/components/BaseCategoryShowcaseList.vue'
 
 export default {
   components: {
+    AppCategoriesNav,
     Slider,
     BaseCoverImgList,
     BaseNumberedList,
@@ -180,6 +185,8 @@ export default {
 <style lang="stylus" scoped>
 .home
   background-color #EFEFEF
+  &__categories-nav
+    display none
   &__wrapper
     max-width 1280px
     margin 20px auto 0 auto
@@ -202,6 +209,9 @@ export default {
 
 @media (max-width 768px)
   .home
+    &__categories-nav
+      display flex
+      margin 5px 0 0 0
     &__wrapper
       max-width 100%
       margin 0
