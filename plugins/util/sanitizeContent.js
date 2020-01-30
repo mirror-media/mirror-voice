@@ -14,7 +14,7 @@ const sanitizeHtmlOptions = {
     }
   },
   categoriesShowcase: {
-    allowedTags: ['p']
+    allowedTags: []
   }
 }
 

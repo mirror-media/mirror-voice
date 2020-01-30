@@ -106,7 +106,7 @@ export default {
 
 .album-info
   &__title
-    margin 0
+    margin 10px 0 0 0
     color #1E170F
     font-size 18px
   &__description
@@ -114,6 +114,11 @@ export default {
     font-size 14px
     line-height 1.5
     margin 10px 0 0 0
+    word-wrap: break-word;
+    -webkit-line-clamp: 3;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 
 .list
   list-style none
@@ -135,6 +140,7 @@ export default {
   .album-info
     &__title
       font-size 15px
+      margin 0
     &__description
       font-size 12px
       line-height 1.6
