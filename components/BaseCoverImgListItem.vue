@@ -8,9 +8,9 @@
       ]"
     >
       <img
-        class="cover-wrapper__img"
-        :src="imgSrc"
+        v-lazy="imgSrc"
         alt=""
+        class="cover-wrapper__img"
       >
     </div>
     <nuxt-link
@@ -77,7 +77,9 @@ export default {
     height 120px
   &__img
     width 100%
+    min-width 100%
     height 100%
+    min-height 100%
     border-radius 5px
     object-fit cover
 

@@ -6,7 +6,7 @@
         class="album-audio-list-wrapper__album album"
       >
         <img
-          :src="albumCoverImgSrc"
+          v-lazy="albumCoverImgSrc"
           alt=""
           class="album__cover-img"
         >
@@ -98,7 +98,9 @@ export default {
   display flex
   &__cover-img
     width 100px
+    min-width 100px
     height 100px
+    min-height 100px
     border-radius 10px
     object-fit cover
   &__album-info
