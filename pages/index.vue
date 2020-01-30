@@ -1,226 +1,182 @@
 <template>
   <section class="home">
-    <!-- <section class="home__slideshow slideshow"></section> -->
+    <AppCategoriesNav
+      class="home__categories-nav"
+    />
     <Slider
       class="home__slideshow"
       :items="audioPromotions.items"
       @clickSlide="handleClickSlide"
     />
-    <section
-      :class="[
-        'home__showcase',
-        'showcase',
-        `showcase--${abWinner}`
-      ]"
-    >
-      <main class="showcase__main main">
-        <header
-          :class="[
-            'showcase-header',
-            `showcase-header--${abWinner}`
-          ]"
-        >
-          <nuxt-link
-            class="showcase-header__title"
-            :to="`/section/${getName(sectionMain)}`"
-            @click.native="handleClickSectionTitle"
-            v-text="getTitle(sectionMain)"
+    <div class="home__wrapper">
+      <section class="aside-main-wrapper">
+        <aside class="aside-main-wrapper__aside">
+          <BaseCoverImgList
+            :title="'最新'"
+            :link-more="'/'"
+            :list-data="latestPosts"
           />
-          <nuxt-link
-            class="showcase-header__more"
-            :to="`/section/${getName(sectionMain)}`"
-            @click.native="handleClickSectionMore"
-          >
-            更多
-          </nuxt-link>
-        </header>
-        <ol class="showcase-list">
-          <li
-            v-for="album in sectionMainShowcaseAlbums"
-            :key="album.id"
-            class="showcase-list__list-item"
-            @click="handleClickShowcaseListItem"
-          >
-            <nuxt-link
-              :to="`/album/${getName(album)}`"
-            >
-              <img
-                v-lazy="getImgUrl(album)"
-                alt=""
-              >
-              <div>
-                <h1 v-text="getTitle(album)" />
-                <p v-text="getVocal(album)" />
-              </div>
-            </nuxt-link>
-          </li>
-        </ol>
-      </main>
-      <aside class="showcase__aside aside">
-        <header
-          :class="[
-            'showcase-header',
-            `showcase-header--${abWinner}`
-          ]"
-        >
-          <nuxt-link
-            class="showcase-header__title"
-            :to="`/section/${getName(sectionAside)}`"
-            @click.native="handleClickSectionTitle"
-            v-text="getTitle(sectionAside)"
+        </aside>
+        <main class="aside-main-wrapper__main">
+          <BaseCoverImgList
+            :title="'熱門'"
+            :link-more="'/'"
+            :columns="2"
+            :list-data="popularVoice"
+            class="main__popular"
           />
-          <nuxt-link
-            class="showcase-header__more"
-            :to="`/section/${getName(sectionAside)}`"
-            @click.native="handleClickSectionMore"
-          >
-            更多
-          </nuxt-link>
-        </header>
-        <ol class="showcase-list">
-          <li
-            v-for="album in sectionAsideShowcaseAlbums"
-            :key="album.id"
-            class="showcase-list__list-item"
-            @click="handleClickShowcaseListItem"
-          >
-            <nuxt-link
-              :to="`/album/${getName(album)}`"
-            >
-              <img
-                v-lazy="getImgUrl(album)"
-                alt=""
-              >
-              <div>
-                <h1 v-text="getTitle(album)" />
-                <p v-text="getVocal(album)" />
-              </div>
-            </nuxt-link>
-          </li>
-        </ol>
-      </aside>
-    </section>
+          <BaseNumberedList
+            :title="'小編推薦'"
+            :list-data="audioChoices"
+            class="main__audio-choices"
+          />
+        </main>
+      </section>
+      <section class="voice-masters">
+        <BasePeopleAudioList
+          :title="'名家推薦'"
+          :list-data="voiceMasters"
+        />
+      </section>
+      <section class="categories-showcase">
+        <BaseCategoryShowcaseList
+          v-for="(category, i) in categoriesShowcase"
+          :key="i"
+          :title="category.title"
+          :list-data="category.albums"
+          class="categories-showcase__list"
+        />
+      </section>
+    </div>
   </section>
 </template>
 
 <script>
 import _ from 'lodash'
 
+import AppCategoriesNav from '~/components/AppCategoriesNav.vue'
 import Slider from '~/components/Slider/Slider.vue'
+import BaseCoverImgList from '~/components/BaseCoverImgList.vue'
+import BaseNumberedList from '~/components/BaseNumberedList.vue'
+import BasePeopleAudioList from '~/components/BasePeopleAudioList.vue'
+import BaseCategoryShowcaseList from '~/components/BaseCategoryShowcaseList.vue'
 
 export default {
-  abtest: {
-    name: 'home-showcase-swap-abtest',
-    variants: { a: 50, b: 50 }
-  },
   components: {
-    Slider
+    AppCategoriesNav,
+    Slider,
+    BaseCoverImgList,
+    BaseNumberedList,
+    BasePeopleAudioList,
+    BaseCategoryShowcaseList
+  },
+  data() {
+    return {
+      limit: {
+        // There are more items in our raw json data, limit it manually
+        popularVoice: 6
+      }
+    }
   },
   computed: {
-    sectionMain() {
-      return _.get(this.sections, 0, {})
+    latestPosts() {
+      const data = _.get(this, ['rawDataLatestPosts', 'items'], [])
+      return data.map(d => ({
+        title: _.get(d, ['albums', 0, 'title'], ''),
+        subtitle: _.get(d, 'title', ''),
+        cover: _.get(this.$getImgs(d), ['mobile', 'url'], ''),
+        link: `/single/${_.get(d, 'slug', '')}`
+      }))
     },
-    sectionMainShowcaseAlbums() {
-      return this.getSectionAlbums(this.getName(this.sectionMain))
+    popularVoice() {
+      let data = _.get(this, ['rawDataPopularVoice', 'items'], [])
+      data = _.take(data, this.limit.popularVoice)
+      return data.map(d => ({
+        title: _.get(d, ['albums', 0], ''),
+        subtitle: _.get(d, 'title', ''),
+        cover: _.get(d, 'heroImage', ''),
+        link: `/single/${_.get(d, 'slug', '')}`
+      }))
     },
-    sectionAside() {
-      return _.get(this.sections, 1, {})
+    audioChoices() {
+      const data = _.get(this, ['rawDataAudioChoices', 'items'], [])
+      return data.map(d => ({
+        title: _.get(d, ['choices', 'title'], ''),
+        audio: _.get(d, ['choices', 'audio', 'audio', 'url'], ''),
+        link: `/single/${_.get(d, ['choices', 'slug'], '')}`
+      }))
     },
-    sectionAsideShowcaseAlbums() {
-      return _.take(this.getSectionAlbums(this.getName(this.sectionAside)), 4)
+    voiceMasters() {
+      const data = _.get(this, ['rawDataVoiceMasters'], [])
+      return data.map(d => ({
+        title: _.get(d, ['masters', 'name'], ''),
+        singles: _.get(d, ['posts'], []).map(single => ({
+          title: _.get(single, 'title', ''),
+          link: `/single/${_.get(single, 'slug', '')}`,
+          audio: _.get(single, ['audio', 'audio', 'url'], '')
+        }))
+      }))
+    },
+    categoriesShowcase() {
+      const data = _.get(this, ['rawDataCategoriesShowcase'], [])
+      return data.map(d => ({
+        title: _.get(d, 'title', ''),
+        albums: _.get(d, 'albums', []).map(album => ({
+          title: _.get(album, 'title', ''),
+          link: `/album/${_.get(album, 'name', '')}`,
+          brief: _.get(album, 'brief', ''),
+          cover: _.get(this.$getImgs(album), ['mobile', 'url'], ''),
+          singles: _.get(album, 'posts', []).map(single => ({
+            title: _.get(single, 'title', ''),
+            link: `/single/${_.get(single, 'slug', '')}`,
+            audio: _.get(single, ['audio', 'audio', 'url'], '')
+          }))
+        }))
+      }))
     }
   },
   async asyncData({ app }) {
-    const fetchAudioPromotions = () => {
-      return app.$fetchAudioPromotions()
-    }
+    const [
+      { value: audioPromotions },
+      { value: rawDataLatestPosts },
+      { value: rawDataAudioChoices },
+      { value: rawDataPopularVoice },
+      { value: rawDataVoiceMasters },
+      { value: rawDataCategoriesShowcase }
+    ] = await Promise.allSettled([
+      // fetchs from cms api
+      app.$fetchAudioPromotions(),
+      app.$fetchSingle({
+        max_results: app.$MAXRESULT_HOME_LATEST_POSTS,
+        page: 1,
+        sort: '-publishedDate',
+        embedded: {
+          albums: 1
+        }
+      }),
+      app.$fetchAudioChoices({
+        max_results: app.$MAXRESULT_HOME_AUDIO_CHOICES,
+        page: 1,
+        sort: 'sortOrder'
+      }),
 
-    /*
-    ** 1. Fetch all sections
-    ** 2. Fetch albums belong to each audio sections
-    */
-    const getAudioSectionsAndAlbums = async () => {
-      const getSectionAlbums = async sectionIds => {
-        // requests in parallel
-        const result = await Promise.all(
-          sectionIds.map(id =>
-            app.$fetchAlbums({
-              max_results: app.$MAXRESULT_SHOWCASE_HOME,
-              page: 1,
-              sort: 'sortOrder',
-              where: {
-                sections: {
-                  $in: [id]
-                },
-                // Filter out albums of empty vocals, which imply empty posts
-                vocals: {
-                  $exists: true,
-                  $not: {
-                    $size: 0
-                  }
-                }
-              }
-            })
-          )
-        )
-        return result.map(d => d.items)
-      }
-
-      const { items } = await app.$fetchSections({ max_results: 20 })
-      const audioSections = items
-      let albums = await getSectionAlbums(
-        audioSections.map(section => section.id)
-      )
-      albums = _.flatten(albums)
-      return { sections: audioSections, albums }
-    }
-
-    // Run requests in parallel
-    const [audioPromotions, { sections = [], albums = [] }] = await Promise.all(
-      [fetchAudioPromotions(), getAudioSectionsAndAlbums()]
-    )
-    const categories = _.flatten(
-      sections.map(section => _.get(section, 'categories', []))
-    )
+      // fetchs from cron generated jsons
+      app.$fetchPopularVoice(),
+      app.$fetchVoiceMasters(),
+      app.$fetchCategoriesShowcase()
+    ])
     return {
       audioPromotions,
-      sections,
-      categories,
-      albums
+      rawDataLatestPosts,
+      rawDataAudioChoices,
+      rawDataPopularVoice,
+      rawDataVoiceMasters,
+      rawDataCategoriesShowcase
     }
   },
   methods: {
-    getSectionAlbums(sectionName) {
-      return this.albums.filter(album => {
-        const { sections = [] } = album
-        return _.findIndex(sections, o => o.name === sectionName) !== -1
-      })
-    },
-
-    handleClickShowcaseListItem() {
-      this.$sendGAHome({ action: 'click', label: 'album' })
-    },
     handleClickSlide() {
       this.$sendGAHome({ action: 'click', label: 'slideshow' })
-    },
-    handleClickSectionTitle() {
-      this.$sendGAHome({ action: 'click', label: 'section' })
-    },
-    handleClickSectionMore() {
-      this.$sendGAHome({ action: 'click', label: 'section more' })
-    },
-
-    getName(item) {
-      return _.get(item, 'name', '')
-    },
-    getTitle(item) {
-      return _.truncate(_.get(item, 'title', ''), { length: 15 })
-    },
-    getImgUrl(item) {
-      return _.get(this.$getImgs(item), ['mobile', 'url'], '')
-    },
-    getVocal(item) {
-      return _.get(item, ['vocals', 0, 'name'], '')
     }
   }
 }
@@ -228,128 +184,51 @@ export default {
 
 <style lang="stylus" scoped>
 .home
-  &__showcase
-    margin-top 30px
+  background-color #EFEFEF
+  &__categories-nav
+    display none
+  &__wrapper
+    max-width 1280px
+    margin 20px auto 0 auto
 
-.showcase
-  min-height 675px
-  max-width 1200px
-  margin-left auto
-  margin-right auto
+.aside-main-wrapper
   display flex
-  &__aside
-    margin 0 0 0 40px
-  &--b
-    flex-direction row-reverse
-    .showcase__main
-      margin 0 0 0 40px
-    .showcase__aside
-      margin 0
+  &__main
+    margin 0 0 0 30px
 
 .main
-  width 770px
+  &__audio-choices
+    margin 30px 0 0 0
 
-.aside
-  width 390px
+.voice-masters
+  margin 30px 0 0 0
 
-.showcase-header
-  height 30px
-  border-bottom 3px solid #EFEFEF
-  padding 0 18px
-  display flex
-  justify-content space-between
-  &--b
-    justify-content flex-start
-    .showcase-header__more
-      margin 0 0 5px 10px
-  &__title
-    font-size 18px
-    font-weight bold
-    color #1E170F
-    margin 0
-    border-bottom 3px solid #FE5000
-    height 30px
-    display inline-block
-    padding 0 5px
-  &__more
-    display flex
-    align-items center
-    font-size 13px
-    color #1E170F
-    margin 0 0 5px 0
-    &:before
-      content ''
-      width 0
-      height 0
-      border-style solid
-      border-width 4px 0 4px 7px
-      border-color transparent transparent transparent #FE5000
-      margin 0 5px 0 0
-
-.showcase-list
-  list-style none
-  margin -2px 3px // margin calc(18px - 20px) calc(18px - 15px)
-  padding 0
-  display flex
-  flex-wrap wrap
-  &__list-item
-    margin 20px 15px
-    max-width 160px
-    img
-      d = 160px
-      width d
-      height d
-      min-width d
-      min-height d
-      object-fit cover
-    div
-      text-align center
-      margin 10px 0 0 0
-    h1
-      margin 0
-      font-size 16px
-      color #2E2526
-      line-height 1.5
-    p
-      margin 10px 0 0 0
-      font-size 13px
-      color #6F6F6F
+.categories-showcase
+  &__list
+    margin 30px 0 0 0
 
 @media (max-width 768px)
-  .showcase
-    min-height 0
-    max-width 100%
-    margin-left 0
-    margin-right 0
+  .home
+    &__categories-nav
+      display flex
+      margin 5px 0 0 0
+    &__wrapper
+      max-width 100%
+      margin 0
+
+  .aside-main-wrapper
     flex-direction column
-    &__aside
-      margin 40px 0 20px 0
-    &--b
-      flex-direction column-reverse
-      .showcase__main
-        margin 0
+    &__main
+      margin 10px 0 0 0
 
   .main
-    width 100%
+    &__audio-choices
+      margin 10px 0 0 0
 
-  .aside
-    width 100%
+  .voice-masters
+    margin 10px 0 0 0
 
-  .showcase-header
-    &__title
-      font-size 16px
-    
-  .showcase-list
-    margin 8px -2px // margin calc(18px - 10px) calc(18px - 20px)
-    &__list-item
-      margin 10px 20px
-      max-width calc((100vw - 18px * 2 - 40px) / 2)
-      img
-        d = calc((100vw - 18px * 2 - 40px) / 2)
-        width d
-        height d
-        min-width d
-        min-height d
-      h1
-        font-size 15px
+  .categories-showcase
+    &__list
+      margin 10px 0 0 0
 </style>

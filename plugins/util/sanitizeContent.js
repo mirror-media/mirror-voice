@@ -1,24 +1,27 @@
 import sanitizeHtml from 'sanitize-html'
 
-const sanitizeHtmlOptionsMain = {
-  allowedTags: ['div', 'p', 'a', 'ol', 'li', 'strong', 'blockquote'],
-  exclusiveFilter(frame) {
-    return frame.tag === 'div' && frame.attribs.class === 'audio-container '
-  }
-}
-const sanitizeHtmlOptionsAside = {
-  allowedTags: ['div', 'p', 'a', 'strong'],
-  exclusiveFilter(frame) {
-    return frame.tag === 'div' && frame.attribs.class === 'audio-container '
+const sanitizeHtmlOptions = {
+  main: {
+    allowedTags: ['div', 'p', 'a', 'ol', 'li', 'strong', 'blockquote'],
+    exclusiveFilter(frame) {
+      return frame.tag === 'div' && frame.attribs.class === 'audio-container '
+    }
+  },
+  aside: {
+    allowedTags: ['div', 'p', 'a', 'strong'],
+    exclusiveFilter(frame) {
+      return frame.tag === 'div' && frame.attribs.class === 'audio-container '
+    }
+  },
+  categoriesShowcase: {
+    allowedTags: []
   }
 }
 
-const sanitizeContent = (content, isContentAside = false) => {
-  const option = isContentAside
-    ? sanitizeHtmlOptionsAside
-    : sanitizeHtmlOptionsMain
+const sanitizeContent = (content, type = 'main') => {
+  const option = sanitizeHtmlOptions[type]
   const sanitized = sanitizeHtml(content, option)
-  return isContentAside ? sanitized : sanitized.replace(/\n/g, '<br>')
+  return type === 'aside' ? sanitized : sanitized.replace(/\n/g, '<br>')
 }
 
 export default sanitizeContent

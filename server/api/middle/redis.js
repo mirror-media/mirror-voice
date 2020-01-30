@@ -22,16 +22,16 @@ const read = require('express-redis-cache')({
   prefix: REDIS_KEY_PREFIX
 })
 read.on('connected', () => {
-  logger.info('Redis Read Server connected')
+  logger.info('[redis] Redis Read Server connected')
 })
 read.on('disconnected', () => {
-  logger.info('Redis Read Server disconnected')
+  logger.info('[redis] Redis Read Server disconnected')
 })
 read.on('message', message => {
-  logger.info(`Redis Read Server message: ${message}`)
+  logger.info(`[redis] Redis Read Server message: ${message}`)
 })
 read.on('error', error => {
-  logger.error(`Redis Read Server error: ${error}`)
+  logger.error(`[redis] Redis Read Server error: ${error}`)
 })
 
 const write = require('express-redis-cache')({
@@ -42,16 +42,16 @@ const write = require('express-redis-cache')({
   prefix: REDIS_KEY_PREFIX
 })
 write.on('connected', () => {
-  logger.info('Redis Write Server connected')
+  logger.info('[redis] Redis Write Server connected')
 })
 write.on('disconnected', () => {
-  logger.info('Redis Write Server disconnected')
+  logger.info('[redis] Redis Write Server disconnected')
 })
 write.on('message', message => {
-  logger.info(`Redis Write Server message: ${message}`)
+  logger.info(`[redis] Redis Write Server message: ${message}`)
 })
 write.on('error', error => {
-  logger.error(`Redis Write Server error: ${error}`)
+  logger.error(`[redis] Redis Write Server error: ${error}`)
 })
 
 const readMiddle = (req, res, next) => {
@@ -59,7 +59,7 @@ const readMiddle = (req, res, next) => {
   read.get(entry, (error, entries = []) => {
     if (error) {
       logger.error(
-        `Error occurred during fetching data from Redis Read Server, entry: ${entry}`
+        `[redis] Error occurred during fetching data from Redis Read Server, entry: ${entry}`
       )
       next(new Error(error))
     }
@@ -82,7 +82,7 @@ const writeMiddle = (req, res, next) => {
     error => {
       if (error) {
         logger.error(
-          `Error occurred during writing data to Redis Write Server, entry: ${entry}`
+          `[redis] Error occurred during writing data to Redis Write Server, entry: ${entry}`
         )
         next(new Error(error))
       }

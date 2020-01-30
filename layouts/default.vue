@@ -1,8 +1,7 @@
 <template>
   <div
     :class="[
-      'app',
-      { 'app--white': isPageHome }
+      'app'
     ]"
   >
     <AppHeader />
@@ -149,9 +148,7 @@ export default {
 
 <style lang="stylus" scoped>
 .app
-  background-color #eeeeee
-  &--white
-    background-color white
+  background-color #EFEFEF
   &__breadcrumb
     max-width 1000px
     margin 20px auto 0 auto
@@ -187,7 +184,7 @@ export default {
     &__breadcrumb
       display none
     &__view-wrapper
-      margin 0 0 50px 0
+      margin 0 0 5px 0
     &__native-notification
       transform translate(0, 325px)
       opacity 1

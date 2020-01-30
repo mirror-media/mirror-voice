@@ -189,6 +189,7 @@ export default {
   height 40px
   display flex
   align-items center
+  z-index 1000
   &__wrapper
     width 100%
     max-width 1280px
@@ -214,6 +215,7 @@ export default {
   display flex
   align-items center
   height 60px
+  z-index 1000
   &__wrapper
     width 100%
     max-width 1280px

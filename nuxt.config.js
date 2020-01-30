@@ -104,7 +104,8 @@ module.exports = {
     '~/plugins/constants/index.js',
     '~/plugins/requests/index.js',
     '~/plugins/meta/index.js',
-    '~/plugins/ga/index.js'
+    '~/plugins/ga/index.js',
+    '~/plugins/extendPromise.js'
   ],
 
   /*

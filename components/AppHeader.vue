@@ -12,15 +12,9 @@
             alt=""
           >
         </nuxt-link>
-        <nav class="main-navs__section-navs section-navs">
-          <HeaderNav
-            v-for="category in categories"
-            :key="category.id"
-            :text="category.title"
-            :to="`/category/${category.name}`"
-            class="section-navs__nav"
-          />
-        </nav>
+        <AppCategoriesNav
+          class="main-navs__categories-navs"
+        />
       </nav>
       <!-- <nav class="header__aside-navs aside-navs">
         <nuxt-link
@@ -39,15 +33,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import HeaderNav from '~/components/Header/HeaderNav.vue'
+import AppCategoriesNav from '~/components/AppCategoriesNav.vue'
 
 export default {
   components: {
-    HeaderNav
-  },
-  computed: {
-    ...mapState(['categories'])
+    AppCategoriesNav
   },
   methods: {
     handleLogoClick() {
@@ -80,7 +70,7 @@ export default {
 .main-navs
   display flex
   align-items center
-  &__section-navs
+  &__categories-navs
     margin 0 0 0 50px
 
 .section-navs
@@ -101,6 +91,6 @@ export default {
 
   .main-navs
     width 100%
-    &__section-navs
-      display none
+    &__categories-navs
+      display none !important
 </style>

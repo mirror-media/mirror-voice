@@ -82,12 +82,13 @@ export default {
 
 <style lang="stylus" scoped>
 .slider
-  height calc(100vw / 1080 * 0.56203 * 1px) // 607 / 1080 = 0.56203
-  padding 0 0 20px 0
+  // height calc(100vw / 1080 * 0.56203 * 1px) // 607 / 1080 = 0.56203
+  padding 0
   position relative
 
 .swiper-slide
   width 33.33%
+  margin 0 5.57px
   &__slide
     width 100%
     height 100%
@@ -105,28 +106,26 @@ export default {
 .swiper-button-prev
   left 23px
   background-image url('~assets/img/revamp/icon-left-arrow.svg')
+  filter brightness(1)
 
 .swiper-button-next
   right 23px
   background-image url('~assets/img/revamp/icon-right-arrow.svg')
-  filter brightness(.7)
+  filter brightness(1)
 
 .swiper-pagination
-  bottom 0px
+  bottom 10px
   & >>> [role=button]
     width 8px
     height 8px
     margin 0 10px
   & >>> .swiper-pagination-bullet
-    background-color gray
+    background-color white
+    opacity 1
   & >>> .swiper-pagination-bullet-active
     background-color #1E170F
 
 @media (max-width 768px)
-  .slider
-    height calc(100vw * 0.65)
-    padding 0 0 30px 0
-
   .swiper-slide
     width 100%
 
@@ -136,9 +135,9 @@ export default {
 
   .swiper-button-prev
     left 5px
-    transform translateY(-15px)
+    opacity 0.6
 
   .swiper-button-next
     right 5px
-    transform translateY(-15px)
+    opacity 0.6
 </style>

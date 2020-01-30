@@ -40,7 +40,7 @@ router.post('/contact', formValidate, authGoogleAPI, (req, res, next) => {
     (err, { data }) => {
       if (err) {
         logger.error(
-          `The Google Sheet API returned an error while append: ${err}`
+          `[spreadsheet] The Google Sheet API returned an error while append: ${err}`
         )
         next(new Error(err))
       }
