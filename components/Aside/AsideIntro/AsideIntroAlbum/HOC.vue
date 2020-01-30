@@ -19,7 +19,7 @@ export default {
       return _.get(this.data, 'title', '')
     },
     description() {
-      return sanitizeContent(_.get(this.data, ['brief', 'html'], ''), true)
+      return sanitizeContent(_.get(this.data, ['brief', 'html'], ''), 'aside')
     }
   },
   render() {
