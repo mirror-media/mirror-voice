@@ -1,49 +1,57 @@
 <template>
   <section class="home">
-    <section class="aside-main-wrapper">
-      <aside class="aside-main-wrapper__aside">
-        <BaseCoverImgList
-          :title="'最新'"
-          :link-more="'/'"
-          :list-data="latestPosts"
+    <Slider
+      class="home__slideshow"
+      :items="audioPromotions.items"
+      @clickSlide="handleClickSlide"
+    />
+    <div class="home__wrapper">
+      <section class="aside-main-wrapper">
+        <aside class="aside-main-wrapper__aside">
+          <BaseCoverImgList
+            :title="'最新'"
+            :link-more="'/'"
+            :list-data="latestPosts"
+          />
+        </aside>
+        <main class="aside-main-wrapper__main">
+          <BaseCoverImgList
+            :title="'熱門'"
+            :link-more="'/'"
+            :columns="2"
+            :list-data="popularVoice"
+            class="main__popular"
+          />
+          <BaseNumberedList
+            :title="'小編推薦'"
+            :list-data="audioChoices"
+            class="main__audio-choices"
+          />
+        </main>
+      </section>
+      <section class="voice-masters">
+        <BasePeopleAudioList
+          :title="'名家推薦'"
+          :list-data="voiceMasters"
         />
-      </aside>
-      <main class="aside-main-wrapper__main">
-        <BaseCoverImgList
-          :title="'熱門'"
-          :link-more="'/'"
-          :columns="2"
-          :list-data="popularVoice"
-          class="main__popular"
+      </section>
+      <section class="categories-showcase">
+        <BaseCategoryShowcaseList
+          v-for="(category, i) in categoriesShowcase"
+          :key="i"
+          :title="category.title"
+          :list-data="category.albums"
+          class="categories-showcase__list"
         />
-        <BaseNumberedList
-          :title="'小編推薦'"
-          :list-data="audioChoices"
-          class="main__audio-choices"
-        />
-      </main>
-    </section>
-    <section class="voice-masters">
-      <BasePeopleAudioList
-        :title="'名家推薦'"
-        :list-data="voiceMasters"
-      />
-    </section>
-    <section class="categories-showcase">
-      <BaseCategoryShowcaseList
-        v-for="(category, i) in categoriesShowcase"
-        :key="i"
-        :title="category.title"
-        :list-data="category.albums"
-        class="categories-showcase__list"
-      />
-    </section>
+      </section>
+    </div>
   </section>
 </template>
 
 <script>
 import _ from 'lodash'
 
+import Slider from '~/components/Slider/Slider.vue'
 import BaseCoverImgList from '~/components/BaseCoverImgList.vue'
 import BaseNumberedList from '~/components/BaseNumberedList.vue'
 import BasePeopleAudioList from '~/components/BasePeopleAudioList.vue'
@@ -51,6 +59,7 @@ import BaseCategoryShowcaseList from '~/components/BaseCategoryShowcaseList.vue'
 
 export default {
   components: {
+    Slider,
     BaseCoverImgList,
     BaseNumberedList,
     BasePeopleAudioList,
@@ -123,6 +132,7 @@ export default {
   },
   async asyncData({ app }) {
     const [
+      { value: audioPromotions },
       { value: rawDataLatestPosts },
       { value: rawDataAudioChoices },
       { value: rawDataPopularVoice },
@@ -130,6 +140,7 @@ export default {
       { value: rawDataCategoriesShowcase }
     ] = await Promise.allSettled([
       // fetchs from cms api
+      app.$fetchAudioPromotions(),
       app.$fetchSingle({
         max_results: app.$MAXRESULT_HOME_LATEST_POSTS,
         page: 1,
@@ -150,11 +161,17 @@ export default {
       app.$fetchCategoriesShowcase()
     ])
     return {
+      audioPromotions,
       rawDataLatestPosts,
       rawDataAudioChoices,
       rawDataPopularVoice,
       rawDataVoiceMasters,
       rawDataCategoriesShowcase
+    }
+  },
+  methods: {
+    handleClickSlide() {
+      this.$sendGAHome({ action: 'click', label: 'slideshow' })
     }
   }
 }
@@ -163,8 +180,9 @@ export default {
 <style lang="stylus" scoped>
 .home
   background-color #EFEFEF
-  max-width 1280px
-  margin 0 auto
+  &__wrapper
+    max-width 1280px
+    margin 20px auto 0 auto
 
 .aside-main-wrapper
   display flex
@@ -184,8 +202,9 @@ export default {
 
 @media (max-width 768px)
   .home
-    max-width auto
-    margin 0
+    &__wrapper
+      max-width 100%
+      margin 0
 
   .aside-main-wrapper
     flex-direction column
