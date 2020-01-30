@@ -4,6 +4,7 @@
       <audio
         ref="audio"
         :src="audio"
+        preload="metadata"
         class="duration-wrapper__audio"
         @durationchange="handleDurationchange"
       />
