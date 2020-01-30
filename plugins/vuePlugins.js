@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueLazyload from 'vue-lazyload'
 import VueAB from './vue-a2b'
 
-Vue.use(VueLazyload)
+Vue.use(VueLazyload, {
+  lazyComponent: true
+})
 Vue.use(VueAB, {
   storage: {
     method: 'cookie',
