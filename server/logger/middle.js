@@ -3,7 +3,7 @@ const { Console } = transports
 const expressWinston = require('express-winston')
 const isDev = process.env.NODE_ENV !== 'production'
 const msg =
-  'HTTP {{req.method}} {{req.url}} {{res.statusCode}} - responseTime: {{res.responseTime}} ms'
+  '[logger middleware] HTTP {{req.method}} {{req.url}} {{res.statusCode}} - responseTime: {{res.responseTime}} ms'
 
 const formats = [
   format.timestamp({
