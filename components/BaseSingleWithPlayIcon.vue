@@ -21,7 +21,10 @@
         :audio="audio"
         class="audio-info__duration"
       />
-      <button class="audio-info__playbutton playbutton">
+      <button
+        class="audio-info__playbutton playbutton"
+        @click="playSingle"
+      >
         <img
           class="playbutton__img"
           src="~/assets/img/revamp/headphones.svg"
@@ -33,6 +36,7 @@
 </template>
 
 <script>
+import { mapActions, mapMutations } from 'vuex'
 import BaseAudioDuration from './BaseAudioDuration.vue'
 
 export default {
@@ -69,6 +73,38 @@ export default {
   computed: {
     titleHeight() {
       return this.titleHeightBase * this.titleLineClamp
+    },
+    single() {
+      return {
+        title: this.title,
+        slug: this.to.replace('/single/', ''),
+        audio: {
+          audio: {
+            url: this.audio
+          }
+        }
+      }
+    }
+  },
+  methods: {
+    ...mapActions({
+      PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
+    }),
+    ...mapMutations({
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
+      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
+      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
+    }),
+    playSingle() {
+      this.SET_ALBUM_ID('')
+      this.SET_ALBUM_COVER('')
+      this.CLEAR_PAGES()
+      this.PREPARE_SINGLES({ page: 1, res: { items: [this.single] } }).then(
+        () => {
+          this.SET_PLAYING_INDEX(0)
+        }
+      )
     }
   }
 }
