@@ -73,8 +73,8 @@ export default {
   data() {
     return {
       limit: {
-        popularVoice: 6,
-        audioChoices: 6
+        // There are more items in our raw json data, limit it manually
+        popularVoice: 6
       }
     }
   },
