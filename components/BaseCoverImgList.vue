@@ -154,6 +154,8 @@ export default {
   .list
     &__list-item
       &--1-column, &--2-column
+        width 100%
+        border-bottom none
         & + &
           padding-top 10.5px
           border-top 1px solid #EFEFEF

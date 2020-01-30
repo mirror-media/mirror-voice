@@ -126,6 +126,7 @@ export default {
 
   .list
     &__list-item
+      border-bottom none
       & + &
         border-top 1px solid #EFEFEF
       &:nth-child(2n)

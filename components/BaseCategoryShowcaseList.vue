@@ -98,6 +98,7 @@ export default {
       padding 10px 0
       background-color white
       border-bottom 5px solid #EFEFEF
+      width 100%
       &:nth-child(1)
         padding 0 0 10px 0
 </style>
