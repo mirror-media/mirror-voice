@@ -18,16 +18,22 @@
         :status="status"
         :order="order"
       />
-      <nuxt-link
-        :class="[
-          'left__title',
-          { 'left__title--hover': !showOrder && isMouseover }
-        ]"
-        :to="`/single/${slug}`"
-        @click.native.stop="$emit('clickLink')"
-      >
-        {{ item.title }}
-      </nuxt-link>
+      <div class="left__info-wrapper info-wrapper">
+        <nuxt-link
+          :class="[
+            'info-wrapper__title',
+            { 'info-wrapper__title--hover': !showOrder && isMouseover }
+          ]"
+          :to="`/single/${slug}`"
+          @click.native.stop="$emit('clickLink')"
+          v-text="item.title"
+        />
+        <p
+          v-if="showVocals"
+          class="info-wrapper__vocals"
+          v-text="vocals"
+        />
+      </div>
     </div>
     <div
       v-show="showOrder || !isMouseover"
@@ -52,6 +58,10 @@ export default {
   },
   props: {
     showOrder: {
+      type: Boolean,
+      default: false
+    },
+    showVocals: {
       type: Boolean,
       default: false
     },
@@ -90,6 +100,11 @@ export default {
     },
     slug() {
       return _.get(this.item, 'slug', '')
+    },
+    vocals() {
+      return _.get(this.item, 'vocals', [])
+        .map(vocal => _.get(vocal, 'name', ''))
+        .join('、')
     }
   },
   methods: {
@@ -149,14 +164,27 @@ export default {
       display flex !important
     &--hover
       display flex !important
+
+.info-wrapper
+  flex 1 1 auto
+  width 0
   &__title
     color black
     max-width 100%
+    display inline-block
     white-space nowrap
     overflow hidden
     text-overflow ellipsis
     &--hover
       color #dc5a4c
+  &__vocals
+    max-width 100%
+    font-size 14px
+    color #7d7d7d
+    margin 10px 0 0 0
+    white-space nowrap
+    overflow hidden
+    text-overflow ellipsis
 
 .right
   color #7d7d7d
