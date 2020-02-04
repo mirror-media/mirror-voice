@@ -3,26 +3,29 @@
     :class="[
       'list-item',
       { 'list-item--hover': isMouseover },
-      { 'list-item--more-padding': showOrder }
+      { 'list-item--more-padding': showOrder },
+      { 'list-item--more-padding-bottom': showProgressBar }
     ]"
     @mouseover="onMouseover"
     @mouseout="onMouseout"
   >
-    <div class="list-item__left left">
+    <div class="list-item__marker-wrapper marker-wrapper">
       <TrackMarker
         :class="[
-          'left__marker',
-          { 'left__marker--show-order': showOrder },
-          { 'left__marker--hover': isMouseover }
+          'marker-wrapper__marker',
+          { 'marker-wrapper__marker--show-order': showOrder },
+          { 'marker-wrapper__marker--hover': isMouseover }
         ]"
         :status="status"
         :order="order"
       />
-      <div class="left__info-wrapper info-wrapper">
+    </div>
+    <div class="list-item__info-wrapper info-wrapper">
+      <div class="info-wrapper__title-vocals-wrapper title-vocals-wrapper">
         <nuxt-link
           :class="[
-            'info-wrapper__title',
-            { 'info-wrapper__title--hover': !showOrder && isMouseover }
+            'title-vocals-wrapper__title',
+            { 'title-vocals-wrapper__title--hover': !showOrder && isMouseover }
           ]"
           :to="`/single/${slug}`"
           @click.native.stop="$emit('clickLink')"
@@ -30,18 +33,23 @@
         />
         <p
           v-if="showVocals"
-          class="info-wrapper__vocals"
+          class="title-vocals-wrapper__vocals"
           v-text="vocals"
         />
       </div>
-    </div>
-    <div
-      v-show="showOrder || !isMouseover"
-      class="list-item__right right"
-    >
-      <p class="right__date">
-        {{ relativeTime }}
-      </p>
+      <div class="info-wrapper__relative-time-wrapper relative-time-wrapper">
+        <p
+          class="relative-time-wrapper__date"
+          v-text="relativeTime"
+        />
+      </div>
+      <div
+        v-show="showProgressBar"
+        class="info-wrapper__duration-progress-bar"
+        :style="{
+          width: `${100 * playedProgress}%`
+        }"
+      />
     </div>
   </li>
 </template>
@@ -64,6 +72,13 @@ export default {
     showVocals: {
       type: Boolean,
       default: false
+    },
+    playedProgress: {
+      type: Number,
+      default: 0,
+      validator(value) {
+        return value >= 0 && value <= 1
+      }
     },
     order: {
       type: Number,
@@ -105,6 +120,9 @@ export default {
       return _.get(this.item, 'vocals', [])
         .map(vocal => _.get(vocal, 'name', ''))
         .join('、')
+    },
+    showProgressBar() {
+      return this.playedProgress > 0
     }
   },
   methods: {
@@ -149,16 +167,14 @@ export default {
     background-color #eeeeee
   &--more-padding
     padding 12px 21px
+  &--more-padding-bottom
+    padding-bottom calc(12px + 5px)
 
-.left
-  overflow hidden
-  flex 1 1 auto
+.marker-wrapper
   display flex
   align-items center
   &__marker
     margin 0 9px 0 0
-    position relative
-    bottom 1px
     display none !important
     &--show-order
       display flex !important
@@ -166,8 +182,29 @@ export default {
       display flex !important
 
 .info-wrapper
+  display flex
+  align-items center
   flex 1 1 auto
   width 0
+  max-width 100%
+  position relative
+  height 100%
+  &__title-vocals-wrapper
+    flex 1 1 auto
+    width 0
+  &__relative-time-wrapper
+    min-width max-content
+  &__duration-progress-bar
+    height 4px
+    background-color #aaaaaa
+    position absolute
+    left 0
+    bottom calc(-12px - 5px)
+
+.title-vocals-wrapper
+  display flex
+  flex-direction column
+  justify-content center
   &__title
     color black
     max-width 100%
@@ -186,9 +223,8 @@ export default {
     overflow hidden
     text-overflow ellipsis
 
-.right
+.relative-time-wrapper
   color #7d7d7d
-  min-width max-content
   margin 0 0 0 10px
   display flex
   justify-content center
@@ -200,7 +236,7 @@ export default {
     padding 0 7px 0 13px
     font-size 13px
 
-  .left
+  .marker-wrapper
     &__marker
       margin 0 13px 0 0
       display flex
@@ -209,6 +245,6 @@ export default {
       &--hover
         display flex
 
-  .right
+  .relative-time-wrapper
     font-size 11px
 </style>
