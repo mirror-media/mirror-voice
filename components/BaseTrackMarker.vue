@@ -1,6 +1,6 @@
 <template>
   <div class="marker">
-    <IconPlaying
+    <BaseIconPlaying
       v-show="status === 'playing'"
       class="marker__playing"
     />
@@ -23,11 +23,11 @@
 </template>
 
 <script>
-import IconPlaying from '~/components/Icon/IconPlaying.vue'
+import BaseIconPlaying from './BaseIconPlaying.vue'
 
 export default {
   components: {
-    IconPlaying
+    BaseIconPlaying
   },
   props: {
     status: {

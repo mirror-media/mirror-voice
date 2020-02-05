@@ -41,7 +41,7 @@
           class="body-wrapper__read-more read-more"
           @click="isBodyWrapperFold = !isBodyWrapperFold"
         >
-          <IconReadmore
+          <BaseIconReadmore
             :class="[
               'read-more__icon',
               { 'read-more__icon--reverse': !isBodyWrapperFold }
@@ -70,7 +70,7 @@ import NoSSR from 'vue-no-ssr'
 import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
 import Info from '~/components/Info/Info.vue'
-import IconReadmore from '~/components/Icon/IconReadmore.vue'
+import BaseIconReadmore from '~/components/BaseIconReadmore.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AsideSlideshowAlbum from '~/components/Aside/AsideSlideshowAlbum.vue'
 
@@ -94,7 +94,7 @@ export default {
     AppMainAsideWrapper,
     AppDiv,
     Info,
-    IconReadmore,
+    BaseIconReadmore,
     AppPlayingBanner,
     AsideSlideshowAlbum,
     NoSSR

@@ -10,7 +10,7 @@
     @mouseout="onMouseout"
   >
     <div class="list-item__marker-wrapper marker-wrapper">
-      <TrackMarker
+      <BaseTrackMarker
         :class="[
           'marker-wrapper__marker',
           { 'marker-wrapper__marker--show-order': showOrder },
@@ -58,11 +58,11 @@
 import _ from 'lodash'
 import dayjs from 'dayjs'
 
-import TrackMarker from './TrackMarker.vue'
+import BaseTrackMarker from './BaseTrackMarker.vue'
 
 export default {
   components: {
-    TrackMarker
+    BaseTrackMarker
   },
   props: {
     showOrder: {

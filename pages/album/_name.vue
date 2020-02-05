@@ -24,7 +24,7 @@
           class="body-wrapper__read-more read-more"
           @click="isBodyWrapperFold = !isBodyWrapperFold"
         >
-          <IconReadmore
+          <BaseIconReadmore
             :class="[
               'read-more__icon',
               { 'read-more__icon--reverse': !isBodyWrapperFold }
@@ -72,7 +72,7 @@
         >
           全部播放 ({{ tracks.meta.total }})
         </AppPlayingBanner>
-        <TrackList
+        <BaseTrackList
           v-show="!isDesktop || isTracksFetched"
           class="tracks-wrapper__tracks"
           :show-list-order="true"
@@ -120,12 +120,12 @@ import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
 import Info from '~/components/Info/Info.vue'
-import IconReadmore from '~/components/Icon/IconReadmore.vue'
+import BaseIconReadmore from '~/components/BaseIconReadmore.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AsideIntroVocal from '~/components/Aside/AsideIntro/AsideIntroVocal/Container.vue'
 import AsideAlbumList from '~/components/Aside/AsideAlbumList.vue'
-import TrackList from '~/components/Track/TrackList.vue'
+import BaseTrackList from '~/components/BaseTrackList.vue'
 import AppPagination from '~/components/AppPagination.vue'
 
 import sanitizeContent from '~/plugins/util/sanitizeContent'
@@ -167,12 +167,12 @@ export default {
     AppDiv,
     AppH1,
     Info,
-    IconReadmore,
+    BaseIconReadmore,
     DivHeader,
     AppPlayingBanner,
     AsideIntroVocal,
     AsideAlbumList,
-    TrackList,
+    BaseTrackList,
     AppPagination
   },
   head() {
