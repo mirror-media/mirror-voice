@@ -91,6 +91,10 @@ export default {
     isPlaying: {
       type: Boolean,
       default: false
+    },
+    relativeTimeBy: {
+      type: String,
+      required: true
     }
   },
   data() {
@@ -111,7 +115,8 @@ export default {
       return this.showOrder ? 'order' : 'play'
     },
     relativeTime() {
-      return this.calcRelativeTime(this.item.publishedDate)
+      const date = _.get(this.item, this.relativeTimeBy, '')
+      return this.calcRelativeTime(date)
     },
     slug() {
       return _.get(this.item, 'slug', '')
@@ -169,12 +174,14 @@ export default {
     padding 12px 21px
   &--more-padding-bottom
     padding-bottom calc(12px + 5px)
+  &__info-wrapper
+    margin 0 0 0 9px
 
 .marker-wrapper
   display flex
   align-items center
   &__marker
-    margin 0 9px 0 0
+    // margin 0 9px 0 0
     display none !important
     &--show-order
       display flex !important
@@ -200,6 +207,7 @@ export default {
     position absolute
     left 0
     bottom calc(-12px - 5px)
+    transition width .25s ease-out
 
 .title-vocals-wrapper
   display flex
@@ -233,18 +241,31 @@ export default {
 @media (max-width 768px)
   .list-item
     height 60px
-    padding 0 7px 0 13px
+    padding 0
     font-size 13px
+    &__marker-wrapper
+      margin 0 0 0 13px
+    &__info-wrapper
+      margin 0 0 0 13px
 
   .marker-wrapper
     &__marker
-      margin 0 13px 0 0
       display flex
       &--show-order
         display flex
       &--hover
         display flex
 
+  .info-wrapper
+    border-bottom 2px solid #eeeeee
+    &__duration-progress-bar
+      bottom 0
+
+  .title-vocals-wrapper
+    &__vocals
+      font-size 13px
+
   .relative-time-wrapper
+    margin 0 11px 0 10px
     font-size 11px
 </style>

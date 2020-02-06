@@ -76,10 +76,11 @@
           v-show="!isDesktop || isTracksFetched"
           class="tracks-wrapper__tracks"
           :show-list-order="true"
+          :show-played-progress="true"
           :is-latest-first="isTracksSortLatestFirst"
           :current-sound="currentSound"
           :is-playing="appPlayer.isPlaying"
-          :tracks="tracks.items"
+          :tracks="tracksWithPlayedProgress"
           :page="page"
           :total="tracks.meta.total"
           :items-per-page="isDesktop ? $MAXRESULT_TRACKS_ALBUM : tracks.meta.total"
@@ -241,6 +242,45 @@ export default {
       return (
         this.isDesktop || (this.isTracksLoading || !this.haveNextPageTracks)
       )
+    },
+
+    ...mapState({
+      localStorageTrackHistory: state =>
+        state.localStorageTrackHistory.trackHistory
+    }),
+    tracksWithPlayedProgress() {
+      let trackItems = _.get(this.tracks, 'items', [])
+      trackItems = trackItems.map(item => {
+        const trackInLocalStorageTrackHistory = _.find(
+          this.localStorageTrackHistory,
+          o => {
+            const slug = _.get(o, ['lastTrackStorage', 'slug'], '')
+            return slug === _.get(item, 'slug', '')
+          }
+        )
+        if (trackInLocalStorageTrackHistory) {
+          const duration = _.get(
+            trackInLocalStorageTrackHistory,
+            'lastTrackDurationTime',
+            0
+          )
+          const playedTime = _.get(
+            trackInLocalStorageTrackHistory,
+            'lastTrackPlayedTime',
+            0
+          )
+          const playedProgress = duration !== 0 ? playedTime / duration : 0
+          console.log(playedProgress)
+          return {
+            ...item,
+            playedProgress
+          }
+        } else {
+          return item
+        }
+      })
+
+      return trackItems
     }
   },
   watch: {
@@ -448,7 +488,7 @@ export default {
   &__playing-banner
     display none !important
   &__tracks
-    margin 18px 0 0 0 !important
+    margin 18px 0 60px 0 !important
   &__pagination
     margin 20px 0 0 0
     position absolute

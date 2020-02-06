@@ -13,6 +13,7 @@
       :order="getOrder(i)"
       :item="track"
       :is-playing="getIsPlaying(track)"
+      :relative-time-by="relativeTimeBy"
       @click.native="$emit('playTrack', track.slug)"
       @clickLink="$emit('clickLink')"
     />
@@ -71,6 +72,10 @@ export default {
     total: {
       type: Number,
       required: true
+    },
+    relativeTimeBy: {
+      type: String,
+      default: 'publishedDate'
     }
   },
   methods: {
@@ -108,4 +113,11 @@ export default {
     border-top 1px solid #eeeeee
     &--border-bottom
       border-bottom 1px solid #eeeeee
+
+@media (max-width 768px)
+  .list
+    &__list-item
+      border-top none
+      &--border-bottom
+        border-bottom none
 </style>
