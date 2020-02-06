@@ -20,7 +20,7 @@
         更多
       </nuxt-link>
     </DivHeader>
-    <TrackList
+    <BaseTrackList
       class="album-relateds-wrapper__track-list"
       :tracks="tracks"
       :items-per-page="5"
@@ -35,12 +35,12 @@
 
 <script>
 import DivHeader from '~/components/Div/DivHeader.vue'
-import TrackList from '~/components/Track/TrackList.vue'
+import BaseTrackList from '~/components/BaseTrackList.vue'
 
 export default {
   components: {
     DivHeader,
-    TrackList
+    BaseTrackList
   },
   props: {
     album: {

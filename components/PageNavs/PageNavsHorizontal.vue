@@ -37,7 +37,7 @@
       class="navs__read-more read-more"
       @click="isCategoriesFold = !isCategoriesFold"
     >
-      <IconReadmore
+      <BaseIconReadmore
         :class="[
           'read-more__icon',
           { 'read-more__icon--reverse': !isCategoriesFold }
@@ -50,13 +50,13 @@
 <script>
 import _ from 'lodash'
 
+import BaseIconReadmore from '../BaseIconReadmore.vue'
 import PageNavsHorizontalList from './PageNavsHorizontalList.vue'
-import IconReadmore from '~/components/Icon/IconReadmore.vue'
 
 export default {
   components: {
-    PageNavsHorizontalList,
-    IconReadmore
+    BaseIconReadmore,
+    PageNavsHorizontalList
   },
   props: {
     sections: {

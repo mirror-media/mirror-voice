@@ -38,5 +38,5 @@
     &:nth-child(4)
       animation-delay 0.75s
     & + &
-      margin 0 0 0 1px
+      margin 0 0 0 2px
 </style>

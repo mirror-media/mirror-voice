@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import Vue from 'vue'
 
 const findTrack = (state, track) =>
   _.find(state.trackHistory, history => {
@@ -19,9 +20,14 @@ export const state = () => ({
 
 export const mutations = {
   MEMORIZE_TRACK(state, track) {
-    const isTrackExist = findTrack(state, track.lastTrackStorage) !== undefined
-    if (isTrackExist) {
+    const trackInStorage = findTrack(state, track.lastTrackStorage)
+    if (trackInStorage) {
       const trackIndex = findTrackIndex(state, track.lastTrackStorage)
+      trackInStorage.lastTrackStorage.memorizedDate = _.get(
+        track,
+        ['lastTrackStorage', 'memorizedDate'],
+        ''
+      )
       move(state.trackHistory, trackIndex, state.trackHistory.length - 1)
     } else {
       const isReachHistoryLimit = state.trackHistory.length >= 10
@@ -36,7 +42,7 @@ export const mutations = {
     if (!trackShouldUpdate) {
       return
     }
-    trackShouldUpdate.lastTrackPlayedTime = time
+    Vue.set(trackShouldUpdate, 'lastTrackPlayedTime', time)
   },
   MEMORIZE_TRACK_DURATIONTIME(state, { track, time }) {
     const trackShouldUpdate = findTrack(state, track)

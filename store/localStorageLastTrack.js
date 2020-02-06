@@ -14,7 +14,17 @@ export const actions = {
     if (_.isEmpty(sound) || isSameTrack) {
       return
     }
-    commit('MEMORIZE_TRACK', sound)
+
+    const _sound = Object.assign(
+      {},
+      {
+        fromLocalStorage: true,
+        memorizedDate: new Date()
+      },
+      sound
+    )
+    commit('MEMORIZE_TRACK', _sound)
+
     const track = Object.assign(
       {},
       { lastTrackStorage: state.lastTrackStorage }
@@ -41,8 +51,7 @@ export const actions = {
 
 export const mutations = {
   MEMORIZE_TRACK(state, sound) {
-    const _sound = Object.assign({}, { fromLocalStorage: true }, sound)
-    state.lastTrackStorage = _sound
+    state.lastTrackStorage = sound
   },
   MEMORIZE_TRACK_PLAYEDTIME(state, time) {
     state.lastTrackPlayedTime = time

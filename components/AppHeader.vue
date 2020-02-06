@@ -16,7 +16,7 @@
           class="main-navs__categories-navs"
         />
       </nav>
-      <!-- <nav class="header__aside-navs aside-navs">
+      <nav class="header__aside-navs aside-navs">
         <nuxt-link
           class="aside-navs__nav"
           to="/history"
@@ -27,7 +27,7 @@
             alt=""
           >
         </nuxt-link>
-      </nav> -->
+      </nav>
     </div>
   </header>
 </template>
@@ -88,6 +88,8 @@ export default {
     padding 0 20px 0 10px
     &__wrapper
       width 100%
+    &__history-icon
+      height 20px
 
   .main-navs
     width 100%

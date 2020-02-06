@@ -184,7 +184,6 @@ export default {
 
 <style lang="stylus" scoped>
 .home
-  background-color #EFEFEF
   &__categories-nav
     display none
   &__wrapper

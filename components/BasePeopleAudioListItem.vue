@@ -12,7 +12,7 @@
         :key="i"
         class="singles-list__list-item"
       >
-        <BaseSingleWithPlayIcon
+        <AppSingleWithPlayIcon
           :title="item.title"
           :title-line-clamp="1"
           :audio="item.audio"
@@ -27,11 +27,11 @@
 <script>
 import _ from 'lodash'
 
-import BaseSingleWithPlayIcon from './BaseSingleWithPlayIcon.vue'
+import AppSingleWithPlayIcon from './AppSingleWithPlayIcon.vue'
 
 export default {
   components: {
-    BaseSingleWithPlayIcon
+    AppSingleWithPlayIcon
   },
   props: {
     title: {

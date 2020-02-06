@@ -90,7 +90,7 @@ export const getters = {
     return singlesData.map(sound => ({
       cover: _.get(getImgs(sound), ['mobile', 'url'], state.albumCover),
       title: _.get(sound, 'title', ''),
-      src: getSingleSoundSrc(sound),
+      src: sound.src || getSingleSoundSrc(sound),
       slug: _.get(sound, 'slug', ''),
       vocals: _.get(sound, 'vocals')
     }))

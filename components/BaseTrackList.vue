@@ -1,6 +1,6 @@
 <template>
   <ol class="list">
-    <TrackListItem
+    <BaseTrackListItem
       v-for="(track, i) in tracks.slice(0, itemsPerPage)"
       :key="i"
       :class="[
@@ -8,9 +8,12 @@
         { 'list__list-item--border-bottom': showListOrder && i === tracks.length - 1 }
       ]"
       :show-order="showListOrder"
+      :show-vocals="showVocals"
+      :played-progress="getPlayedProgress(track)"
       :order="getOrder(i)"
       :item="track"
       :is-playing="getIsPlaying(track)"
+      :relative-time-by="relativeTimeBy"
       @click.native="$emit('playTrack', track.slug)"
       @clickLink="$emit('clickLink')"
     />
@@ -20,16 +23,24 @@
 <script>
 import _ from 'lodash'
 
-import TrackListItem from './TrackListItem.vue'
+import BaseTrackListItem from './BaseTrackListItem.vue'
 
 export default {
   components: {
-    TrackListItem
+    BaseTrackListItem
   },
   props: {
     showListOrder: {
       type: Boolean,
       defalut: false
+    },
+    showVocals: {
+      type: Boolean,
+      defalut: false
+    },
+    showPlayedProgress: {
+      type: Boolean,
+      default: false
     },
     currentSound: {
       type: Object,
@@ -61,6 +72,10 @@ export default {
     total: {
       type: Number,
       required: true
+    },
+    relativeTimeBy: {
+      type: String,
+      default: 'publishedDate'
     }
   },
   methods: {
@@ -78,6 +93,12 @@ export default {
         slug !== '' &&
         slug === _.get(this.currentSound, 'slug', '')
       )
+    },
+    getPlayedProgress(track) {
+      if (!this.showPlayedProgress) {
+        return 0
+      }
+      return _.get(track, 'playedProgress', 0)
     }
   }
 }
@@ -92,4 +113,11 @@ export default {
     border-top 1px solid #eeeeee
     &--border-bottom
       border-bottom 1px solid #eeeeee
+
+@media (max-width 768px)
+  .list
+    &__list-item
+      border-top none
+      &--border-bottom
+        border-bottom none
 </style>

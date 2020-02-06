@@ -24,7 +24,7 @@
           class="body-wrapper__read-more read-more"
           @click="isBodyWrapperFold = !isBodyWrapperFold"
         >
-          <IconReadmore
+          <BaseIconReadmore
             :class="[
               'read-more__icon',
               { 'read-more__icon--reverse': !isBodyWrapperFold }
@@ -72,14 +72,15 @@
         >
           全部播放 ({{ tracks.meta.total }})
         </AppPlayingBanner>
-        <TrackList
+        <BaseTrackList
           v-show="!isDesktop || isTracksFetched"
           class="tracks-wrapper__tracks"
           :show-list-order="true"
+          :show-played-progress="true"
           :is-latest-first="isTracksSortLatestFirst"
           :current-sound="currentSound"
           :is-playing="appPlayer.isPlaying"
-          :tracks="tracks.items"
+          :tracks="tracksWithPlayedProgress"
           :page="page"
           :total="tracks.meta.total"
           :items-per-page="isDesktop ? $MAXRESULT_TRACKS_ALBUM : tracks.meta.total"
@@ -120,12 +121,12 @@ import AppMainAsideWrapper from '~/components/AppMainAsideWrapper.vue'
 import AppDiv from '~/components/AppDiv.vue'
 import AppH1 from '~/components/AppH1.vue'
 import Info from '~/components/Info/Info.vue'
-import IconReadmore from '~/components/Icon/IconReadmore.vue'
+import BaseIconReadmore from '~/components/BaseIconReadmore.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import AppPlayingBanner from '~/components/AppPlayingBanner.vue'
 import AsideIntroVocal from '~/components/Aside/AsideIntro/AsideIntroVocal/Container.vue'
 import AsideAlbumList from '~/components/Aside/AsideAlbumList.vue'
-import TrackList from '~/components/Track/TrackList.vue'
+import BaseTrackList from '~/components/BaseTrackList.vue'
 import AppPagination from '~/components/AppPagination.vue'
 
 import sanitizeContent from '~/plugins/util/sanitizeContent'
@@ -167,12 +168,12 @@ export default {
     AppDiv,
     AppH1,
     Info,
-    IconReadmore,
+    BaseIconReadmore,
     DivHeader,
     AppPlayingBanner,
     AsideIntroVocal,
     AsideAlbumList,
-    TrackList,
+    BaseTrackList,
     AppPagination
   },
   head() {
@@ -241,6 +242,45 @@ export default {
       return (
         this.isDesktop || (this.isTracksLoading || !this.haveNextPageTracks)
       )
+    },
+
+    ...mapState({
+      localStorageTrackHistory: state =>
+        state.localStorageTrackHistory.trackHistory
+    }),
+    tracksWithPlayedProgress() {
+      let trackItems = _.get(this.tracks, 'items', [])
+      trackItems = trackItems.map(item => {
+        const trackInLocalStorageTrackHistory = _.find(
+          this.localStorageTrackHistory,
+          o => {
+            const slug = _.get(o, ['lastTrackStorage', 'slug'], '')
+            return slug === _.get(item, 'slug', '')
+          }
+        )
+        if (trackInLocalStorageTrackHistory) {
+          const duration = _.get(
+            trackInLocalStorageTrackHistory,
+            'lastTrackDurationTime',
+            0
+          )
+          const playedTime = _.get(
+            trackInLocalStorageTrackHistory,
+            'lastTrackPlayedTime',
+            0
+          )
+          const playedProgress = duration !== 0 ? playedTime / duration : 0
+          console.log(playedProgress)
+          return {
+            ...item,
+            playedProgress
+          }
+        } else {
+          return item
+        }
+      })
+
+      return trackItems
     }
   },
   watch: {
@@ -448,7 +488,7 @@ export default {
   &__playing-banner
     display none !important
   &__tracks
-    margin 18px 0 0 0 !important
+    margin 18px 0 60px 0 !important
   &__pagination
     margin 20px 0 0 0
     position absolute
