@@ -16,11 +16,14 @@
     <PlayerNavs
       class="player__navs"
       :show-nav="list.length > 1"
+      :show-time-control="showSlider"
       :is-playing="isPlaying"
+      @rewind="handleRewind"
       @backward="playIndex -= 1"
       @pause="pause"
       @play="play"
       @forward="playIndex += 1"
+      @fastforward="handleFastforward"
     />
     <div class="player__middle middle">
       <PlayerInfo
@@ -29,15 +32,34 @@
         :duration="playStatDuration"
         :played="playStatPlayedTime"
       />
-      <!-- Dont't show slider if playStatDuration is 0 -->
-      <PlayerSlider
-        v-if="showSlider"
-        class="middle__progress"
-        :direction="'horizontal'"
-        :buffered="buffered"
-        :value="progress"
-        @valueChange="seek"
-      />
+      <div class="middle__progress-rewind-fastword-wrapper">
+        <!-- Dont't show slider if playStatDuration is 0 -->
+        <PlayerSlider
+          v-if="showSlider"
+          class="middle__progress"
+          :direction="'horizontal'"
+          :buffered="buffered"
+          :value="progress"
+          @valueChange="seek"
+        />
+        <div
+          v-show="showSlider"
+          class="mobile-rewind-fastforward-wrapper"
+        >
+          <img
+            class="mobile-rewind-fastforward-wrapper__rewind"
+            src="~/assets/img/skip15secback.svg"
+            alt=""
+            @click="handleRewind"
+          >
+          <img
+            class="mobile-rewind-fastforward-wrapper__fastforward"
+            src="~/assets/img/skip15sec.svg"
+            alt=""
+            @click="handleFastforward"
+          >
+        </div>
+      </div>
     </div>
     <PlayerRate
       class="player__rate"
@@ -310,6 +332,13 @@ export default {
     },
     getCover(item) {
       return _.get(item, 'cover', '')
+    },
+
+    handleRewind() {
+      this.audio.currentTime -= 15
+    },
+    handleFastforward() {
+      this.audio.currentTime += 15
     }
   }
 }
@@ -346,6 +375,9 @@ export default {
   &__progress
     margin 10px 0 0 0
 
+.mobile-rewind-fastforward-wrapper
+  display none
+
 @media (max-width 768px)
   .player
     max-width 100vw
@@ -365,6 +397,19 @@ export default {
     flex-direction column
     width 0px
     flex 1 1 auto
+    &__progress-rewind-fastword-wrapper
+      display flex
+      justify-content space-between
+      margin 4px 0 0 0
     &__progress
-      margin 10px 0 0 0
+      flex 1 1 auto
+
+  .mobile-rewind-fastforward-wrapper
+    display flex
+    margin 0 0 0 8px
+    &__rewind
+      height 20px
+    &__fastforward
+      height 20px
+      margin 0 0 0 8px
 </style>
