@@ -4,9 +4,7 @@
       'app'
     ]"
   >
-    <AppHeader
-      class="app__header"
-    />
+    <AppHeader />
     <!-- <AppBreadcrumb
       v-show="!hideBreadcrumb"
       class="app__breadcrumb"
@@ -183,11 +181,6 @@ export default {
 
 @media (max-width 768px)
   .app
-    &__header
-      position fixed
-      top 0
-      left 0
-      width 100%
     &__breadcrumb
       display none
     &__view-wrapper

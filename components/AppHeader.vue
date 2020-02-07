@@ -86,6 +86,10 @@ export default {
   .header
     height 50px
     padding 0 20px 0 10px
+    position fixed
+    top 0
+    left 0
+    width 100%
     &__wrapper
       width 100%
     &__history-icon
