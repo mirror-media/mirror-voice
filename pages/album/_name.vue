@@ -270,7 +270,6 @@ export default {
             0
           )
           const playedProgress = duration !== 0 ? playedTime / duration : 0
-          console.log(playedProgress)
           return {
             ...item,
             playedProgress

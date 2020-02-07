@@ -15,6 +15,7 @@
             :title="'最新'"
             :link-more="'/'"
             :list-data="latestPosts"
+            @playItem="handlePlayCoverImgListItem"
           />
         </aside>
         <main class="aside-main-wrapper__main">
@@ -24,6 +25,7 @@
             :columns="2"
             :list-data="popularVoice"
             class="main__popular"
+            @playItem="handlePlayCoverImgListItem"
           />
           <BaseNumberedList
             :title="'小編推薦'"
@@ -53,6 +55,7 @@
 
 <script>
 import _ from 'lodash'
+import { mapActions, mapMutations } from 'vuex'
 
 import AppCategoriesNav from '~/components/AppCategoriesNav.vue'
 import Slider from '~/components/Slider/Slider.vue'
@@ -85,7 +88,9 @@ export default {
         title: _.get(d, ['albums', 0, 'title'], ''),
         subtitle: _.get(d, 'title', ''),
         cover: _.get(this.$getImgs(d), ['mobile', 'url'], ''),
-        link: `/single/${_.get(d, 'slug', '')}`
+        link: `/single/${_.get(d, 'slug', '')}`,
+        slug: _.get(d, 'slug', ''),
+        audio: this.$getSingleSoundSrc(d)
       }))
     },
     popularVoice() {
@@ -95,7 +100,9 @@ export default {
         title: _.get(d, ['albums', 0], ''),
         subtitle: _.get(d, 'title', ''),
         cover: _.get(d, 'heroImage', ''),
-        link: `/single/${_.get(d, 'slug', '')}`
+        link: `/single/${_.get(d, 'slug', '')}`,
+        slug: _.get(d, 'slug', ''),
+        audio: _.get(d, 'audio', '')
       }))
     },
     audioChoices() {
@@ -177,6 +184,33 @@ export default {
   methods: {
     handleClickSlide() {
       this.$sendGAHome({ action: 'click', label: 'slideshow' })
+    },
+
+    ...mapActions({
+      PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
+    }),
+    ...mapMutations({
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
+      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
+      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
+    }),
+    handlePlayCoverImgListItem(item) {
+      const singleItem = {
+        cover: _.get(item, 'cover', ''),
+        title: _.get(item, 'subtitle', ''),
+        src: _.get(item, 'audio', ''),
+        slug: _.get(item, 'slug', ''),
+        vocals: []
+      }
+      this.SET_ALBUM_ID('')
+      this.SET_ALBUM_COVER('')
+      this.CLEAR_PAGES()
+      this.PREPARE_SINGLES({ page: 1, res: { items: [singleItem] } }).then(
+        () => {
+          this.SET_PLAYING_INDEX(0)
+        }
+      )
     }
   }
 }

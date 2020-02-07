@@ -88,7 +88,9 @@ export const getters = {
       Object.values(sortedObject).map(page => page.items)
     )
     return singlesData.map(sound => ({
-      cover: _.get(getImgs(sound), ['mobile', 'url'], state.albumCover),
+      cover:
+        sound.cover ||
+        _.get(getImgs(sound), ['mobile', 'url'], state.albumCover),
       title: _.get(sound, 'title', ''),
       src: sound.src || getSingleSoundSrc(sound),
       slug: _.get(sound, 'slug', ''),

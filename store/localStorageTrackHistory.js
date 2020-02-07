@@ -30,7 +30,8 @@ export const mutations = {
       )
       move(state.trackHistory, trackIndex, state.trackHistory.length - 1)
     } else {
-      const isReachHistoryLimit = state.trackHistory.length >= 10
+      const isReachHistoryLimit =
+        state.trackHistory.length >= this.$LOCAL_STORAGE_HISTORY_LIMIT
       if (isReachHistoryLimit) {
         state.trackHistory.shift()
       }
