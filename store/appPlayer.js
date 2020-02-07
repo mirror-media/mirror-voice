@@ -6,7 +6,7 @@ import getSingleSoundSrc from '~/plugins/util/getSingleSoundSrc'
 import getImgs from '~/plugins/util/getImgs'
 
 export const state = () => ({
-  showAppPlayer: false,
+  showAppPlayer: true,
   isPlaying: false,
   pages: {},
   playingIndex: null,
