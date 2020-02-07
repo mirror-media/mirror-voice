@@ -7,6 +7,16 @@
         `cover-wrapper--${imgSize}`
       ]"
     >
+      <div
+        class="cover-wrapper__play-icon-wrapper play-icon-wrapper"
+        @click="$emit('clickPlayIconWrapper')"
+      >
+        <img
+          class="play-icon-wrapper__img"
+          src="~/assets/img/revamp/play-circle.svg"
+          alt=""
+        >
+      </div>
       <img
         v-lazy="imgSrc"
         alt=""
@@ -69,12 +79,19 @@ export default {
     margin 0 0 0 10.5px
 
 .cover-wrapper
+  position relative
   &--smaller
     width 100px
     height 100px
   &--bigger
     width 120px
     height 120px
+  &__play-icon-wrapper
+    position absolute
+    left 0
+    top 0
+    width 100%
+    height 100%
   &__img
     width 100%
     min-width 100%
@@ -82,6 +99,15 @@ export default {
     min-height 100%
     border-radius 5px
     object-fit cover
+
+.play-icon-wrapper
+  display flex
+  justify-content center
+  align-items center
+  cursor pointer
+  &__img
+    width 24px
+    height 24px
 
 .info-wrapper
   display flex

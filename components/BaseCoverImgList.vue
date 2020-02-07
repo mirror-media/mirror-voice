@@ -32,6 +32,7 @@
           'list__list-item',
           `list__list-item--${columns}-column`
         ]"
+        @clickPlayIconWrapper="$emit('playItem', item)"
       />
     </ol>
   </div>
