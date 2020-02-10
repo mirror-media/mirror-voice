@@ -29,6 +29,7 @@
     >
       <div class="info-wrapper__info-texts info-texts">
         <h1
+          v-if="title !== ''"
           class="info-texts__title"
           v-text="title"
         />
@@ -115,12 +116,12 @@ export default {
 
 .info-texts
   &__title
-    margin 0
+    margin 0 0 10px 0
     font-size 13px
     font-weight normal
     color #FF6D2D
   &__subtitle
-    margin 10px 0 0 0
+    margin 0
     font-size 15px
     font-weight bold
     line-height 1.4
