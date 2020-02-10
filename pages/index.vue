@@ -12,23 +12,23 @@
       <section class="aside-main-wrapper">
         <aside class="aside-main-wrapper__aside">
           <BaseCoverImgList
-            :title="'最新'"
-            :link-more="'/'"
+            :title="$DEFAULT_TITLE_LATEST"
+            :link-more="'/category/latest'"
             :list-data="latestPosts"
             @playItem="handlePlayCoverImgListItem"
           />
         </aside>
         <main class="aside-main-wrapper__main">
           <BaseCoverImgList
-            :title="'熱門'"
-            :link-more="'/'"
+            :title="$DEFAULT_TITLE_POPULAR"
+            :link-more="'/category/popular'"
             :columns="2"
             :list-data="popularVoice"
             class="main__popular"
             @playItem="handlePlayCoverImgListItem"
           />
           <BaseNumberedList
-            :title="'小編推薦'"
+            :title="$DEFAULT_TITLE_AUDIO_CHOICES"
             :list-data="audioChoices"
             class="main__audio-choices"
           />
@@ -36,7 +36,7 @@
       </section>
       <section class="voice-masters">
         <BasePeopleAudioList
-          :title="'名家推薦'"
+          :title="$DEFAULT_TITLE_VOICE_MASTERS"
           :list-data="voiceMasters"
         />
       </section>

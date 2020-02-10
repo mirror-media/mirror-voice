@@ -1,0 +1,6 @@
+export default {
+  DEFAULT_TITLE_LATEST: '最新',
+  DEFAULT_TITLE_POPULAR: '熱門',
+  DEFAULT_TITLE_AUDIO_CHOICES: '小編推薦',
+  DEFAULT_TITLE_VOICE_MASTERS: '名家推薦'
+}
