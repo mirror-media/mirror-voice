@@ -5,7 +5,10 @@
       `list-wrapper--${columns}-column`
     ]"
   >
-    <header class="list-wrapper__header header">
+    <header
+      v-if="showHeader"
+      class="list-wrapper__header header"
+    >
       <h1
         class="header__title"
         v-text="title"
@@ -50,20 +53,24 @@ export default {
     BaseCoverImgListItem
   },
   props: {
+    showHeader: {
+      type: Boolean,
+      default: true
+    },
     columns: {
       type: Number,
       default: 1,
       validator(value) {
-        return [1, 2].includes(value)
+        return [1, 2, 3].includes(value)
       }
     },
     title: {
       type: String,
-      required: true
+      default: ''
     },
     linkMore: {
       type: String,
-      required: true
+      default: '/'
     },
     listData: {
       type: Array,
@@ -82,6 +89,7 @@ export default {
   computed: {
     coverSize() {
       switch (this.columns) {
+        case 3:
         case 2:
           return 'bigger'
         case 1:
@@ -107,8 +115,10 @@ export default {
     width 410px
   &--2-column
     width 840px
-  &__list
-    margin 10px 0 0 0
+  &--3-column
+    width 1280px
+  &__header
+    margin 0 0 10px 0
 
 .header
   display flex
@@ -138,15 +148,21 @@ export default {
       border-bottom 1px solid #EFEFEF
       &:nth-child(2n)
         margin-left 20px
+    &--3-column
+      width 385px
+      padding-top 10.5px
+      border-bottom 1px solid #EFEFEF
+      &:not(:nth-child(3n-2)) // not 1, 4, 7, 10...
+        margin-left 35px
 
 @media (max-width 768px)
   .list-wrapper
     box-shadow none
     padding 16px 16px 10px 16px
-    &--1-column, &--2-column
+    &--1-column, &--2-column, &--3-column
       width 100%
-    &__list
-      margin 13px 0 0 0
+    &__header
+      margin 0 0 13px 0
 
   .header
     &__title
@@ -154,12 +170,14 @@ export default {
 
   .list
     &__list-item
-      &--1-column, &--2-column
+      &--1-column, &--2-column, &--3-column
         width 100%
         border-bottom none
         & + &
           padding-top 10.5px
           border-top 1px solid #EFEFEF
         &:nth-child(2n)
+          margin-left 0
+        &:not(:nth-child(3n-2)) // not 1, 4, 7, 10...
           margin-left 0
 </style>
