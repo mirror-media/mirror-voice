@@ -1,6 +1,6 @@
 <template>
   <nav class="navs">
-    <HeaderNav
+    <AppCategoriesNavItem
       v-for="category in categories"
       :key="category.id"
       :text="category.title"
@@ -11,15 +11,28 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import HeaderNav from '~/components/Header/HeaderNav.vue'
+import AppCategoriesNavItem from './AppCategoriesNavItem.vue'
 
 export default {
   components: {
-    HeaderNav
+    AppCategoriesNavItem
   },
   computed: {
-    ...mapState(['categories'])
+    categories() {
+      return [
+        {
+          id: 'latest',
+          name: 'latest',
+          title: this.$DEFAULT_TITLE_LATEST
+        },
+        {
+          id: 'popular',
+          name: 'popular',
+          title: this.$DEFAULT_TITLE_POPULAR
+        },
+        ...this.$store.state.categories
+      ]
+    }
   }
 }
 </script>
@@ -33,6 +46,10 @@ export default {
   &__nav
     & + &
       margin 0 0 0 60px
+    &.nuxt-link-active
+      color black
+      font-weight bold
+      border-bottom 3px solid #FF6D2D
 
 @media (max-width 768px)
   .navs
