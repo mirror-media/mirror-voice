@@ -24,13 +24,20 @@
       >
     </div>
     <nuxt-link
-      class="list-item__info-wrapper info-wrapper"
+      :class="[
+        'list-item__info-wrapper',
+        'info-wrapper',
+        { 'info-wrapper--space-between': showInfoMeta }
+      ]"
       :to="to"
     >
       <div class="info-wrapper__info-texts info-texts">
         <h1
           v-if="title !== ''"
-          class="info-texts__title"
+          :class="[
+            'info-texts__title',
+            { 'info-texts__title--less-margin': showInfoMeta }
+          ]"
           v-text="title"
         />
         <h2
@@ -38,11 +45,25 @@
           v-text="subtitle"
         />
       </div>
+      <div
+        v-show="showInfoMeta"
+        class="info-wrapper__info-metas info-metas"
+      >
+        <div class="info-metas__remaining-duration remaining-duration">
+          剩餘 {{ memorizedRemainingDurationSecondsFormatted }}
+        </div>
+        <span
+          class="info-metas__date"
+          v-text="memorizedDateFormatted"
+        />
+      </div>
     </nuxt-link>
   </li>
 </template>
 
 <script>
+import dayjs from 'dayjs'
+
 export default {
   props: {
     imgSrc: {
@@ -67,6 +88,25 @@ export default {
     to: {
       type: String,
       required: true
+    },
+    memorizedRemainingDurationSeconds: {
+      type: Number,
+      default: -1
+    },
+    memorizedDate: {
+      type: [Date, String],
+      default: ''
+    }
+  },
+  computed: {
+    showInfoMeta() {
+      return this.memorizedRemainingDurationSeconds >= 0
+    },
+    memorizedRemainingDurationSecondsFormatted() {
+      return this.$secondsToHms(this.memorizedRemainingDurationSeconds)
+    },
+    memorizedDateFormatted() {
+      return dayjs(this.memorizedDate).format('YYYY.MM.DD')
     }
   }
 }
@@ -134,6 +174,9 @@ export default {
     -webkit-box-orient vertical
     overflow hidden
 
+.info-metas
+  display none
+
 @media (max-width 768px)
   .cover-wrapper
     width 80px
@@ -141,14 +184,45 @@ export default {
     min-width 80px
     min-height 80px
 
+  .info-wrapper
+    display flex
+    flex-direction column
+    justify-content center
+    flex 1 1 auto
+    width 0
+    &--space-between
+      justify-content space-between
+
   .info-texts
+    width 100%
     &__title
       font-size 15px
       font-weight bold
       color #2E2526
+      &--less-margin
+        margin 0 0 5px 0
     &__subtitle
       font-size 14px
       font-weight normal
       color #2E2526
       width 100%
+
+  .info-metas
+    display flex
+    justify-content space-between
+    align-items center
+    width 100%
+    &__remaining-duration
+      width 80px
+      height 16px
+      background-color #B8B8B8
+      font-size 10px
+      color white
+      display flex
+      justify-content center
+      align-items center
+      border-radius 12px
+    &__date
+      font-size 10px
+      color #B8B8B8
 </style>

@@ -31,6 +31,8 @@
         :title="item.title"
         :subtitle="item.subtitle"
         :to="item.link"
+        :memorized-remaining-duration-seconds="getRemaining(item)"
+        :memorized-date="getMemorizedDate(item)"
         :class="[
           'list__list-item',
           `list__list-item--${columns}-column`
@@ -56,6 +58,10 @@ export default {
     showHeader: {
       type: Boolean,
       default: true
+    },
+    showStorageInfo: {
+      type: Boolean,
+      default: false
     },
     columns: {
       type: Number,
@@ -101,6 +107,16 @@ export default {
   methods: {
     handleClickMore() {
       this.$router.push(this.linkMore)
+    },
+    getRemaining(item) {
+      if (!this.showStorageInfo) {
+        return -1
+      } else {
+        return _.get(item, 'remainingDuration', -1)
+      }
+    },
+    getMemorizedDate(item) {
+      return _.get(item, 'memorizedDate', '')
     }
   }
 }

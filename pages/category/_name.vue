@@ -19,6 +19,7 @@
       </header>
       <BaseCoverImgList
         :show-header="false"
+        :show-storage-info="isCurrentCategoryExtra"
         :columns="3"
         :list-data="listData"
         class="list-wrapper__list"
@@ -30,7 +31,7 @@
 
 <script>
 import _ from 'lodash'
-import { mapActions, mapMutations } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import Vue from 'vue'
 
 import BaseTextWithArrow from '~/components/BaseTextWithArrow.vue'
@@ -88,6 +89,9 @@ export default {
     currentCategoryName() {
       return _.get(this.$route, ['params', 'name'], '')
     },
+    isCurrentCategoryExtra() {
+      return extraCategories.includes(this.currentCategoryName)
+    },
     currentCategoryTitle() {
       const mapping = {
         latest: this.$DEFAULT_TITLE_LATEST,
@@ -103,6 +107,11 @@ export default {
       }
       return _.get(mapping, this.currentCategoryName, mapping.default)
     },
+
+    ...mapState({
+      localStorageTrackHistory: state =>
+        state.localStorageTrackHistory.trackHistory
+    }),
     listData() {
       const rawData = _.get(this.showcaseData, 'items', [])
       const mapping = {
@@ -112,7 +121,17 @@ export default {
           cover: _.get(this.$getImgs(d), ['mobile', 'url'], ''),
           link: `/single/${_.get(d, 'slug', '')}`,
           slug: _.get(d, 'slug', ''),
-          audio: this.$getSingleSoundSrc(d)
+          audio: this.$getSingleSoundSrc(d),
+          remainingDuration: _.get(
+            this.findTrackMetaInHistory(_.get(d, 'slug', '')),
+            'remaining',
+            -1
+          ),
+          memorizedDate: _.get(
+            this.findTrackMetaInHistory(_.get(d, 'slug', '')),
+            'memorizedDate',
+            ''
+          )
         }),
         popular: d => ({
           title: _.get(d, ['albums', 0], ''),
@@ -120,7 +139,17 @@ export default {
           cover: _.get(d, 'heroImage', ''),
           link: `/single/${_.get(d, 'slug', '')}`,
           slug: _.get(d, 'slug', ''),
-          audio: _.get(d, 'audio', '')
+          audio: _.get(d, 'audio', ''),
+          remainingDuration: _.get(
+            this.findTrackMetaInHistory(_.get(d, 'slug', '')),
+            'remaining',
+            -1
+          ),
+          memorizedDate: _.get(
+            this.findTrackMetaInHistory(_.get(d, 'slug', '')),
+            'memorizedDate',
+            ''
+          )
         }),
         default: d => ({
           title: _.get(d, ['albums', 0, 'title'], ''),
@@ -128,8 +157,6 @@ export default {
           cover: _.get(this.$getImgs(d), ['mobile', 'url'], ''),
           link: `/album/${_.get(d, 'name', '')}`,
           id: _.get(d, 'id', '')
-          // slug: _.get(d, 'slug', ''),
-          // audio: this.$getSingleSoundSrc(d)
         })
       }
       return rawData.map(
@@ -234,10 +261,7 @@ export default {
       CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
     }),
     handlePlayCoverImgListItem(item) {
-      const isCurrentCategoryExtra = extraCategories.includes(
-        this.currentCategoryName
-      )
-      if (isCurrentCategoryExtra) {
+      if (this.isCurrentCategoryExtra) {
         const singleItem = {
           cover: _.get(item, 'cover', ''),
           title: _.get(item, 'subtitle', ''),
@@ -266,6 +290,43 @@ export default {
           }
         })
       }
+    },
+
+    findTrackMetaInHistory(slug) {
+      const trackInLocalStorageTrackHistory = _.find(
+        this.localStorageTrackHistory,
+        o => {
+          const _slug = _.get(o, ['lastTrackStorage', 'slug'], '')
+          return _slug === slug
+        }
+      )
+      if (trackInLocalStorageTrackHistory) {
+        const duration = _.get(
+          trackInLocalStorageTrackHistory,
+          'lastTrackDurationTime',
+          0
+        )
+        const playedTime = _.get(
+          trackInLocalStorageTrackHistory,
+          'lastTrackPlayedTime',
+          0
+        )
+        const memorizedDate = _.get(
+          trackInLocalStorageTrackHistory,
+          ['lastTrackStorage', 'memorizedDate'],
+          ''
+        )
+        const remaining = duration - playedTime
+        return {
+          remaining,
+          memorizedDate
+        }
+      } else {
+        return {
+          remaining: -1,
+          memorizedDate: ''
+        }
+      }
     }
   }
 }
@@ -293,4 +354,21 @@ export default {
     margin 0
   &__back
     cursor pointer
+
+@media (max-width 768px)
+  .list-wrapper
+    &__list
+      margin 12px 0 0 0
+
+  .header
+    justify-content center
+    &__title
+      font-size 15px
+      font-weight bold
+      color black
+      padding 0
+      border none
+      margin 12px 0 0 0
+    &__back
+      display none
 </style>
