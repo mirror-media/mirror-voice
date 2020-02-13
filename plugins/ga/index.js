@@ -1,11 +1,12 @@
 const sendGA = (
   ga,
-  { eventCategory = '', eventAction = '', eventLabel = '' }
+  { eventCategory = '', eventAction = '', eventLabel = '', eventValue }
 ) => {
   ga.event({
     eventCategory,
     eventAction,
-    eventLabel
+    eventLabel,
+    ...(eventValue && { eventValue: parseInt(eventValue) })
   })
 }
 
@@ -61,6 +62,16 @@ export default (context, inject) => {
       eventCategory: 'single',
       eventAction: action,
       eventLabel: label
+    })
+  })
+
+  // appPlayer ga event trackings
+  inject('sendGAAppPlayer', ({ action = '', label = '', value }) => {
+    sendGA(context.$ga, {
+      eventCategory: 'appPlayer',
+      eventAction: action,
+      eventLabel: label,
+      eventValue: value
     })
   })
 }
