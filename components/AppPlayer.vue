@@ -15,6 +15,8 @@
       @durationchange="syncDuration"
       @error="onError"
       @playingError="onPlayingError"
+      @ended="handleEnded"
+      @loadstart="hanldeLoadstart"
     />
   </div>
 </template>
@@ -135,6 +137,9 @@ export default {
         }
       }
     },
+    soundSlug() {
+      return _.get(this.sound, 'slug', '')
+    },
     currentPlayedTime: {
       get() {
         const sound = this.list[this.playingIndex]
@@ -155,6 +160,13 @@ export default {
       return 'next' in this.currentPageLinks
     }
   },
+  // watch: {
+  //   sound(newValue, oldValue) {
+  //     console.log('sound changed')
+  //     console.log(newValue)
+  //     console.log(oldValue)
+  //   }
+  // },
   methods: {
     ...mapMutations({
       SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
@@ -178,9 +190,23 @@ export default {
     }),
     syncPlay() {
       this.SET_IS_PLAYING(true)
+
+      if (this.currentPlayedTime) {
+        this.$sendGAAppPlayer({
+          action: 'play_continue',
+          label: this.soundSlug,
+          value: this.currentPlayedTime
+        })
+      }
     },
     syncPause() {
       this.SET_IS_PLAYING(false)
+
+      this.$sendGAAppPlayer({
+        action: 'play_pause',
+        label: this.soundSlug,
+        value: this.currentPlayedTime
+      })
     },
     syncDuration(e) {
       const duration = _.get(e, ['target', 'duration'], 0)
@@ -197,6 +223,40 @@ export default {
       if (error.name === 'NotSupportedError') {
         this.SET_SHOW_LIGHTBOX(true)
       }
+    },
+
+    handleEnded() {
+      this.$sendGAAppPlayer({
+        action: 'play_end',
+        label: this.soundSlug,
+        value: this.currentPlayedTime
+      })
+    },
+    hanldeLoadstart() {
+      const localStorageTrackHistory = _.get(
+        this.$store.state,
+        ['localStorageTrackHistory', 'trackHistory'],
+        []
+      )
+      const currentTrackSlug = this.soundSlug
+      const currentTrackIndexInHistory = _.findIndex(
+        localStorageTrackHistory,
+        o => {
+          const slug = _.get(o, ['lastTrackStorage', 'slug'], '')
+          return slug === currentTrackSlug
+        }
+      )
+      const lastTrack = _.get(
+        localStorageTrackHistory,
+        currentTrackIndexInHistory - 1,
+        {}
+      )
+
+      this.$sendGAAppPlayer({
+        action: 'play_other',
+        label: _.get(lastTrack, ['lastTrackStorage', 'slug'], ''),
+        value: _.get(lastTrack, 'lastTrackPlayedTime', 0)
+      })
     }
   }
 }
