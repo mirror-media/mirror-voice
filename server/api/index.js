@@ -1,6 +1,5 @@
 const express = require('express')
 const router = express.Router()
-const addIsAudioSiteOnlyMiddle = require('./middle/isAudioSiteOnly')
 const { readMiddle, writeMiddle } = require('./middle/redis')
 const fetchMiddle = require('./request')()
 
@@ -11,8 +10,6 @@ router.use('/googlespreadsheet', require('./middle/googlespreadsheet'))
 // Routes for fetching static jsons
 router.use(['/json', '/rss'], require('./middle/json'))
 
-router.get('/audiochoices', readMiddle, fetchMiddle, writeMiddle)
-
-router.get('*', addIsAudioSiteOnlyMiddle, readMiddle, fetchMiddle, writeMiddle)
+router.get('*', readMiddle, fetchMiddle, writeMiddle)
 
 module.exports = router

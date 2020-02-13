@@ -20,9 +20,7 @@ export const actions = {
       sort: 'sortOrder',
       max_results: 20,
       where: {
-        name: {
-          $in: [app.$VOICE_SECTION_NAME]
-        }
+        isAudioSiteOnly: true
       }
     })
     commit('SET_SECTIONS', items)
