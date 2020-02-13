@@ -1,7 +1,17 @@
+import _ from 'lodash'
 import buildQuery from '../util/buildQuery'
+import buildQueryWhereSection from '../util/buildQueryWhereSection'
 import Axios from './axios'
 
-export default ({ $axios }, inject) => {
+// For more info: https://paper.dropbox.com/doc/--AuN82fOwJnRF80Rf7MX06pkOAg-mjiVcoj6xDgEgn46eg60b
+const getAudioOnlySectionIds = store => {
+  const audioOnlySectionIds = _.get(store.state, ['sections'], []).map(
+    section => _.get(section, 'id', '')
+  )
+  return audioOnlySectionIds
+}
+
+export default ({ store, $axios }, inject) => {
   const _axios = new Axios($axios)
   const get = url =>
     _axios
@@ -33,7 +43,9 @@ export default ({ $axios }, inject) => {
     return get(url)
   })
   inject('fetchSingle', params => {
-    const query = buildQuery(params)
+    const query = buildQuery(
+      buildQueryWhereSection(params, getAudioOnlySectionIds(store))
+    )
     const url = `/api/posts?${query}`
     return get(url)
   })
