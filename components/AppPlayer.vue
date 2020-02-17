@@ -52,7 +52,8 @@ export default {
       // internalSound: {},
       playerVolume: 1,
       playerMuted: false,
-      playerplaybackRate: 1
+      playerplaybackRate: 1,
+      latestSingle: {}
     }
   },
   computed: {
@@ -89,6 +90,8 @@ export default {
         if (!sound && !_.isEmpty(this.lastTrackStorage)) {
           this.SHOW_APP_PLAYER()
           return this.lastTrackStorage
+        } else if (!sound && !_.isEmpty(this.latestSingle)) {
+          return this.latestSingle
         }
         this.MEMORIZE_TRACK(sound)
         return sound
@@ -162,13 +165,25 @@ export default {
       return 'next' in this.currentPageLinks
     }
   },
-  // watch: {
-  //   sound(newValue, oldValue) {
-  //     console.log('sound changed')
-  //     console.log(newValue)
-  //     console.log(oldValue)
-  //   }
-  // },
+  created() {
+    this.$fetchSingle({
+      max_results: 1,
+      page: 1,
+      sort: '-publishedDate',
+      embedded: {
+        albums: 1
+      }
+    }).then(({ items = [] }) => {
+      const singleItems = items.map(d => ({
+        title: _.get(d, 'title', ''),
+        cover: _.get(this.$getImgs(d), ['mobile', 'url'], ''),
+        link: `/single/${_.get(d, 'slug', '')}`,
+        slug: _.get(d, 'slug', ''),
+        src: this.$getSingleSoundSrc(d)
+      }))
+      this.latestSingle = _.get(singleItems, 0, {})
+    })
+  },
   methods: {
     ...mapMutations({
       SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
@@ -177,11 +192,6 @@ export default {
       SET_PLAYED_TIME: 'appPlayer/SET_PLAYED_TIME',
       SHOW_APP_PLAYER: 'appPlayer/SHOW_APP_PLAYER',
       SET_SHOW_LIGHTBOX: 'lightboxPlayingError/SET_SHOW_LIGHTBOX'
-      // MEMORIZE_TRACK: 'localStorageLastTrack/MEMORIZE_TRACK',
-      // MEMORIZE_TRACK_PLAYEDTIME:
-      //   'localStorageLastTrack/MEMORIZE_TRACK_PLAYEDTIME',
-      // MEMORIZE_TRACK_DURATIONTIME:
-      //   'localStorageLastTrack/MEMORIZE_TRACK_DURATIONTIME'
     }),
     ...mapActions({
       MEMORIZE_TRACK: 'localStorageLastTrack/MEMORIZE_TRACK',

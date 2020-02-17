@@ -235,9 +235,17 @@ export default {
   },
   watch: {
     // observe mutable properties
-    currentSound() {
+    currentSound(newValue, oldValue) {
       this.audio.src = this.currentSound.src
-      if (this.currentSound.src && this.currentSound.src !== '') {
+      if (
+        this.currentSound.src &&
+        this.currentSound.src !== '' &&
+        /*
+        ** do not autoplay if prev sound was empty,
+        ** like scenario of init player with latest single.
+        */
+        oldValue.src !== ''
+      ) {
         // this.play()
         this.thenPlay()
       }
