@@ -373,5 +373,5 @@ export default {
       border none
       margin 12px 0 0 0
     &__back
-      display none
+      display none !important
 </style>
