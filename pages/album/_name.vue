@@ -272,7 +272,9 @@ export default {
           const playedProgress = duration !== 0 ? playedTime / duration : 0
           return {
             ...item,
-            playedProgress
+            playedProgress,
+            duration,
+            playedTime
           }
         } else {
           return item
@@ -377,12 +379,14 @@ export default {
       PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
     }),
     playAlbum(albumId = this.album.id) {
+      this.SET_PLAYED_TIME(0)
       fetchPlayerTracks(this.$store, albumId, false)
       this.$sendGAAlbum({ action: 'click', label: 'play all' })
     },
 
     ...mapMutations({
       SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_PLAYED_TIME: 'appPlayer/SET_PLAYED_TIME',
       SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
       SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
       CLEAR_PAGES: 'appPlayer/CLEAR_PAGES',
@@ -407,9 +411,16 @@ export default {
         tracks = { ...this.tracks, items: itemsReversed }
       }
 
+      this.SET_PLAYED_TIME(0)
       this.PREPARE_SINGLES({ page: this.page, res: tracks }).then(() => {
         const playingIndex = _.findIndex(this.list, o => o.slug === slug)
         this.SET_PLAYING_INDEX(playingIndex)
+
+        const single = _.find(this.tracksWithPlayedProgress, o => {
+          const _slug = _.get(o, 'slug', '')
+          return _slug === slug
+        })
+        this.SET_PLAYED_TIME(_.get(single, 'playedTime', 0))
       })
 
       this.$sendGAAlbum({ action: 'click', label: 'play single' })

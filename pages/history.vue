@@ -100,6 +100,8 @@ export default {
         const playedProgress = duration !== 0 ? playedTime / duration : 0
         return {
           ..._.get(track, 'lastTrackStorage', {}),
+          duration,
+          playedTime,
           playedProgress
         }
       })
@@ -122,6 +124,7 @@ export default {
     }),
     ...mapMutations({
       SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_PLAYED_TIME: 'appPlayer/SET_PLAYED_TIME',
       SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
       SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
       CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
@@ -134,6 +137,7 @@ export default {
       this.SET_ALBUM_ID('')
       this.SET_ALBUM_COVER('')
       this.CLEAR_PAGES()
+      this.SET_PLAYED_TIME(_.get(single, 'playedTime', 0))
       this.PREPARE_SINGLES({ page: 1, res: { items: [single] } }).then(() => {
         this.SET_PLAYING_INDEX(0)
       })

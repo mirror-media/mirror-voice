@@ -17,6 +17,8 @@
       @playingError="onPlayingError"
       @ended="handleEnded"
       @loadstart="hanldeLoadstart"
+      @backward="handleBackward"
+      @forward="handleForward"
     />
   </div>
 </template>
@@ -257,6 +259,13 @@ export default {
         label: _.get(lastTrack, ['lastTrackStorage', 'slug'], ''),
         value: _.get(lastTrack, 'lastTrackPlayedTime', 0)
       })
+    },
+
+    handleBackward() {
+      this.SET_PLAYED_TIME(0)
+    },
+    handleForward() {
+      this.SET_PLAYED_TIME(0)
     }
   }
 }

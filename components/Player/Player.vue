@@ -19,10 +19,10 @@
       :show-time-control="showSlider"
       :is-playing="isPlaying"
       @rewind="handleRewind"
-      @backward="playIndex -= 1"
+      @backward="handleBackward"
       @pause="pause"
       @play="play"
-      @forward="playIndex += 1"
+      @forward="handleForward"
       @fastforward="handleFastforward"
     />
     <div class="player__middle middle">
@@ -302,6 +302,7 @@ export default {
     },
     thenPlay() {
       this.$nextTick(() => {
+        this.audio.currentTime = this.playedTime
         this.play()
       })
     },
@@ -339,6 +340,15 @@ export default {
     },
     handleFastforward() {
       this.audio.currentTime += 15
+    },
+
+    handleBackward() {
+      this.playIndex -= 1
+      this.$emit('backward')
+    },
+    handleForward() {
+      this.playIndex += 1
+      this.$emit('forward')
     }
   }
 }
