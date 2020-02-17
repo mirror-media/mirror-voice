@@ -152,8 +152,11 @@ export default {
           )
         }),
         default: d => ({
-          title: _.get(d, ['albums', 0, 'title'], ''),
-          subtitle: _.get(d, 'title', ''),
+          title: _.get(d, 'title', ''),
+          subtitle: `主播：${_.get(d, 'vocals', [])
+            .map(o => _.get(o, 'name', ''))
+            .join('、')}`,
+          content: this.$getHtmlText(_.get(d, ['brief', 'html'], '')),
           cover: _.get(this.$getImgs(d), ['mobile', 'url'], ''),
           link: `/album/${_.get(d, 'name', '')}`,
           id: _.get(d, 'id', '')

@@ -30,6 +30,7 @@
         :img-size="coverSize"
         :title="item.title"
         :subtitle="item.subtitle"
+        :content="item.content"
         :to="item.link"
         :memorized-remaining-duration-seconds="getRemaining(item)"
         :memorized-date="getMemorizedDate(item)"

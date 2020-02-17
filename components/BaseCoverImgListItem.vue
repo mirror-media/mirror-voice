@@ -33,16 +33,30 @@
     >
       <div class="info-wrapper__info-texts info-texts">
         <h1
-          v-if="title !== ''"
+          v-if="title && title !== ''"
           :class="[
             'info-texts__title',
-            { 'info-texts__title--less-margin': showInfoMeta }
+            { 'info-texts__title--less-margin': showInfoMeta },
+            { 'info-texts__title--marginless': haveContent },
+            { 'info-texts__title--bigger': haveContent },
+            { 'info-texts__title--orange-mobile': haveContent },
+            { 'info-texts__title--weight-normal-mobile': haveContent }
           ]"
           v-text="title"
         />
         <h2
-          class="info-texts__subtitle"
+          v-if="subtitle && subtitle !== ''"
+          :class="[
+            'info-texts__subtitle',
+            { 'info-texts__subtitle--margin-bottom': haveContent },
+            { 'info-texts__subtitle--bold-mobile': haveContent }
+          ]"
           v-text="subtitle"
+        />
+        <div
+          v-if="content && content !== ''"
+          class="info-texts__content"
+          v-html="content"
         />
       </div>
       <div
@@ -85,6 +99,12 @@ export default {
       type: String,
       required: true
     },
+    content: {
+      required: true,
+      validator(value) {
+        return typeof value === 'string' || value === undefined
+      }
+    },
     to: {
       type: String,
       required: true
@@ -99,6 +119,9 @@ export default {
     }
   },
   computed: {
+    haveContent() {
+      return this.content !== undefined
+    },
     showInfoMeta() {
       return this.memorizedRemainingDurationSeconds >= 0
     },
@@ -124,9 +147,13 @@ export default {
   &--smaller
     width 100px
     height 100px
+    min-width 100px
+    min-height 100px
   &--bigger
     width 120px
     height 120px
+    min-width 120px
+    min-height 120px
   &__play-icon-wrapper
     position absolute
     left 0
@@ -160,6 +187,15 @@ export default {
     font-size 13px
     font-weight normal
     color #FF6D2D
+    word-wrap break-word
+    -webkit-line-clamp 1
+    display -webkit-box
+    -webkit-box-orient vertical
+    overflow hidden
+    &--bigger
+      font-size 15px
+    &--marginless
+      margin 0
   &__subtitle
     margin 0
     font-size 15px
@@ -167,9 +203,21 @@ export default {
     line-height 1.4
     text-align justify
     color #2E2526
-    width 250px
     word-wrap break-word
     -webkit-line-clamp 2
+    display -webkit-box
+    -webkit-box-orient vertical
+    overflow hidden
+    &--smaller
+      font-size 14px
+    &--margin-bottom
+      margin 0 0 3px 0
+  &__content
+    font-size 14px
+    color black
+    line-height 1.4
+    word-wrap break-word
+    -webkit-line-clamp 3
     display -webkit-box
     -webkit-box-orient vertical
     overflow hidden
@@ -201,11 +249,17 @@ export default {
       color #2E2526
       &--less-margin
         margin 0 0 5px 0
+      &--orange-mobile
+        color #FF6D2D
+      &--weight-normal-mobile
+        font-weight normal
     &__subtitle
       font-size 14px
       font-weight normal
       color #2E2526
       width 100%
+      &--bold-mobile
+        font-weight bold
 
   .info-metas
     display flex
