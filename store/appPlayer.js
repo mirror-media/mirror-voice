@@ -39,6 +39,7 @@ export const mutations = {
 
   CLEAR_PAGES(state) {
     Vue.set(state, 'pages', {})
+    state.playedTime = 0
   },
   INSERT_PAGE(state, { page, res }) {
     Vue.set(state.pages, page, res)
