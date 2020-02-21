@@ -141,7 +141,11 @@ export default {
       this.PREPARE_SINGLES({ page: 1, res: { items: [single] } }).then(() => {
         this.SET_PLAYING_INDEX(0)
       })
-      this.$scrollTo('.header', 1000)
+
+      const scrollToSelector = this.isTracksSortLatestFirst
+        ? '.header'
+        : '.footer'
+      this.$scrollTo(scrollToSelector, 1000)
     }
   }
 }
