@@ -1,9 +1,14 @@
 <template>
-  <ol class="list">
+  <transition-group
+    name="list-complete"
+    tag="ol"
+    class="list"
+  >
     <BaseTrackListItem
       v-for="(track, i) in tracks.slice(0, itemsPerPage)"
-      :key="i"
+      :key="getTrackSlug(track)"
       :class="[
+        'list-complete-item',
         'list__list-item',
         { 'list__list-item--border-bottom': showListOrder && i === tracks.length - 1 }
       ]"
@@ -17,7 +22,7 @@
       @click.native="$emit('playTrack', track.slug)"
       @clickLink="$emit('clickLink')"
     />
-  </ol>
+  </transition-group>
 </template>
 
 <script>
@@ -99,6 +104,9 @@ export default {
         return 0
       }
       return _.get(track, 'playedProgress', 0)
+    },
+    getTrackSlug(track) {
+      return _.get(track, 'slug', '')
     }
   }
 }
@@ -113,6 +121,20 @@ export default {
     border-top 1px solid #eeeeee
     &--border-bottom
       border-bottom 1px solid #eeeeee
+
+.list-complete-item {
+  transition: all 1s;
+  // display: inline-block;
+  // margin-right: 10px;
+}
+.list-complete-enter, .list-complete-leave-to
+/* .list-complete-leave-active below version 2.1.8 */ {
+  opacity: 0;
+  transform: translateY(30px);
+}
+.list-complete-leave-active {
+  position: absolute;
+}
 
 @media (max-width 768px)
   .list
