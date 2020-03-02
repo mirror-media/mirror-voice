@@ -4,15 +4,21 @@
       'wrapper',
       `wrapper--${arrowAt}`
     ]"
+    @mouseover="handleMouseover"
+    @mouseout="handleMouseout"
   >
     <p
-      class="wrapper__text"
+      :class="[
+        'wrapper__text',
+        { 'wrapper__text--orange': isMouseover }
+      ]"
       v-text="text"
     />
     <div
       :class="[
         'wrapper__arrow',
-        `wrapper__arrow--${arrowAt}`
+        `wrapper__arrow--${arrowAt}`,
+        { 'wrapper__arrow--orange': isMouseover }
       ]"
     />
   </div>
@@ -32,6 +38,19 @@ export default {
         return ['left', 'right'].includes(value)
       }
     }
+  },
+  data() {
+    return {
+      isMouseover: false
+    }
+  },
+  methods: {
+    handleMouseover() {
+      this.isMouseover = true
+    },
+    handleMouseout() {
+      this.isMouseover = false
+    }
   }
 }
 </script>
@@ -45,11 +64,16 @@ export default {
   &__text
     font-size 13px
     color #6F6F6F
+    &--orange
+      color #FF6D2D
   &__arrow
     width 8px
     height 8px
     border-right 2px solid #6F6F6F
     border-bottom 2px solid #6F6F6F
+    &--orange
+      border-right 2px solid #FF6D2D
+      border-bottom 2px solid #FF6D2D
     &--right
       transform rotate(-45deg)
       margin 0 0 0 3px
