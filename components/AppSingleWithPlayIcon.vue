@@ -12,6 +12,8 @@
         :style="{
           '-webkit-line-clamp': titleLineClamp,
         }"
+        @mouseover.native="handleMouseover"
+        @mouseout.native="handleMouseout"
         v-text="title"
       />
     </div>
@@ -22,8 +24,14 @@
         class="audio-info__duration"
       />
       <button
-        class="audio-info__playbutton playbutton"
+        :class="[
+          'audio-info__playbutton',
+          'playbutton',
+          { 'playbutton--border': isMouseover }
+        ]"
         @click="playSingle"
+        @mouseover="handleMouseover"
+        @mouseout="handleMouseout"
       >
         <img
           class="playbutton__img"
@@ -67,7 +75,8 @@ export default {
   },
   data() {
     return {
-      titleHeightBase: 27
+      titleHeightBase: 27,
+      isMouseover: false
     }
   },
   computed: {
@@ -105,6 +114,14 @@ export default {
           this.SET_PLAYING_INDEX(0)
         }
       )
+    },
+    handleMouseover() {
+      this.isMouseover = true
+      this.$emit('mouseover')
+    },
+    handleMouseout() {
+      this.isMouseover = false
+      this.$emit('mouseout')
     }
   }
 }
@@ -143,13 +160,20 @@ export default {
     margin 0 0 0 15px
 
 .playbutton
-  width 20.38px
-  height 18px
+  width 26px
+  height 26px
+  padding 3px
   background-color transparent
-  border none
   outline none
-  padding 0
   cursor pointer
+  border-radius 100%
+  display flex
+  justify-content center
+  align-items center
+  border 1px solid transparent
+  transition border .25s ease-out
+  &--border
+    border 1px solid #FF6D2D
   &__img
     width 100%
     height 100%

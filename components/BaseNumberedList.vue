@@ -13,7 +13,11 @@
       <li
         v-for="(item, i) in listData"
         :key="i"
-        class="list__list-item list-item"
+        :class="[
+          'list__list-item',
+          'list-item',
+          { 'list-item--orange-border': showOrangeBorder(i) }
+        ]"
       >
         <AppSingleWithPlayIcon
           :title="item.title"
@@ -21,6 +25,8 @@
           :audio="item.audio"
           :to="item.link"
           class="list-item__single"
+          @mouseover="handleMouseover(i)"
+          @mouseout="handleMouseout"
         />
       </li>
     </ol>
@@ -52,6 +58,22 @@ export default {
             _.every(data, d => 'link' in d))
         )
       }
+    }
+  },
+  data() {
+    return {
+      isMouseoverAt: -1
+    }
+  },
+  methods: {
+    handleMouseover(i) {
+      this.isMouseoverAt = i
+    },
+    handleMouseout() {
+      this.isMouseoverAt = -1
+    },
+    showOrangeBorder(i) {
+      return this.isMouseoverAt === i
     }
   }
 }
@@ -106,9 +128,12 @@ export default {
   width 385px
   padding-top 5.5px
   padding-bottom 5.5px
-  border-bottom 1px solid #EFEFEF
   display flex
   align-items center
+  border-bottom 1px solid #EFEFEF
+  transition border-bottom .25s ease-out
+  &--orange-border
+    border-bottom 1px solid #FE5000
   &__single
     margin 0 0 0 15px
 

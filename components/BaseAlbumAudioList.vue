@@ -25,7 +25,11 @@
         <li
           v-for="(item, i) in listData"
           :key="i"
-          class="list__list-item list-item"
+          :class="[
+            'list__list-item',
+            'list-item',
+            { 'list-item--orange-border': showOrangeBorder(i) }
+          ]"
         >
           <AppSingleWithPlayIcon
             :title="item.title"
@@ -34,6 +38,8 @@
             :show-duration="true"
             :to="item.link"
             class="list-item__single"
+            @mouseover="handleMouseover(i)"
+            @mouseout="handleMouseout"
           />
         </li>
       </ol>
@@ -80,9 +86,25 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      isMouseoverAt: -1
+    }
+  },
   computed: {
     albumDescriptionSanitized() {
       return sanitizeContent(this.albumDescription, 'categoriesShowcase')
+    }
+  },
+  methods: {
+    handleMouseover(i) {
+      this.isMouseoverAt = i
+    },
+    handleMouseout() {
+      this.isMouseoverAt = -1
+    },
+    showOrangeBorder(i) {
+      return this.isMouseoverAt === i
     }
   }
 }
@@ -127,8 +149,13 @@ export default {
   padding 0
   margin 22px 0 0 0
   &__list-item
-    border-bottom 1px solid #EFEFEF
     padding 10px 0
+
+.list-item
+  border-bottom 1px solid #EFEFEF
+  transition border-bottom .25s ease-out
+  &--orange-border
+    border-bottom 1px solid #FE5000
 
 @media (max-width 768px)
   .album-audio-list-wrapper
