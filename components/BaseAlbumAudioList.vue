@@ -115,6 +115,7 @@ export default {
   width 630px
   background-color white
   padding 20px 20px 7.5px 20px
+  min-height 377.5px
 
 .album
   display flex
@@ -161,6 +162,7 @@ export default {
   .album-audio-list-wrapper
     width 100%
     padding 0 10px
+    min-height 0
     &__mobile-inner-wrapper
       border 1px solid #B8B8B8
       border-radius 10px
