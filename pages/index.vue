@@ -106,10 +106,10 @@ export default {
       }))
     },
     audioChoices() {
-      const data = _.get(this, ['rawDataAudioChoices', 'items'], [])
+      const data = _.get(this, 'rawDataAudioChoices', [])
       return data.map(d => ({
         title: _.get(d, ['choices', 'title'], ''),
-        audio: _.get(d, ['choices', 'audio', 'audio', 'url'], ''),
+        audio: _.get(d, ['choices', 'audio', 0, 'audio', 'url'], ''),
         link: `/single/${_.get(d, ['choices', 'slug'], '')}`
       }))
     },
@@ -146,10 +146,10 @@ export default {
     const [
       { value: audioPromotions },
       { value: rawDataLatestPosts },
-      { value: rawDataAudioChoices },
       { value: rawDataPopularVoice },
       { value: rawDataVoiceMasters },
-      { value: rawDataCategoriesShowcase }
+      { value: rawDataCategoriesShowcase },
+      { value: rawDataAudioChoices }
     ] = await Promise.allSettled([
       // fetchs from cms api
       app.$fetchAudioPromotions(),
@@ -161,24 +161,20 @@ export default {
           albums: 1
         }
       }),
-      app.$fetchAudioChoices({
-        max_results: app.$MAXRESULT_HOME_AUDIO_CHOICES,
-        page: 1,
-        sort: 'sortOrder'
-      }),
 
       // fetchs from cron generated jsons
       app.$fetchPopularVoice(),
       app.$fetchVoiceMasters(),
-      app.$fetchCategoriesShowcase()
+      app.$fetchCategoriesShowcase(),
+      app.$fetchAudioChoices()
     ])
     return {
       audioPromotions,
       rawDataLatestPosts,
-      rawDataAudioChoices,
       rawDataPopularVoice,
       rawDataVoiceMasters,
-      rawDataCategoriesShowcase
+      rawDataCategoriesShowcase,
+      rawDataAudioChoices
     }
   },
   methods: {

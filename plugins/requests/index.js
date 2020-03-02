@@ -27,11 +27,6 @@ export default ({ store, $axios }, inject) => {
     const url = `/api/audiopromotions?${query}`
     return get(url)
   })
-  inject('fetchAudioChoices', params => {
-    const query = buildQuery(params)
-    const url = `/api/audiochoices?${query}`
-    return get(url)
-  })
   inject('fetchSections', params => {
     const query = buildQuery(params)
     const url = `/api/sections?${query}`
@@ -61,6 +56,10 @@ export default ({ store, $axios }, inject) => {
   })
   inject('fetchCategoriesShowcase', () => {
     const url = '/api/json/albums_posts_voice.json'
+    return get(url)
+  })
+  inject('fetchAudioChoices', () => {
+    const url = '/api/rss/audiochoices_full.json'
     return get(url)
   })
 
