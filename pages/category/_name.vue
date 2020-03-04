@@ -162,9 +162,9 @@ export default {
           id: _.get(d, 'id', '')
         })
       }
-      return rawData.map(
-        _.get(mapping, this.currentCategoryName, mapping.default)
-      )
+      return rawData
+        .map(_.get(mapping, this.currentCategoryName, mapping.default))
+        .filter(d => (this.currentCategoryName ? d.audio !== '' : d))
     },
     haveNextPageShowcase() {
       return 'next' in _.get(this.showcaseData, 'links', {})

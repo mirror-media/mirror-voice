@@ -96,14 +96,16 @@ export default {
     popularVoice() {
       let data = _.get(this, ['rawDataPopularVoice', 'items'], [])
       data = _.take(data, this.limit.popularVoice)
-      return data.map(d => ({
-        title: _.get(d, ['albums', 0], ''),
-        subtitle: _.get(d, 'title', ''),
-        cover: _.get(d, 'heroImage', ''),
-        link: `/single/${_.get(d, 'slug', '')}`,
-        slug: _.get(d, 'slug', ''),
-        audio: _.get(d, 'audio', '')
-      }))
+      return data
+        .map(d => ({
+          title: _.get(d, ['albums', 0], ''),
+          subtitle: _.get(d, 'title', ''),
+          cover: _.get(d, 'heroImage', ''),
+          link: `/single/${_.get(d, 'slug', '')}`,
+          slug: _.get(d, 'slug', ''),
+          audio: _.get(d, 'audio', '')
+        }))
+        .filter(d => d.audio !== '')
     },
     audioChoices() {
       const data = _.get(this, 'rawDataAudioChoices', [])
