@@ -1,0 +1,18 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot tests renders component correctly if we provide efficient props 1`] = `
+<div
+  class="player-wrapper"
+>
+  <player-stub
+    audiocurrentindex="1"
+    audiolist="[object Object],[object Object]"
+    class="player-wrapper__player"
+    currenttime="1234"
+    isplaying="true"
+    playbackrate="0.5"
+    updatetime="100"
+    volume="0.8"
+  />
+</div>
+`;

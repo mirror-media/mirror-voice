@@ -1,0 +1,154 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot tests renders component correctly if we provide efficient props 1`] = `
+<div
+  class="player"
+>
+  <audio
+    src="http://first-single.wav"
+  />
+   
+  <baseplayercover-stub
+    class="player__cover cover"
+    imgsrc="http://first-single.jpg"
+    to="/single/first-single"
+  />
+   
+  <baseplayernavs-stub
+    class="player__navs"
+    showtracksnav="true"
+  />
+   
+  <div
+    class="player__middle middle"
+  >
+    <baseplayerinfo-stub
+      text="first single"
+      timecurrent="0"
+      timetotal="0"
+      to="/single/first-single"
+    />
+     
+    <div
+      class="middle__progress-rewind-fastword-wrapper"
+    >
+      <baseplayerslider-stub
+        class="middle__progress"
+        direction="horizontal"
+        valuebuffered="0"
+        valuecurrent="0"
+      />
+       
+      <div
+        class="mobile-rewind-fastforward-wrapper"
+      >
+        <button
+          class="button rewind-button"
+        >
+          <img
+            alt="rewind"
+            class="rewind-button__img"
+            src="~/assets/img/skip15secback.svg"
+          />
+        </button>
+         
+        <button
+          class="button fastforward-button"
+        >
+          <img
+            alt="fastforward"
+            class="fastforward-button__img"
+            src="~/assets/img/skip15sec.svg"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+   
+  <baseplayerrate-stub
+    class="player__rate"
+    playbackratecurrent="1"
+  />
+   
+  <baseplayervolume-stub
+    class="player__volume"
+    volumecurrent="1"
+  />
+</div>
+`;
+
+exports[`snapshot tests renders component correctly if we provide inefficient props 1`] = `
+<div
+  class="player"
+>
+  <audio
+    src=""
+  />
+   
+  <baseplayercover-stub
+    class="player__cover cover"
+    imgsrc=""
+    to="/"
+  />
+   
+  <baseplayernavs-stub
+    class="player__navs"
+  />
+   
+  <div
+    class="player__middle middle"
+  >
+    <baseplayerinfo-stub
+      text=""
+      timecurrent="0"
+      timetotal="0"
+      to="/"
+    />
+     
+    <div
+      class="middle__progress-rewind-fastword-wrapper"
+    >
+      <baseplayerslider-stub
+        class="middle__progress"
+        direction="horizontal"
+        valuebuffered="0"
+        valuecurrent="0"
+      />
+       
+      <div
+        class="mobile-rewind-fastforward-wrapper"
+      >
+        <button
+          class="button rewind-button"
+        >
+          <img
+            alt="rewind"
+            class="rewind-button__img"
+            src="~/assets/img/skip15secback.svg"
+          />
+        </button>
+         
+        <button
+          class="button fastforward-button"
+        >
+          <img
+            alt="fastforward"
+            class="fastforward-button__img"
+            src="~/assets/img/skip15sec.svg"
+          />
+        </button>
+      </div>
+    </div>
+  </div>
+   
+  <baseplayerrate-stub
+    class="player__rate"
+    playbackratecurrent="1"
+  />
+   
+  <baseplayervolume-stub
+    class="player__volume"
+    volumecurrent="1"
+  />
+</div>
+`;
