@@ -82,4 +82,7 @@ export default {
     position absolute
   & >>> .vue-slider-rail
     height 100%
+    width 100%
+  & >>> .vue-slider-process
+    position absolute
 </style>
