@@ -2,155 +2,167 @@
   <div class="player-wrapper">
     <Player
       class="player-wrapper__player"
-      :is-playing.sync="$$isPlaying"
-      :volume.sync="$$volume"
-      :playback-rate.sync="$$playbackRate"
-      :current-time.sync="$$currentTime"
-      :update-time="updateTimeState"
-      :audio-list="audioListState"
-      :audio-current-index.sync="$$audioCurrentIndex"
-      @durationchange="handleDurationChange"
-      @error="handleError"
+      :type="'long'"
+      :sound.sync="sound"
+      :list="list"
+      :volume.sync="playerVolume"
+      :muted.sync="playerMuted"
+      :playback-rate.sync="playerplaybackRate"
+      :should-playing="isPlaying"
+      :played-time.sync="currentPlayedTime"
+      @play="syncPlay"
+      @pause="syncPause"
+      @durationchange="syncDuration"
+      @error="onError"
+      @playingError="onPlayingError"
       @ended="handleEnded"
+      @loadstart="hanldeLoadstart"
+      @backward="handleBackward"
+      @forward="handleForward"
     />
   </div>
 </template>
 
 <script>
 import _ from 'lodash'
-import { mapState, mapMutations, mapActions, mapGetters } from 'vuex'
+import queryString from 'query-string'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 
-import Player from '~/components/Player/BasePlayer.vue'
+import Player from '~/components/Player/Player.vue'
+
+const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
+  return store.dispatch('appPlayer/FETCH', {
+    max_results: 10,
+    page,
+    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
+    where: {
+      albums: {
+        $in: [albumId]
+      }
+    }
+  })
+}
 
 export default {
   components: {
     Player
   },
+  data() {
+    return {
+      // internalSound: {},
+      playerVolume: 1,
+      playerMuted: false,
+      playerplaybackRate: 1,
+      latestSingle: {}
+    }
+  },
   computed: {
     ...mapState({
-      uuid: state => state.appPlayer.uuid,
-      audioIsPlayingState: state => state.appPlayer.audioIsPlaying,
-      audioVolumeState: state => state.appPlayer.audioVolume,
-      audioPlaybackRateState: state => state.appPlayer.audioPlaybackRate,
-      audioCurrentTimeState: state => state.appPlayer.audioCurrentTime,
-      audioDurationState: state => state.appPlayer.audioDuration,
-      updateTimeState: state => state.appPlayer.updateTime,
-      audioListState: state => state.appPlayer.audioList,
-      audioCurrentIndexState: state => state.appPlayer.audioCurrentIndex,
-      audioCurrentAlbumId: state => state.appPlayer.audioCurrentAlbumId,
-      payloadNextAudioList: state => state.appPlayer.payloadNextAudioList,
-      payloadPrevAudioList: state => state.appPlayer.payloadPrevAudioList
+      pages: state => state.appPlayer.pages,
+      albumId: state => state.appPlayer.albumId,
+      playingIndex: state => state.appPlayer.playingIndex,
+      isPlaying: state => state.appPlayer.isPlaying,
+      playedTime: state => state.appPlayer.playedTime,
+      lastTrackStorage: state => state.localStorageLastTrack.lastTrackStorage,
+      lastTrackPlayedTime: state =>
+        state.localStorageLastTrack.lastTrackPlayedTime
     }),
-    $$isPlaying: {
-      get() {
-        return (
-          this.audioIsPlayingState &&
-          this.$store.state.appPlayerCurrentPlaying.uuids[this.uuid] === true
-        )
-      },
-      set(value) {
-        this.SET_AUDIO_IS_PLAYING(value)
-      }
-    },
-    $$volume: {
-      get() {
-        return this.audioVolumeState
-      },
-      set(value) {
-        this.SET_AUDIO_VOLUME(value)
-      }
-    },
-    $$playbackRate: {
-      get() {
-        return this.audioPlaybackRateState
-      },
-      set(value) {
-        this.SET_AUDIO_PLAYBACK_RATE(value)
-      }
-    },
-    $$currentTime: {
-      get() {
-        return this.audioCurrentTimeState
-      },
-      set(value) {
-        this.SET_AUDIO_CURRENT_TIME(value)
-      }
-    },
-    $$audioCurrentIndex: {
-      get() {
-        return this.audioCurrentIndexState
-      },
-      set(value) {
-        this.SET_AUDIO_CURRENT_INDEX(value)
-      }
-    },
-
     ...mapGetters({
-      currentSlug: 'appPlayer/currentSlug'
-    })
-  },
-  watch: {
-    currentSlug(newValue, oldValue) {
-      const lastTrack = _.get(
-        this.$store.state,
-        ['localStorageTrackHistory', 'dict', oldValue],
-        {}
+      list: 'appPlayer/LIST'
+    }),
+    currentPageIndex() {
+      return _.findKey(this.pages, o =>
+        o.items.map(item => item.slug).includes(this.sound.slug)
       )
-      const lastTrackCurrentTime = _.get(lastTrack, 'memorizedCurrentTime', 0)
-      this.$sendGAAppPlayer({
-        action: 'play_other',
-        label: oldValue,
-        value: lastTrackCurrentTime
-      })
     },
-    $$isPlaying(newValue, oldValue) {
-      if (!newValue && oldValue) {
-        this.$sendGAAppPlayer({
-          action: 'play_pause',
-          label: this.currentSlug,
-          value: this.audioCurrentTimeState
-        })
-      } else if (newValue && !oldValue) {
-        this.$sendGAAppPlayer({
-          action: 'play_continue',
-          label: this.currentSlug,
-          value: this.audioCurrentTimeState
-        })
+    currentPage() {
+      return this.pages[this.currentPageIndex]
+    },
+    currentPageLinks() {
+      return _.get(this.currentPage, 'links', {})
+    },
+    currentPageMeta() {
+      return _.get(this.currentPage, 'meta', {})
+    },
+    sound: {
+      get() {
+        const sound = this.list[this.playingIndex]
+        if (!sound && !_.isEmpty(this.lastTrackStorage)) {
+          this.SHOW_APP_PLAYER()
+          return this.lastTrackStorage
+        } else if (!sound && !_.isEmpty(this.latestSingle)) {
+          return this.latestSingle
+        }
+        this.MEMORIZE_TRACK(sound)
+        return sound
+      },
+      set(sound) {
+        let index = _.findIndex(this.list, o => o.src === sound.src)
+        const shouldFetchNextPage =
+          index === this.list.length - 1 && this.isListHaveNext
+        const shouldFetchPrevPage = index === 0 && this.isListHavePrev
+        if (shouldFetchNextPage) {
+          // NOTE: workaround for specify the sort
+          const sort = _.get(
+            queryString.parse(
+              _.get(this.currentPageLinks, ['next', 'href'], '')
+            ),
+            'sort',
+            ''
+          )
+          fetchPlayerTracks(
+            this.$store,
+            this.albumId,
+            sort !== 'publishedDate',
+            this.currentPageMeta.page + 1
+          ).then(() => {
+            index = _.findIndex(this.list, o => o.src === sound.src)
+            this.SET_PLAYING_INDEX(index)
+          })
+        } else if (shouldFetchPrevPage) {
+          // NOTE: workaround for specify the sort
+          const sort = _.get(
+            queryString.parse(
+              _.get(this.currentPageLinks, ['prev', 'href'], '')
+            ),
+            'sort',
+            ''
+          )
+          fetchPlayerTracks(
+            this.$store,
+            this.albumId,
+            sort !== 'publishedDate',
+            this.currentPageMeta.page - 1
+          ).then(() => {
+            index = _.findIndex(this.list, o => o.src === sound.src)
+            this.SET_PLAYING_INDEX(index)
+          })
+        } else {
+          this.SET_PLAYING_INDEX(index)
+        }
       }
     },
-    $$audioCurrentIndex(value) {
-      const payloadNextExist = this.payloadNextAudioList !== null
-      const payloadPrevExist = this.payloadPrevAudioList !== null
-      const shouldFetchNextPageAt = this.audioListState.length - 1
-      const shouldFetchPrevPageAt = 0
-      const shouldFetchNextPage = value >= shouldFetchNextPageAt
-      const shouldFetchPrevPage = value <= shouldFetchPrevPageAt
-      const albumId = this.audioCurrentAlbumId
-      if (shouldFetchNextPage && payloadNextExist) {
-        this.FETCH_SINGLES({
-          payload: this.payloadNextAudioList,
-          albumId,
-          playAt: value,
-          autoPlay: true,
-          append: 'push'
-        })
-      } else if (shouldFetchPrevPage && payloadPrevExist) {
-        this.FETCH_SINGLES({
-          payload: this.payloadPrevAudioList,
-          albumId,
-          playAt: 10,
-          autoPlay: true,
-          append: 'unshift'
-        })
+    soundSlug() {
+      return _.get(this.sound, 'slug', '')
+    },
+    currentPlayedTime: {
+      get() {
+        const sound = this.list[this.playingIndex]
+        if (!sound && !_.isEmpty(this.lastTrackStorage)) {
+          return this.lastTrackPlayedTime
+        }
+        return this.playedTime
+      },
+      set(time) {
+        this.SET_PLAYED_TIME(time)
+        this.MEMORIZE_TRACK_PLAYEDTIME(time)
       }
     },
-    $$currentTime(value) {
-      this.$store.commit('localStorageTrackHistory/MEMORIZE_TRACK', {
-        track: this.audioListState[this.$$audioCurrentIndex],
-        memorizedDate: new Date(),
-        memorizedDuration: this.audioDurationState,
-        memorizedCurrentTime: value
-      })
+    isListHavePrev() {
+      return 'prev' in this.currentPageLinks
+    },
+    isListHaveNext() {
+      return 'next' in this.currentPageLinks
     }
   },
   created() {
@@ -162,62 +174,108 @@ export default {
         albums: 1
       }
     }).then(({ items = [] }) => {
-      const latestTrackInHistory = _.get(
-        Object.values(this.$store.state.localStorageTrackHistory.dict).sort(
-          (a, b) => new Date(b.memorizedDate) - new Date(a.memorizedDate)
-        ),
-        0,
-        {}
-      )
-      if (!_.isEmpty(latestTrackInHistory)) {
-        this.RESET_AUDIO_LIST({
-          list: [latestTrackInHistory],
-          updateTime: latestTrackInHistory.memorizedCurrentTime
-        })
-      } else {
-        const singleItems = items.map(item => this.$normalizeSingle(item))
-        this.RESET_AUDIO_LIST({ list: singleItems })
-      }
-    })
-
-    window.addEventListener('beforeunload', () => {
-      this.$store.commit('appPlayerCurrentPlaying/DELETE_UUID', this.uuid)
+      const singleItems = items.map(d => ({
+        title: _.get(d, 'title', ''),
+        cover: _.get(this.$getImgs(d), ['mobile', 'url'], ''),
+        link: `/single/${_.get(d, 'slug', '')}`,
+        slug: _.get(d, 'slug', ''),
+        src: this.$getSingleSoundSrc(d)
+      }))
+      this.latestSingle = _.get(singleItems, 0, {})
     })
   },
   methods: {
     ...mapMutations({
-      SET_AUDIO_IS_PLAYING: 'appPlayer/SET_AUDIO_IS_PLAYING',
-      SET_AUDIO_VOLUME: 'appPlayer/SET_AUDIO_VOLUME',
-      SET_AUDIO_PLAYBACK_RATE: 'appPlayer/SET_AUDIO_PLAYBACK_RATE',
-      SET_AUDIO_CURRENT_TIME: 'appPlayer/SET_AUDIO_CURRENT_TIME',
-      SET_AUDIO_DURATION: 'appPlayer/SET_AUDIO_DURATION',
-      SET_UPDATE_TIME: 'appPlayer/SET_UPDATE_TIME',
-      SET_AUDIO_CURRENT_INDEX: 'appPlayer/SET_AUDIO_CURRENT_INDEX',
-      SET_AUDIO_LIST: 'appPlayer/SET_AUDIO_LIST',
-      PUSH_AUDIO_LIST: 'appPlayer/PUSH_AUDIO_LIST'
-    }),
-    ...mapActions({
-      RESET_AUDIO_LIST: 'appPlayer/RESET_AUDIO_LIST',
-      FETCH_SINGLES: 'appPlayer/FETCH_SINGLES'
-    }),
-    ...mapMutations({
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_IS_PLAYING: 'appPlayer/SET_IS_PLAYING',
+      SET_DUARTION: 'appPlayer/SET_DUARTION',
+      SET_PLAYED_TIME: 'appPlayer/SET_PLAYED_TIME',
+      SHOW_APP_PLAYER: 'appPlayer/SHOW_APP_PLAYER',
       SET_SHOW_LIGHTBOX: 'lightboxPlayingError/SET_SHOW_LIGHTBOX'
     }),
+    ...mapActions({
+      MEMORIZE_TRACK: 'localStorageLastTrack/MEMORIZE_TRACK',
+      MEMORIZE_TRACK_PLAYEDTIME:
+        'localStorageLastTrack/MEMORIZE_TRACK_PLAYEDTIME',
+      MEMORIZE_TRACK_DURATIONTIME:
+        'localStorageLastTrack/MEMORIZE_TRACK_DURATIONTIME'
+    }),
+    syncPlay() {
+      this.SET_IS_PLAYING(true)
 
-    handleDurationChange(e) {
-      this.SET_AUDIO_DURATION(e.target.duration)
+      if (this.currentPlayedTime) {
+        this.$sendGAAppPlayer({
+          action: 'play_continue',
+          label: this.soundSlug,
+          value: this.currentPlayedTime
+        })
+      }
     },
-    handleError(e) {
+    syncPause() {
+      this.SET_IS_PLAYING(false)
+
+      this.$sendGAAppPlayer({
+        action: 'play_pause',
+        label: this.soundSlug,
+        value: this.currentPlayedTime
+      })
+    },
+    syncDuration(e) {
+      const duration = _.get(e, ['target', 'duration'], 0)
+      this.SET_DUARTION(duration)
+      this.MEMORIZE_TRACK_DURATIONTIME(duration)
+    },
+
+    onError(e) {
       if (e.target.getAttribute('src') !== '') {
         this.SET_SHOW_LIGHTBOX(true)
       }
     },
+    onPlayingError(error) {
+      if (error.name === 'NotSupportedError') {
+        this.SET_SHOW_LIGHTBOX(true)
+      }
+    },
+
     handleEnded() {
       this.$sendGAAppPlayer({
         action: 'play_end',
-        label: this.currentSlug,
-        value: this.audioCurrentTimeState
+        label: this.soundSlug,
+        value: this.currentPlayedTime
       })
+    },
+    hanldeLoadstart() {
+      const localStorageTrackHistory = _.get(
+        this.$store.state,
+        ['localStorageTrackHistory', 'trackHistory'],
+        []
+      )
+      const currentTrackSlug = this.soundSlug
+      const currentTrackIndexInHistory = _.findIndex(
+        localStorageTrackHistory,
+        o => {
+          const slug = _.get(o, ['lastTrackStorage', 'slug'], '')
+          return slug === currentTrackSlug
+        }
+      )
+      const lastTrack = _.get(
+        localStorageTrackHistory,
+        currentTrackIndexInHistory - 1,
+        {}
+      )
+
+      this.$sendGAAppPlayer({
+        action: 'play_other',
+        label: _.get(lastTrack, ['lastTrackStorage', 'slug'], ''),
+        value: _.get(lastTrack, 'lastTrackPlayedTime', 0)
+      })
+    },
+
+    handleBackward() {
+      this.SET_PLAYED_TIME(0)
+    },
+    handleForward() {
+      this.SET_PLAYED_TIME(0)
     }
   }
 }

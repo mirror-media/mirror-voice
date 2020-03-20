@@ -31,7 +31,7 @@
 
 <script>
 import _ from 'lodash'
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import Vue from 'vue'
 
 import BaseTextWithArrow from '~/components/BaseTextWithArrow.vue'
@@ -255,31 +255,42 @@ export default {
     },
 
     ...mapActions({
-      RESET_AUDIO_LIST: 'appPlayer/RESET_AUDIO_LIST',
-      FETCH_SINGLES: 'appPlayer/FETCH_SINGLES'
+      PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
+    }),
+    ...mapMutations({
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
+      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
+      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
     }),
     handlePlayCoverImgListItem(item) {
       if (this.isCurrentCategoryExtra) {
         const singleItem = {
+          cover: _.get(item, 'cover', ''),
           title: _.get(item, 'subtitle', ''),
+          src: _.get(item, 'audio', ''),
           slug: _.get(item, 'slug', ''),
-          coverImgSrc: _.get(item, 'cover', ''),
-          audioSrc: _.get(item, 'audio', '')
+          vocals: _.get(item, 'vocals', [])
         }
-        this.RESET_AUDIO_LIST({ list: [singleItem], autoPlay: true })
+        this.SET_ALBUM_ID('')
+        this.SET_ALBUM_COVER('')
+        this.CLEAR_PAGES()
+        this.PREPARE_SINGLES({ page: 1, res: { items: [singleItem] } }).then(
+          () => {
+            this.SET_PLAYING_INDEX(0)
+          }
+        )
       } else {
-        this.FETCH_SINGLES({
-          payload: {
-            max_results: 10,
-            page: 1,
-            sort: 'publishedDate',
-            where: {
-              albums: {
-                $in: [_.get(item, 'id', '')]
-              }
+        const albumId = _.get(item, 'id', '')
+        this.$store.dispatch('appPlayer/FETCH', {
+          max_results: 10,
+          page: 1,
+          sort: 'publishedDate',
+          where: {
+            albums: {
+              $in: [albumId]
             }
-          },
-          autoPlay: true
+          }
         })
       }
     },

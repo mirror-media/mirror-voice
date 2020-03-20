@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import BaseAudioDuration from './BaseAudioDuration.vue'
 
 export default {
@@ -87,17 +87,33 @@ export default {
       return {
         title: this.title,
         slug: this.to.replace('/single/', ''),
-        coverImgSrc: '',
-        audioSrc: this.audio
+        audio: {
+          audio: {
+            url: this.audio
+          }
+        }
       }
     }
   },
   methods: {
     ...mapActions({
-      RESET_AUDIO_LIST: 'appPlayer/RESET_AUDIO_LIST'
+      PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
+    }),
+    ...mapMutations({
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
+      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
+      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
     }),
     playSingle() {
-      this.RESET_AUDIO_LIST({ list: [this.single], autoPlay: true })
+      this.SET_ALBUM_ID('')
+      this.SET_ALBUM_COVER('')
+      this.CLEAR_PAGES()
+      this.PREPARE_SINGLES({ page: 1, res: { items: [this.single] } }).then(
+        () => {
+          this.SET_PLAYING_INDEX(0)
+        }
+      )
     },
     handleMouseover() {
       this.isMouseover = true

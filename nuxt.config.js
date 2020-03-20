@@ -99,8 +99,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '~/plugins/vueDirectivesGlobal.js',
-    '~/plugins/vuePluginsGlobal.js',
+    '~/plugins/vuePlugins.js',
     '~/plugins/util/index.js',
     '~/plugins/constants/index.js',
     '~/plugins/requests/index.js',
@@ -145,7 +144,7 @@ module.exports = {
     [
       'nuxt-vuex-localstorage',
       {
-        localStorage: ['localStorageTrackHistory', 'appPlayerCurrentPlaying']
+        localStorage: ['localStorageLastTrack', 'localStorageTrackHistory']
       }
     ],
     'vue-scrollto/nuxt'

@@ -1,5 +1,6 @@
 <template>
   <section
+    v-infinite-scroll="loadmore"
     class="history"
   >
     <AppDiv
@@ -40,7 +41,7 @@
         :show-played-progress="true"
         :is-latest-first="isTracksSortLatestFirst"
         :current-sound="currentSound"
-        :is-playing="appPlayer.audioIsPlaying"
+        :is-playing="appPlayer.isPlaying"
         :tracks="tracks"
         :page="1"
         :total="total"
@@ -53,12 +54,18 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
 import _ from 'lodash'
+import Vue from 'vue'
 
 import AppDiv from '~/components/AppDiv.vue'
 import DivHeader from '~/components/Div/DivHeader.vue'
 import BaseTrackList from '~/components/BaseTrackList.vue'
+
+if (process.browser) {
+  const infiniteScroll = require('vue-infinite-scroll')
+  Vue.use(infiniteScroll)
+}
 
 export default {
   components: {
@@ -68,62 +75,71 @@ export default {
   },
   data() {
     return {
-      isTracksSortLatestFirst: true
+      isTracksSortLatestFirst: true,
+      tracksLimit: 10
     }
   },
   computed: {
     ...mapState(['appPlayer']),
 
+    ...mapGetters({
+      list: 'appPlayer/LIST'
+    }),
     currentSound() {
-      return _.get(
-        this.appPlayer.audioList,
-        this.appPlayer.audioCurrentIndex,
-        {}
-      )
+      return _.get(this.list, this.appPlayer.playingIndex, {})
     },
 
     ...mapState({
-      localStorageTrackHistory: state => state.localStorageTrackHistory.dict
+      localStorageTrackHistory: state =>
+        state.localStorageTrackHistory.trackHistory
     }),
     tracks() {
-      if (_.isEmpty(this.localStorageTrackHistory)) {
-        return []
-      }
-      const sortFunction = this.isTracksSortLatestFirst
-        ? (a, b) => new Date(b.memorizedDate) - new Date(a.memorizedDate)
-        : (a, b) => new Date(a.memorizedDate) - new Date(b.memorizedDate)
-      return Object.values(this.localStorageTrackHistory)
-        .map(value => {
-          const duration = _.get(value, 'memorizedDuration', 0)
-          const playedTime = _.get(value, 'memorizedCurrentTime', 0)
-          const playedProgress = duration !== 0 ? playedTime / duration : 0
-          return {
-            ...value,
-            duration,
-            playedTime,
-            playedProgress
-          }
-        })
-        .slice()
-        .sort(sortFunction)
+      let tracks = this.localStorageTrackHistory.map(track => {
+        const duration = _.get(track, 'lastTrackDurationTime', 0)
+        const playedTime = _.get(track, 'lastTrackPlayedTime', 0)
+        const playedProgress = duration !== 0 ? playedTime / duration : 0
+        return {
+          ..._.get(track, 'lastTrackStorage', {}),
+          duration,
+          playedTime,
+          playedProgress
+        }
+      })
+      tracks = this.isTracksSortLatestFirst ? tracks.slice().reverse() : tracks
+      return _.take(tracks, this.tracksLimit)
     },
     total() {
-      return this.tracks.length
+      return this.localStorageTrackHistory.length
     }
   },
   methods: {
+    loadmore() {
+      if (this.tracksLimit < this.$LOCAL_STORAGE_HISTORY_LIMIT) {
+        this.tracksLimit += 10
+      }
+    },
+
     ...mapActions({
-      RESET_AUDIO_LIST: 'appPlayer/RESET_AUDIO_LIST'
+      PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
+    }),
+    ...mapMutations({
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_PLAYED_TIME: 'appPlayer/SET_PLAYED_TIME',
+      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
+      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
+      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
     }),
     playTrack(slug) {
-      const singleItem = _.find(this.tracks, o => {
+      const single = _.find(this.tracks, o => {
         const _slug = _.get(o, 'slug', '')
         return _slug === slug
       })
-      this.RESET_AUDIO_LIST({
-        list: [singleItem],
-        autoPlay: true,
-        updateTime: singleItem.memorizedCurrentTime
+      this.SET_ALBUM_ID('')
+      this.SET_ALBUM_COVER('')
+      this.CLEAR_PAGES()
+      this.SET_PLAYED_TIME(_.get(single, 'playedTime', 0))
+      this.PREPARE_SINGLES({ page: 1, res: { items: [single] } }).then(() => {
+        this.SET_PLAYING_INDEX(0)
       })
 
       const scrollToSelector = this.isTracksSortLatestFirst

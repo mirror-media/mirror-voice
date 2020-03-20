@@ -12,7 +12,7 @@
       :album-name="albumName"
       :tracks="trackItems"
       :current-sound="currentSound"
-      :is-playing="$store.state.appPlayer.audioIsPlaying"
+      :is-playing="appPlayer.isPlaying"
       @playTrack="v => $emit('playTrack', v)"
       @clickAlbum="$emit('clickAlbum')"
       @clickAlbumMore="$emit('clickAlbumMore')"
@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from 'vuex'
 import _ from 'lodash'
 
 import HOC from './HOC.vue'
@@ -47,10 +48,12 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      list: 'appPlayer/LIST'
+    }),
+    ...mapState(['appPlayer']),
     currentSound() {
-      const list = this.$store.state.appPlayer.audioList
-      const index = this.$store.state.appPlayer.audioCurrentIndex
-      return _.get(list, index, {})
+      return _.get(this.list, this.appPlayer.playingIndex, {})
     }
   }
 }

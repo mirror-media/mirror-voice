@@ -55,7 +55,7 @@
 
 <script>
 import _ from 'lodash'
-import { mapActions } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 
 import AppCategoriesNav from '~/components/AppCategoriesNav.vue'
 import Slider from '~/components/Slider/Slider.vue'
@@ -185,16 +185,30 @@ export default {
     },
 
     ...mapActions({
-      RESET_AUDIO_LIST: 'appPlayer/RESET_AUDIO_LIST'
+      PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
+    }),
+    ...mapMutations({
+      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
+      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
+      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
+      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES'
     }),
     handlePlayCoverImgListItem(item) {
       const singleItem = {
+        cover: _.get(item, 'cover', ''),
         title: _.get(item, 'subtitle', ''),
+        src: _.get(item, 'audio', ''),
         slug: _.get(item, 'slug', ''),
-        coverImgSrc: _.get(item, 'cover', ''),
-        audioSrc: _.get(item, 'audio', '')
+        vocals: []
       }
-      this.RESET_AUDIO_LIST({ list: [singleItem], autoPlay: true })
+      this.SET_ALBUM_ID('')
+      this.SET_ALBUM_COVER('')
+      this.CLEAR_PAGES()
+      this.PREPARE_SINGLES({ page: 1, res: { items: [singleItem] } }).then(
+        () => {
+          this.SET_PLAYING_INDEX(0)
+        }
+      )
     }
   }
 }
