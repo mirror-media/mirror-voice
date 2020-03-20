@@ -12,6 +12,9 @@
         'list__list-item',
         { 'list__list-item--border-bottom': showListOrder && i === tracks.length - 1 }
       ]"
+      :style="{
+        transition: enableTransition ? 'all 1s' : 'none'
+      }"
       :show-order="showListOrder"
       :show-vocals="showVocals"
       :played-progress="getPlayedProgress(track)"
@@ -81,6 +84,10 @@ export default {
     relativeTimeBy: {
       type: String,
       default: 'publishedDate'
+    },
+    enableTransition: {
+      type: Boolean,
+      default: true
     }
   },
   methods: {

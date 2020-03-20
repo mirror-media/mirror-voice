@@ -20,7 +20,7 @@
     <AppFooter />
     <NoSSR>
       <AppPlayer
-        :class="[ 'app__player', { 'app__player--hide': !showPlayer } ]"
+        :class="['app__player']"
       />
     </NoSSR>
     <transition name="fade" mode="out-in">
@@ -74,7 +74,6 @@ export default {
   },
   computed: {
     ...mapState({
-      showPlayer: state => state.appPlayer.showAppPlayer,
       showLightbox: state => state.lightboxPlayingError.showLightbox
     }),
     // hideBreadcrumb() {

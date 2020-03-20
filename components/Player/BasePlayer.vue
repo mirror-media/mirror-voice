@@ -242,8 +242,9 @@ export default {
       this.audioElement.playbackRate = value
     },
     updateTime(value) {
-      this.audioElement.currentTime = value
-      console.log(this.audioElement.currentTime)
+      this.$nextTick(() => {
+        this.audioElement.currentTime = value
+      })
     },
     isPlaying(value) {
       if (value) {

@@ -75,11 +75,12 @@
         <BaseTrackList
           v-show="!isDesktop || isTracksFetched"
           class="tracks-wrapper__tracks"
+          :enable-transition="false"
           :show-list-order="true"
           :show-played-progress="true"
           :is-latest-first="isTracksSortLatestFirst"
           :current-sound="currentSound"
-          :is-playing="appPlayer.isPlaying"
+          :is-playing="appPlayer.audioIsPlaying"
           :tracks="tracksWithPlayedProgress"
           :page="page"
           :total="tracks.meta.total"
@@ -113,7 +114,7 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapState, mapActions, mapMutations } from 'vuex'
 import _ from 'lodash'
 import Vue from 'vue'
 
@@ -149,16 +150,25 @@ const fetchTracks = (app, albumId, isLatestFirst = true, page = 1) => {
   })
 }
 
-const fetchPlayerTracks = (store, albumId, isLatestFirst = true, page = 1) => {
-  return store.dispatch('appPlayer/FETCH', {
-    max_results: 10,
-    page,
-    sort: `${isLatestFirst ? '-' : ''}publishedDate`,
-    where: {
-      albums: {
-        $in: [albumId]
+const fetchSingles = (
+  store,
+  { albumId = '', playAt = 0, sort = 'publishedDate', page = 1, append = null }
+) => {
+  return store.dispatch('appPlayer/FETCH_SINGLES', {
+    payload: {
+      max_results: 10,
+      page,
+      sort,
+      where: {
+        albums: {
+          $in: [albumId]
+        }
       }
-    }
+    },
+    albumId,
+    playAt,
+    autoPlay: true,
+    append
   })
 }
 
@@ -195,10 +205,6 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({
-      list: 'appPlayer/LIST'
-    }),
-
     brief() {
       return sanitizeContent(_.get(this.album, ['brief', 'html'], ''))
     },
@@ -207,8 +213,13 @@ export default {
     },
 
     ...mapState(['appPlayer']),
+    ...mapState(['appPlayer']),
     currentSound() {
-      return _.get(this.list, this.appPlayer.playingIndex, {})
+      return _.get(
+        this.appPlayer.audioList,
+        this.appPlayer.audioCurrentIndex,
+        {}
+      )
     },
     isAlbumPlaying: {
       get() {
@@ -218,8 +229,8 @@ export default {
         **    if ids are equal, we can say current album is playing
         */
         return (
-          this.appPlayer.isPlaying &&
-          this.appPlayer.albumId === _.get(this.album, 'id', '')
+          this.appPlayer.audioIsPlaying &&
+          this.appPlayer.audioCurrentAlbumId === _.get(this.album, 'id', '')
         )
       },
       set(val) {
@@ -227,7 +238,7 @@ export default {
           this.playAlbum()
         } else {
           // pause
-          this.SET_IS_PLAYING(false)
+          this.SET_AUDIO_IS_PLAYING(false)
         }
       }
     },
@@ -245,28 +256,26 @@ export default {
     },
 
     ...mapState({
-      localStorageTrackHistory: state =>
-        state.localStorageTrackHistory.trackHistory
+      localStorageTrackHistory: state => state.localStorageTrackHistory.dict
     }),
     tracksWithPlayedProgress() {
       let trackItems = _.get(this.tracks, 'items', [])
       trackItems = trackItems.map(item => {
         const trackInLocalStorageTrackHistory = _.find(
           this.localStorageTrackHistory,
-          o => {
-            const slug = _.get(o, ['lastTrackStorage', 'slug'], '')
-            return slug === _.get(item, 'slug', '')
+          (o, key) => {
+            return key === _.get(item, 'slug', '')
           }
         )
         if (trackInLocalStorageTrackHistory) {
           const duration = _.get(
             trackInLocalStorageTrackHistory,
-            'lastTrackDurationTime',
+            'memorizedDuration',
             0
           )
           const playedTime = _.get(
             trackInLocalStorageTrackHistory,
-            'lastTrackPlayedTime',
+            'memorizedCurrentTime',
             0
           )
           const playedProgress = duration !== 0 ? playedTime / duration : 0
@@ -286,7 +295,7 @@ export default {
   },
   watch: {
     isTracksSortLatestFirst() {
-      this.fetchTracks(1)
+      this.fetchTracks(this.page)
     },
     page() {
       this.fetchTracks(this.page)
@@ -310,7 +319,7 @@ export default {
     }
 
     // // Breadcrumb
-    // // TODO: Refactoring with /single
+    // // TODO: ing with /single
     // const crumbSection = {
     //   title: _.get(album, ['sections', 0, 'title'], ''),
     //   path: `/section/${_.get(album, ['sections', 0, 'name'], '')}`
@@ -379,49 +388,72 @@ export default {
       PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
     }),
     playAlbum(albumId = this.album.id) {
-      this.SET_PLAYED_TIME(0)
-      fetchPlayerTracks(this.$store, albumId, false)
+      // this.SET_PLAYED_TIME(0)
+      // fetchPlayerTracks(this.$store, albumId, false)
+      fetchSingles(this.$store, { albumId })
       this.$sendGAAlbum({ action: 'click', label: 'play all' })
     },
 
     ...mapMutations({
-      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
-      SET_PLAYED_TIME: 'appPlayer/SET_PLAYED_TIME',
-      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
-      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
-      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES',
-      SET_IS_PLAYING: 'appPlayer/SET_IS_PLAYING'
+      SET_AUDIO_IS_PLAYING: 'appPlayer/SET_AUDIO_IS_PLAYING',
+      SET_AUDIO_VOLUME: 'appPlayer/SET_AUDIO_VOLUME',
+      SET_AUDIO_PLAYBACK_RATE: 'appPlayer/SET_AUDIO_PLAYBACK_RATE',
+      SET_AUDIO_CURRENT_TIME: 'appPlayer/SET_AUDIO_CURRENT_TIME',
+      SET_AUDIO_DURATION: 'appPlayer/SET_AUDIO_DURATION',
+      SET_UPDATE_TIME: 'appPlayer/SET_UPDATE_TIME',
+      SET_AUDIO_CURRENT_INDEX: 'appPlayer/SET_AUDIO_CURRENT_INDEX',
+      SET_AUDIO_LIST: 'appPlayer/SET_AUDIO_LIST',
+      PUSH_AUDIO_LIST: 'appPlayer/PUSH_AUDIO_LIST',
+      SET_FETCH_PAYLOAD: 'appPlayer/SET_FETCH_PAYLOAD'
+    }),
+    ...mapActions({
+      RESET_AUDIO_LIST: 'appPlayer/RESET_AUDIO_LIST'
     }),
     playTrack(slug) {
-      this.SET_ALBUM_ID(this.album.id)
-      this.SET_ALBUM_COVER(
-        _.get(this.$getImgs(this.album), ['mobile', 'url'], '')
-      )
-      this.CLEAR_PAGES()
+      // /*
+      // ** Check track items are sorted by latest published date or not
+      // ** if not, reverse track items.
+      // */
+      // let tracks
+      // if (this.isTracksSortLatestFirst) {
+      //   tracks = this.tracks
+      // } else {
+      //   const itemsReversed = [...this.tracks.items].reverse()
+      //   tracks = { ...this.tracks, items: itemsReversed }
+      // }
 
-      /*
-      ** Check track items are sorted by latest published date or not
-      ** if not, reverse track items.
-      */
-      let tracks
-      if (this.isTracksSortLatestFirst) {
-        tracks = this.tracks
-      } else {
-        const itemsReversed = [...this.tracks.items].reverse()
-        tracks = { ...this.tracks, items: itemsReversed }
-      }
-
-      this.SET_PLAYED_TIME(0)
-      this.PREPARE_SINGLES({ page: this.page, res: tracks }).then(() => {
-        const playingIndex = _.findIndex(this.list, o => o.slug === slug)
-        this.SET_PLAYING_INDEX(playingIndex)
-
-        const single = _.find(this.tracksWithPlayedProgress, o => {
-          const _slug = _.get(o, 'slug', '')
-          return _slug === slug
-        })
-        this.SET_PLAYED_TIME(_.get(single, 'playedTime', 0))
+      const items = this.tracksWithPlayedProgress
+      const playAt = _.findIndex(items, o => {
+        const _slug = _.get(o, 'slug', '')
+        return _slug === slug
       })
+      const updateTime = _.get(items, [playAt, 'playedTime'], 0)
+      this.RESET_AUDIO_LIST({
+        list: items.map(item => this.$normalizeSingle(item)),
+        albumId: _.get(this.album, 'id', ''),
+        playAt,
+        updateTime,
+        autoPlay: true
+      })
+
+      // send links info to appPlayer's store, for load more tracks
+      const links = _.get(this.tracks, 'links', {})
+      const hrefPrev = _.get(links, ['prev', 'href'], '')
+      const hrefNext = _.get(links, ['next', 'href'], '')
+      if (hrefPrev !== '') {
+        const hrefPrevParsed = this.$toPayloadObject({
+          maxResults: 10,
+          payloadString: hrefPrev.replace('posts', '')
+        })
+        this.SET_FETCH_PAYLOAD({ where: 'prev', payload: hrefPrevParsed })
+      }
+      if (hrefNext !== '') {
+        const hrefNextParsed = this.$toPayloadObject({
+          maxResults: 10,
+          payloadString: hrefNext.replace('posts', '')
+        })
+        this.SET_FETCH_PAYLOAD({ where: 'next', payload: hrefNextParsed })
+      }
 
       this.$sendGAAlbum({ action: 'click', label: 'play single' })
     },

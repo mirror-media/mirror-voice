@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapGetters } from 'vuex'
+import { mapActions, mapMutations } from 'vuex'
 import _ from 'lodash'
 
 import AppDiv from '~/components/AppDiv.vue'
@@ -119,11 +119,7 @@ export default {
     },
     shouldFetch() {
       return _.isEmpty(_.get(this.slideData, [this.slideAlbumId, 'album'], {}))
-    },
-
-    ...mapGetters({
-      list: 'appPlayer/LIST'
-    })
+    }
   },
   watch: {
     currentSlideIndex() {
@@ -199,26 +195,43 @@ export default {
     },
 
     ...mapActions({
-      PREPARE_SINGLES: 'appPlayer/PREPARE_SINGLES'
+      RESET_AUDIO_LIST: 'appPlayer/RESET_AUDIO_LIST'
     }),
     ...mapMutations({
-      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX',
-      SET_ALBUM_ID: 'appPlayer/SET_ALBUM_ID',
-      SET_ALBUM_COVER: 'appPlayer/SET_ALBUM_COVER',
-      CLEAR_PAGES: 'appPlayer/CLEAR_PAGES',
-      SET_IS_PLAYING: 'appPlayer/SET_IS_PLAYING'
+      SET_FETCH_PAYLOAD: 'appPlayer/SET_FETCH_PAYLOAD'
     }),
     playTrack(slug) {
-      this.SET_ALBUM_ID(this.slideDataAlbum.id)
-      this.SET_ALBUM_COVER(
-        _.get(this.$getImgs(this.slideDataAlbum), ['mobile', 'url'], '')
-      )
-      this.CLEAR_PAGES()
-
-      this.PREPARE_SINGLES({ page: 1, res: this.slideDataTracks }).then(() => {
-        const playingIndex = _.findIndex(this.list, o => o.slug === slug)
-        this.SET_PLAYING_INDEX(playingIndex)
+      const tracks = this.slideDataTracks
+      const items = _.get(tracks, 'items', [])
+      const playAt = _.findIndex(items, o => {
+        const _slug = _.get(o, 'slug', '')
+        return _slug === slug
       })
+      this.RESET_AUDIO_LIST({
+        list: items.map(item => this.$normalizeSingle(item)),
+        albumId: this.slideAlbumId,
+        playAt,
+        autoPlay: true
+      })
+
+      // send links info to appPlayer's store, for load more tracks
+      const links = _.get(this.tracks, 'links', {})
+      const hrefPrev = _.get(links, ['prev', 'href'], '')
+      const hrefNext = _.get(links, ['next', 'href'], '')
+      if (hrefPrev !== '') {
+        const hrefPrevParsed = this.$toPayloadObject({
+          maxResults: 10,
+          payloadString: hrefPrev.replace('posts', '')
+        })
+        this.SET_FETCH_PAYLOAD({ where: 'prev', payload: hrefPrevParsed })
+      }
+      if (hrefNext !== '') {
+        const hrefNextParsed = this.$toPayloadObject({
+          maxResults: 10,
+          payloadString: hrefNext.replace('posts', '')
+        })
+        this.SET_FETCH_PAYLOAD({ where: 'next', payload: hrefNextParsed })
+      }
 
       this.$sendGASingle({ action: 'click', label: 'play single' })
     }
