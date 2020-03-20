@@ -1,0 +1,129 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot tests renders component correctly if showTracksNav is false 1`] = `
+<nav
+  class="navs"
+>
+  <button
+    class="button rewind-button"
+  >
+    <img
+      alt="rewind"
+      class="rewind-button__img"
+      src="~/assets/img/skip15secback.svg"
+    />
+  </button>
+   
+  <button
+    class="button backward-button"
+    style="display: none;"
+  >
+    <img
+      alt="backward"
+      class="backward-button__img"
+      src="~/assets/img/btn_forward_normal.png"
+    />
+  </button>
+   
+  <button
+    class="button main-button pause"
+  >
+    <img
+      alt="play"
+      class="main-button__img"
+      src="~/assets/img/btn_play.png"
+    />
+     
+    <img
+      alt="pause"
+      class="main-button__img"
+      src="~/assets/img/btn_pause.png"
+      style="display: none;"
+    />
+  </button>
+   
+  <button
+    class="button forward-button"
+    style="display: none;"
+  >
+    <img
+      alt="forward"
+      class="forward-button__img"
+      src="~/assets/img/btn_backward_normal.png"
+    />
+  </button>
+   
+  <button
+    class="button fastforward-button"
+  >
+    <img
+      alt="fastforward"
+      class="fastforward-button__img"
+      src="~/assets/img/skip15sec.svg"
+    />
+  </button>
+</nav>
+`;
+
+exports[`snapshot tests renders component correctly if showTracksNav is true 1`] = `
+<nav
+  class="navs"
+>
+  <button
+    class="button rewind-button"
+  >
+    <img
+      alt="rewind"
+      class="rewind-button__img"
+      src="~/assets/img/skip15secback.svg"
+    />
+  </button>
+   
+  <button
+    class="button backward-button"
+  >
+    <img
+      alt="backward"
+      class="backward-button__img"
+      src="~/assets/img/btn_forward_normal.png"
+    />
+  </button>
+   
+  <button
+    class="button main-button pause"
+  >
+    <img
+      alt="play"
+      class="main-button__img"
+      src="~/assets/img/btn_play.png"
+    />
+     
+    <img
+      alt="pause"
+      class="main-button__img"
+      src="~/assets/img/btn_pause.png"
+      style="display: none;"
+    />
+  </button>
+   
+  <button
+    class="button forward-button"
+  >
+    <img
+      alt="forward"
+      class="forward-button__img"
+      src="~/assets/img/btn_backward_normal.png"
+    />
+  </button>
+   
+  <button
+    class="button fastforward-button"
+  >
+    <img
+      alt="fastforward"
+      class="fastforward-button__img"
+      src="~/assets/img/skip15sec.svg"
+    />
+  </button>
+</nav>
+`;

@@ -8,15 +8,7 @@
       >
       <div class="top__description description">
         <p>哎呀，語音檔出現了一點錯誤，</p>
-        <p>先聽聽看別的音檔如何？</p>
       </div>
-    </div>
-    <div class="wrapper__center center">
-      <ShowcasePlayingErrorList
-        v-if="list.length > 0"
-        class="center__list"
-        @clickListItem="clickListItem"
-      />
     </div>
     <div class="wrapper__bottom bottom">
       <nuxt-link
@@ -24,38 +16,20 @@
         to="/"
         @click.native="SET_SHOW_LIGHTBOX(false)"
       >
-        不用了，我要回首頁
+        回首頁
       </nuxt-link>
     </div>
   </div>
 </template>
 
 <script>
-import _ from 'lodash'
-import { mapMutations, mapGetters } from 'vuex'
-
-import ShowcasePlayingErrorList from '~/components/ShowcasePlayingError/List.vue'
+import { mapMutations } from 'vuex'
 
 export default {
-  components: {
-    ShowcasePlayingErrorList
-  },
-  computed: {
-    ...mapGetters({
-      list: 'appPlayer/LIST'
-    })
-  },
   methods: {
     ...mapMutations({
-      SET_SHOW_LIGHTBOX: 'lightboxPlayingError/SET_SHOW_LIGHTBOX',
-      SET_PLAYING_INDEX: 'appPlayer/SET_PLAYING_INDEX'
-    }),
-    clickListItem(item) {
-      const slug = _.get(item, 'slug', '')
-      const index = _.findIndex(this.list, o => o.slug === slug)
-      this.SET_PLAYING_INDEX(index)
-      this.SET_SHOW_LIGHTBOX(false)
-    }
+      SET_SHOW_LIGHTBOX: 'lightboxPlayingError/SET_SHOW_LIGHTBOX'
+    })
   }
 }
 </script>

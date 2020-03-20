@@ -1,0 +1,44 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`snapshot tests renders component correctly 1`] = `
+<div
+  class="rate"
+>
+  <button
+    class="button-toggler"
+  >
+    X 1.0
+  </button>
+   
+  <ol
+    class="picker rate__picker"
+    style="display: none;"
+  >
+    <li
+      class="picker__list-item"
+    >
+      2.0
+    </li>
+    <li
+      class="picker__list-item"
+    >
+      1.5
+    </li>
+    <li
+      class="picker__list-item active"
+    >
+      1.0
+    </li>
+    <li
+      class="picker__list-item"
+    >
+      0.75
+    </li>
+    <li
+      class="picker__list-item"
+    >
+      0.5
+    </li>
+  </ol>
+</div>
+`;
