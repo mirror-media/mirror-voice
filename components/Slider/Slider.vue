@@ -10,7 +10,24 @@
         class="swiper-slide"
         @click="$emit('clickSlide')"
       >
-        <nuxt-link :to="getHref(item)">
+        <a
+          v-if="isHTTP(getHref(item))"
+          :href="getHref(item)"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <div class="swiper-slide__slide">
+            <img
+              class="swiper-slide__image"
+              :src="getImgUrl(item)"
+              alt=""
+            >
+          </div>
+        </a>
+        <nuxt-link
+          v-else
+          :to="getHref(item)"
+        >
           <div class="swiper-slide__slide">
             <img
               class="swiper-slide__image"
@@ -75,6 +92,9 @@ export default {
     },
     getHref(item) {
       return _.get(item, 'href', '/')
+    },
+    isHTTP(string) {
+      return RegExp('^https?://').test(string)
     }
   }
 }
