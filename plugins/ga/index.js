@@ -67,11 +67,21 @@ export default (context, inject) => {
 
   // appPlayer ga event trackings
   inject('sendGAAppPlayer', ({ action = '', label = '', value }) => {
+    const playerAction = action
+    const slug = label
+    const currentTime = value
     sendGA(context.$ga, {
       eventCategory: 'appPlayer',
-      eventAction: action,
-      eventLabel: label,
-      eventValue: value
+      eventAction: playerAction,
+      eventLabel: slug,
+      eventValue: currentTime
+    })
+    // Experiment listing all currentTimes in GA console
+    sendGA(context.$ga, {
+      eventCategory: playerAction,
+      eventAction: slug,
+      eventLabel: currentTime,
+      eventValue: currentTime
     })
   })
 }
