@@ -117,17 +117,15 @@ pipeline:
         - master
 
   helm-deploy-review:
-    image: quay.io/ipedrazas/drone-helm
+    image: pelotech/drone-helm3
     skip_tls_verify: true
     chart: ./helm/mirror-voice
     release: ${DRONE_REPO_NAME}-${DRONE_BRANCH}
-    wait: true
+    wait_for_upgrade: true
     # debug: true
-    upgrade: true
+    mode: upgrade
     reuse_values: true
-    recreate_pods: false
-    client_only: true
-    service_account: tiller
+    kube_service_account: tiller
     secrets: [api_server, kubernetes_token]
     values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_REPO_NAME}-${DRONE_BRANCH},service.type=LoadBalancer
     namespace: review
@@ -266,17 +264,15 @@ pipeline:
       branch: master
 
   helm-deploy-dev:
-    image: quay.io/ipedrazas/drone-helm
+    image: pelotech/drone-helm3
     skip_tls_verify: true
     chart: ./helm/mirror-voice
     release: "mirror-voice"
-    wait: true
+    wait_for_upgrade: true
     # debug: true
-    upgrade: true
+    mode: upgrade
     reuse_values: true
-    recreate_pods: false
-    client_only: true
-    service_account: tiller
+    kube_service_account: tiller
     secrets: [api_server, kubernetes_token]
     values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
     namespace: review
