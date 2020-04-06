@@ -129,10 +129,8 @@ pipeline:
     reuse_values: true
     kube_service_account: tiller
     namespace: review
-    kube_api_server:
-      from_secret: api_server
-    kube_token:
-      from_secret: kubernetes_token
+    kube_api_server: ${api_server}
+    kube_token: ${kubernetes_token}
     when:
       event: pull_request
       branch:
@@ -281,10 +279,8 @@ pipeline:
     kube_service_account: tiller
     namespace: review
     environment:
-    kube_api_server:
-      from_secret: api_server
-    kube_token:
-      from_secret: kubernetes_token
+    kube_api_server: ${api_server}
+    kube_token: ${kubernetes_token}
     when:
       event: push
       branch: master
