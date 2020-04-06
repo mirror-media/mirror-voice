@@ -126,7 +126,8 @@ pipeline:
     mode: upgrade
     reuse_values: true
     kube_service_account: tiller
-    secrets: [api_server, kubernetes_token]
+    prefix: dev
+    secrets: [dev_api_server, dev_kubernetes_token]
     values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_REPO_NAME}-${DRONE_BRANCH},service.type=LoadBalancer
     namespace: review
     when:
@@ -273,7 +274,8 @@ pipeline:
     mode: upgrade
     reuse_values: true
     kube_service_account: tiller
-    secrets: [api_server, kubernetes_token]
+    prefix: dev
+    secrets: [dev_api_server, dev_kubernetes_token]
     values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
     namespace: review
     when:
