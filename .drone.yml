@@ -118,18 +118,22 @@ pipeline:
 
   helm-deploy-review:
     image: pelotech/drone-helm3
-    skip_tls_verify: true
-    chart: ./helm/mirror-voice
-    release: ${DRONE_REPO_NAME}-${DRONE_BRANCH}
-    wait_for_upgrade: true
-    # debug: true
-    mode: upgrade
-    reuse_values: true
-    kube_service_account: tiller
-    prefix: dev
-    secrets: [dev_api_server, dev_kubernetes_token]
-    values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_REPO_NAME}-${DRONE_BRANCH},service.type=LoadBalancer
-    namespace: review
+    settings:
+      skip_tls_verify: true
+      chart: ./helm/mirror-voice
+      release: ${DRONE_REPO_NAME}-${DRONE_BRANCH}
+      wait_for_upgrade: true
+      # debug: true
+      mode: upgrade
+      reuse_values: true
+      kube_service_account: tiller
+      values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_REPO_NAME}-${DRONE_BRANCH},service.type=LoadBalancer
+      namespace: review
+    environment:
+      KUBE_API_SERVER:
+        from_secret: api_server
+      KUBE_TOKEN:
+        from_secret: kubernetes_token
     when:
       event: pull_request
       branch:
@@ -266,18 +270,22 @@ pipeline:
 
   helm-deploy-dev:
     image: pelotech/drone-helm3
-    skip_tls_verify: true
-    chart: ./helm/mirror-voice
-    release: "mirror-voice"
-    wait_for_upgrade: true
-    # debug: true
-    mode: upgrade
-    reuse_values: true
-    kube_service_account: tiller
-    prefix: dev
-    secrets: [dev_api_server, dev_kubernetes_token]
-    values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
-    namespace: review
+    settings:
+      skip_tls_verify: true
+      chart: ./helm/mirror-voice
+      release: "mirror-voice"
+      wait_for_upgrade: true
+      # debug: true
+      mode: upgrade
+      reuse_values: true
+      kube_service_account: tiller
+      values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
+      namespace: review
+    environment:
+      KUBE_API_SERVER:
+        from_secret: api_server
+      KUBE_TOKEN:
+        from_secret: kubernetes_token
     when:
       event: push
       branch: master
