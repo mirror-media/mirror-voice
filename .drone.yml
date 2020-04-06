@@ -118,22 +118,21 @@ pipeline:
 
   helm-deploy-review:
     image: pelotech/drone-helm3
-    settings:
-      skip_tls_verify: true
-      chart: ./helm/mirror-voice
-      release: ${DRONE_REPO_NAME}-${DRONE_BRANCH}
-      wait_for_upgrade: true
-      # debug: true
-      mode: upgrade
-      reuse_values: true
-      kube_service_account: tiller
-      values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_REPO_NAME}-${DRONE_BRANCH},service.type=LoadBalancer
-      namespace: review
-    environment:
-      KUBE_API_SERVER:
-        from_secret: api_server
-      KUBE_TOKEN:
-        from_secret: kubernetes_token
+    mode: upgrade
+    secrets: [api_server, kubernetes_token]
+    chart: ./helm/mirror-voice
+    release: ${DRONE_REPO_NAME}-${DRONE_BRANCH}
+    values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7},fullnameOverride=${DRONE_REPO_NAME}-${DRONE_BRANCH},service.type=LoadBalancer
+    skip_tls_verify: true
+    wait_for_upgrade: true
+    # debug: true
+    reuse_values: true
+    kube_service_account: tiller
+    namespace: review
+    kube_api_server:
+      from_secret: api_server
+    kube_token:
+      from_secret: kubernetes_token
     when:
       event: pull_request
       branch:
@@ -270,22 +269,22 @@ pipeline:
 
   helm-deploy-dev:
     image: pelotech/drone-helm3
-    settings:
-      skip_tls_verify: true
-      chart: ./helm/mirror-voice
-      release: "mirror-voice"
-      wait_for_upgrade: true
-      # debug: true
-      mode: upgrade
-      reuse_values: true
-      kube_service_account: tiller
-      values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
-      namespace: review
+    mode: upgrade
+    secrets: [api_server, kubernetes_token]
+    chart: ./helm/mirror-voice
+    release: "mirror-voice"
+    values: image.tag=${DRONE_BRANCH}-${DRONE_COMMIT_SHA:0:7}
+    skip_tls_verify: true
+    wait_for_upgrade: true
+    # debug: true
+    reuse_values: true
+    kube_service_account: tiller
+    namespace: review
     environment:
-      KUBE_API_SERVER:
-        from_secret: api_server
-      KUBE_TOKEN:
-        from_secret: kubernetes_token
+    kube_api_server:
+      from_secret: api_server
+    kube_token:
+      from_secret: kubernetes_token
     when:
       event: push
       branch: master
