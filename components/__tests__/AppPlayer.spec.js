@@ -398,6 +398,112 @@ describe('component lifecycle hooks', () => {
 })
 
 describe('GA events plugin methods', () => {
+  test('should call "play_pause" action if playing state was set to false from true', () => {
+    const $sendGAAppPlayer = jest.fn()
+    const currentSlug = 'mockslug'
+    const audioCurrentTimeState = 12345
+    const wrapper = createWrapper({
+      mocks: {
+        $sendGAAppPlayer
+      },
+      computed: {
+        currentSlug: () => currentSlug,
+        audioCurrentTimeState: () => audioCurrentTimeState
+      }
+    })
+    wrapper.vm.$options.watch.$$isPlaying.call(wrapper.vm, false, true)
+
+    expect($sendGAAppPlayer).toHaveBeenCalledWith({
+      action: 'play_pause',
+      label: currentSlug,
+      value: audioCurrentTimeState
+    })
+  })
+
+  test('should call "play_continue" action if playing state was set to true from false', () => {
+    const $sendGAAppPlayer = jest.fn()
+    const currentSlug = 'mockslug'
+    const audioCurrentTimeState = 12345
+    const wrapper = createWrapper({
+      mocks: {
+        $sendGAAppPlayer
+      },
+      computed: {
+        currentSlug: () => currentSlug,
+        audioCurrentTimeState: () => audioCurrentTimeState
+      }
+    })
+    wrapper.vm.$options.watch.$$isPlaying.call(wrapper.vm, true, false)
+
+    expect($sendGAAppPlayer).toHaveBeenCalledWith({
+      action: 'play_continue',
+      label: currentSlug,
+      value: audioCurrentTimeState
+    })
+  })
+
+  test('should call "play_other" action WITH LAST TRACK INFO if currentSlug changed', () => {
+    const mockLastTrackSlug = 'mockLastTrackSlug'
+    const mockMemorizedCurrentTime = 12345
+    const store = createStore({
+      modules: {
+        localStorageTrackHistory: {
+          namespaced: true,
+          state() {
+            return {
+              dict: {
+                [mockLastTrackSlug]: {
+                  memorizedCurrentTime: mockMemorizedCurrentTime
+                }
+              }
+            }
+          }
+        }
+      }
+    })
+    const $sendGAAppPlayer = jest.fn()
+    const wrapper = createWrapper({
+      store,
+      mocks: {
+        $sendGAAppPlayer
+      }
+    })
+    wrapper.vm.$options.watch.currentSlug.call(
+      wrapper.vm,
+      'mockNewSlug',
+      mockLastTrackSlug
+    )
+
+    expect($sendGAAppPlayer).toHaveBeenCalledWith({
+      action: 'play_other',
+      label: mockLastTrackSlug,
+      value: mockMemorizedCurrentTime
+    })
+  })
+
+  test('should call "play_end" action if Player emit ended event', () => {
+    const $sendGAAppPlayer = jest.fn()
+    const currentSlug = 'mockslug'
+    const audioCurrentTimeState = 12345
+    const wrapper = createWrapper({
+      mocks: {
+        $sendGAAppPlayer
+      },
+      computed: {
+        currentSlug: () => currentSlug,
+        audioCurrentTimeState: () => audioCurrentTimeState
+      }
+    })
+    const player = wrapper.find(BasePlayer)
+    player.vm.$emit('ended')
+
+    expect($sendGAAppPlayer).toHaveBeenCalledWith({
+      action: 'play_end',
+      label: currentSlug,
+      value: audioCurrentTimeState
+    })
+  })
+
   test('should call "play_leave" action before window unload', () => {
     const $sendGAAppPlayer = jest.fn()
     const currentSlug = 'mockslug'
