@@ -442,7 +442,30 @@ describe('GA events plugin methods', () => {
     })
   })
 
-  test('should call "play_other" action WITH LAST TRACK INFO if currentSlug changed', () => {
+  test('should call "play_end" action if Player emit ended event', () => {
+    const $sendGAAppPlayer = jest.fn()
+    const currentSlug = 'mockslug'
+    const audioCurrentTimeState = 12345
+    const wrapper = createWrapper({
+      mocks: {
+        $sendGAAppPlayer
+      },
+      computed: {
+        currentSlug: () => currentSlug,
+        audioCurrentTimeState: () => audioCurrentTimeState
+      }
+    })
+    const player = wrapper.find(BasePlayer)
+    player.vm.$emit('ended')
+
+    expect($sendGAAppPlayer).toHaveBeenCalledWith({
+      action: 'play_end',
+      label: currentSlug,
+      value: audioCurrentTimeState
+    })
+  })
+
+  test('should call "play_leave" action WITH LAST TRACK INFO if currentSlug changed', () => {
     const mockLastTrackSlug = 'mockLastTrackSlug'
     const mockMemorizedCurrentTime = 12345
     const store = createStore({
@@ -475,32 +498,9 @@ describe('GA events plugin methods', () => {
     )
 
     expect($sendGAAppPlayer).toHaveBeenCalledWith({
-      action: 'play_other',
+      action: 'play_leave',
       label: mockLastTrackSlug,
       value: mockMemorizedCurrentTime
-    })
-  })
-
-  test('should call "play_end" action if Player emit ended event', () => {
-    const $sendGAAppPlayer = jest.fn()
-    const currentSlug = 'mockslug'
-    const audioCurrentTimeState = 12345
-    const wrapper = createWrapper({
-      mocks: {
-        $sendGAAppPlayer
-      },
-      computed: {
-        currentSlug: () => currentSlug,
-        audioCurrentTimeState: () => audioCurrentTimeState
-      }
-    })
-    const player = wrapper.find(BasePlayer)
-    player.vm.$emit('ended')
-
-    expect($sendGAAppPlayer).toHaveBeenCalledWith({
-      action: 'play_end',
-      label: currentSlug,
-      value: audioCurrentTimeState
     })
   })
 

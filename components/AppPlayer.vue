@@ -98,7 +98,7 @@ export default {
       )
       const lastTrackCurrentTime = _.get(lastTrack, 'memorizedCurrentTime', 0)
       this.$sendGAAppPlayer({
-        action: 'play_other',
+        action: 'play_leave',
         label: oldValue,
         value: lastTrackCurrentTime
       })
