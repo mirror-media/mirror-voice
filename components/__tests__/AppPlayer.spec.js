@@ -397,6 +397,30 @@ describe('component lifecycle hooks', () => {
   })
 })
 
+describe('GA events plugin methods', () => {
+  test('should call "play_leave" action before window unload', () => {
+    const $sendGAAppPlayer = jest.fn()
+    const currentSlug = 'mockslug'
+    const audioCurrentTimeState = 12345
+    createWrapper({
+      mocks: {
+        $sendGAAppPlayer
+      },
+      computed: {
+        currentSlug: () => currentSlug,
+        audioCurrentTimeState: () => audioCurrentTimeState
+      }
+    })
+    window.dispatchEvent(new Event('beforeunload'))
+
+    expect($sendGAAppPlayer).toHaveBeenCalledWith({
+      action: 'play_leave',
+      label: currentSlug,
+      value: audioCurrentTimeState
+    })
+  })
+})
+
 describe('snapshot tests', () => {
   test('renders component correctly if we provide efficient props', () => {
     const audioIsPlaying = true

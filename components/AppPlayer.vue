@@ -182,6 +182,11 @@ export default {
 
     window.addEventListener('beforeunload', () => {
       this.$store.commit('appPlayerCurrentPlaying/DELETE_UUID', this.uuid)
+      this.$sendGAAppPlayer({
+        action: 'play_leave',
+        label: this.currentSlug,
+        value: this.audioCurrentTimeState
+      })
     })
   },
   methods: {
