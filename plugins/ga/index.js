@@ -6,7 +6,7 @@ const sendGA = (
     eventCategory,
     eventAction,
     eventLabel,
-    ...(eventValue && { eventValue: parseInt(eventValue) })
+    eventValue
   })
 }
 
@@ -69,7 +69,7 @@ export default (context, inject) => {
   inject('sendGAAppPlayer', ({ action = '', label = '', value }) => {
     const playerAction = action
     const slug = label
-    const currentTime = value
+    const currentTime = Math.round(parseInt(value))
     sendGA(context.$ga, {
       eventCategory: 'appPlayer',
       eventAction: playerAction,
