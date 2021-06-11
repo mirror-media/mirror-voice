@@ -1,6 +1,6 @@
 # mirror-voice
 
-> mirror-voice frontend
+> mirror-voice frontend (deprecated)
 
 ## Build Setup
 
