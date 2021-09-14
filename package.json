@@ -66,7 +66,7 @@
     "query-string": "^6.9.0",
     "redis-connection-pool": "^1.7.2",
     "sanitize-html": "^1.20.0",
-    "set-value": "^3.0.1",
+    "set-value": "^4.0.1",
     "uuid": "^7.0.2",
     "vue-ads-pagination": "^2.1.4",
     "vue-awesome-swiper": "^3.1.3",
